@@ -1,0 +1,29 @@
+/* Socios */
+.socio-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+}
+.socio-row:last-child { border-bottom: none; }
+.socio-row:hover { background: #fafbfc; }
+
+.socio-logo {
+    width: 50px; height: 50px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; font-weight: 800; flex-shrink: 0;
+}
+.av-y { background: rgba(255,193,7,.15);  color: #7a4f00; }
+.av-b { background: rgba(59,130,246,.12); color: #1e40af; }
+.av-g { background: rgba(16,185,129,.12); color: #065f46; }
+.av-p { background: rgba(139,92,246,.12); color: #5b21b6; }
+
+.socio-info   { flex: 1; min-width: 0; }
+.socio-name   { font-size: .85rem; font-weight: 700; color: var(--text); }
+.socio-desc   { font-size: .73rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.socio-meta   { flex-shrink: 0; }
+.socio-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+@media (max-width: 576px) {
+    .socio-desc { display: none; }
+}

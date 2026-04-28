@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep *)",
+      "PowerShell(& \"C:\\\\laragon\\\\bin\\\\php\\\\php8.2.28\\\\php.exe\" -r \"echo password_hash\\('11223344', PASSWORD_DEFAULT\\);\")",
+      "PowerShell(& \"C:\\\\laragon\\\\bin\\\\php\\\\php-8.1.10-Win32-vs16-x64\\\\php.exe\" -r \"echo password_hash\\('11223344', PASSWORD_DEFAULT\\);\")"
+    ]
+  }
+}

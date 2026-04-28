@@ -1,0 +1,244 @@
+/* EGIDRA — Servicios dinámico */
+(function () {
+    'use strict';
+
+    const grid       = document.getElementById('grid-servicios');
+    const statsEl    = document.getElementById('stats-servicios');
+    const btnNuevoSvc= document.getElementById('btn-nuevo-svc');
+    const btnNuevaCat= document.getElementById('btn-nueva-cat');
+    const btnGuardSvc= document.getElementById('btn-guardar-svc');
+    const btnGuardCat= document.getElementById('btn-guardar-cat');
+    const tituloSvc  = document.getElementById('modal-svc-title');
+    const tituloCat  = document.getElementById('modal-cat-title');
+
+    const fSvcId    = document.getElementById('svc-id');
+    const fSvcCat   = document.getElementById('svc-cat');
+    const fSvcTitulo= document.getElementById('svc-titulo');
+    const fSvcDesc  = document.getElementById('svc-desc');
+    const fSvcIcono = document.getElementById('svc-icono');
+    const fSvcOrden = document.getElementById('svc-orden');
+    const fSvcDest  = document.getElementById('svc-dest');
+    const fSvcActivo= document.getElementById('svc-activo');
+
+    const fCatId    = document.getElementById('cat-id');
+    const fCatNombre= document.getElementById('cat-nombre');
+    const fCatIcono = document.getElementById('cat-icono');
+    const fCatDesc  = document.getElementById('cat-desc');
+    const fCatOrden = document.getElementById('cat-orden');
+    const fCatActivo= document.getElementById('cat-activo');
+
+    let categorias = [];
+
+    function esc(str) {
+        const d = document.createElement('div');
+        d.appendChild(document.createTextNode(str ?? ''));
+        return d.innerHTML;
+    }
+
+    function poblarSelectCat() {
+        fSvcCat.innerHTML = '<option value="">— Seleccionar —</option>';
+        categorias.forEach(function (c) {
+            fSvcCat.insertAdjacentHTML('beforeend', '<option value="' + c.id + '">' + esc(c.nombre) + '</option>');
+        });
+    }
+
+    function renderGrid(cats) {
+        if (!cats.length) {
+            grid.innerHTML = '<div class="col-12 text-center text-muted py-4">No hay categorías de servicios.</div>';
+            if (statsEl) statsEl.textContent = '0 categorías · 0 servicios';
+            return;
+        }
+
+        let totalSvcs = 0;
+        cats.forEach(function (c) { totalSvcs += (c.servicios || []).length; });
+        if (statsEl) statsEl.textContent = cats.length + ' categorías · ' + totalSvcs + ' servicios';
+
+        grid.innerHTML = cats.map(function (c) {
+            const svcs = c.servicios || [];
+            const items = svcs.map(function (s) {
+                return '<div class="svc-item">' +
+                    '<span>' + esc(s.titulo) + (s.es_destacado ? ' <i class="fas fa-star" style="color:var(--accent);font-size:.7rem;"></i>' : '') + '</span>' +
+                    '<div class="d-flex gap-1">' +
+                        '<button class="btn-icon edit-svc" data-id="' + s.id + '" title="Editar"><i class="fas fa-pen"></i></button>' +
+                        '<button class="btn-icon del-svc" data-id="' + s.id + '" title="Eliminar"><i class="fas fa-trash"></i></button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            return '<div class="col-md-6">' +
+                '<div class="svc-card">' +
+                    '<div class="svc-card-head">' +
+                        '<div class="svc-icon"><i class="fas ' + esc(c.icono || 'fa-folder') + '"></i></div>' +
+                        '<h6>' + esc(c.nombre) + '</h6>' +
+                        '<button class="btn-icon edit-cat ms-auto" data-id="' + c.id + '" title="Editar categoría"><i class="fas fa-pen"></i></button>' +
+                    '</div>' +
+                    items +
+                    '<div class="svc-item" style="border-top:1px dashed var(--border);margin-top:4px;">' +
+                        '<button class="btn-icon add-svc-to-cat" data-cat-id="' + c.id + '" style="width:100%;justify-content:center;gap:6px;font-size:.75rem;" title="Añadir servicio a esta categoría">' +
+                            '<i class="fas fa-plus"></i> Añadir servicio' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    }
+
+    function cargar() {
+        grid.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
+        fetch('../api/servicios/listar.php')
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                categorias = data.estado ? data.datos : [];
+                poblarSelectCat();
+                renderGrid(categorias);
+            })
+            .catch(function () { grid.innerHTML = '<div class="col-12 text-center text-muted py-4">Error al cargar.</div>'; });
+    }
+
+    function findSvc(id) {
+        for (var i = 0; i < categorias.length; i++) {
+            var found = (categorias[i].servicios || []).find(function (s) { return s.id == id; });
+            if (found) return found;
+        }
+        return null;
+    }
+
+    /* ── Servicio ── */
+
+    function abrirNuevoSvc(catId) {
+        tituloSvc.textContent = 'Nuevo servicio';
+        fSvcId.value = ''; fSvcTitulo.value = ''; fSvcDesc.value = '';
+        fSvcIcono.value = ''; fSvcOrden.value = '0';
+        fSvcDest.checked = false; fSvcActivo.checked = true;
+        fSvcCat.value = catId || '';
+        window.EgAdmin.openModal('modal-svc');
+    }
+
+    function abrirEditarSvc(id) {
+        const s = findSvc(id);
+        if (!s) return;
+        tituloSvc.textContent = 'Editar servicio';
+        fSvcId.value     = s.id;
+        fSvcCat.value    = s.categoria_id || '';
+        fSvcTitulo.value = s.titulo       || '';
+        fSvcDesc.value   = s.descripcion_breve || '';
+        fSvcIcono.value  = s.icono        || '';
+        fSvcOrden.value  = s.orden ?? 0;
+        fSvcDest.checked = !!s.es_destacado;
+        fSvcActivo.checked = !!s.activo;
+        window.EgAdmin.openModal('modal-svc');
+    }
+
+    function guardarSvc() {
+        if (!fSvcTitulo.value.trim() || !fSvcCat.value) {
+            Swal.fire({ title: 'Campos requeridos', text: 'Título y categoría son obligatorios.', icon: 'warning' });
+            return;
+        }
+        const fd = new FormData();
+        fd.append('id',          fSvcId.value);
+        fd.append('categoria_id',fSvcCat.value);
+        fd.append('titulo',      fSvcTitulo.value.trim());
+        fd.append('descripcion', fSvcDesc.value.trim());
+        fd.append('icono',       fSvcIcono.value.trim());
+        fd.append('orden',       fSvcOrden.value || '0');
+        fd.append('es_destacado',fSvcDest.checked ? '1' : '0');
+        fd.append('activo',      fSvcActivo.checked ? '1' : '0');
+
+        fetch('../api/servicios/guardar.php', { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
+                window.EgAdmin.closeModal('modal-svc');
+                Swal.fire({ title: 'Guardado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                cargar();
+            })
+            .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+    }
+
+    function eliminarSvc(id) {
+        Swal.fire({
+            title: '¿Eliminar servicio?', text: 'Esta acción no se puede deshacer.',
+            icon: 'warning', showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#e74c3c', cancelButtonColor: '#6c757d', reverseButtons: true
+        }).then(function (res) {
+            if (!res.isConfirmed) return;
+            const fd = new FormData();
+            fd.append('id', id);
+            fetch('../api/servicios/eliminar.php', { method: 'POST', body: fd })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
+                    Swal.fire({ title: 'Eliminado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                    cargar();
+                })
+                .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+        });
+    }
+
+    /* ── Categoría ── */
+
+    function abrirNuevaCat() {
+        tituloCat.textContent = 'Nueva categoría';
+        fCatId.value = ''; fCatNombre.value = ''; fCatIcono.value = '';
+        fCatDesc.value = ''; fCatOrden.value = '0'; fCatActivo.checked = true;
+        window.EgAdmin.openModal('modal-cat');
+    }
+
+    function abrirEditarCat(id) {
+        const c = categorias.find(function (x) { return x.id == id; });
+        if (!c) return;
+        tituloCat.textContent = 'Editar categoría';
+        fCatId.value     = c.id;
+        fCatNombre.value = c.nombre            || '';
+        fCatIcono.value  = c.icono             || '';
+        fCatDesc.value   = c.descripcion_breve || '';
+        fCatOrden.value  = c.orden ?? 0;
+        fCatActivo.checked = !!c.activo;
+        window.EgAdmin.openModal('modal-cat');
+    }
+
+    function guardarCat() {
+        if (!fCatNombre.value.trim()) {
+            Swal.fire({ title: 'Campo requerido', text: 'El nombre es obligatorio.', icon: 'warning' });
+            return;
+        }
+        const fd = new FormData();
+        fd.append('id',               fCatId.value);
+        fd.append('nombre',           fCatNombre.value.trim());
+        fd.append('icono',            fCatIcono.value.trim());
+        fd.append('descripcion_breve',fCatDesc.value.trim());
+        fd.append('orden',            fCatOrden.value || '0');
+        fd.append('activo',           fCatActivo.checked ? '1' : '0');
+
+        fetch('../api/servicios/categorias/guardar.php', { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
+                window.EgAdmin.closeModal('modal-cat');
+                Swal.fire({ title: 'Guardado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                cargar();
+            })
+            .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+    }
+
+    /* ── Event delegation ── */
+
+    grid.addEventListener('click', function (e) {
+        const editSvc = e.target.closest('.edit-svc');
+        const delSvc  = e.target.closest('.del-svc');
+        const editCat = e.target.closest('.edit-cat');
+        const addSvc  = e.target.closest('.add-svc-to-cat');
+        if (editSvc) abrirEditarSvc(editSvc.dataset.id);
+        if (delSvc)  eliminarSvc(delSvc.dataset.id);
+        if (editCat) abrirEditarCat(editCat.dataset.id);
+        if (addSvc)  abrirNuevoSvc(addSvc.dataset.catId);
+    });
+
+    btnNuevoSvc?.addEventListener('click', function () { abrirNuevoSvc(''); });
+    btnNuevaCat?.addEventListener('click', abrirNuevaCat);
+    btnGuardSvc?.addEventListener('click', guardarSvc);
+    btnGuardCat?.addEventListener('click', guardarCat);
+
+    cargar();
+})();

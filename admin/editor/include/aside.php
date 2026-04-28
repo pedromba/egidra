@@ -1,0 +1,102 @@
+<?php
+if (!defined('RUTA_BASE')) {
+    require_once __DIR__ . '/../../../config/rutas.php';
+}
+require_once __DIR__ . '/../../../config/conexion.php';
+
+$base = RUTA_BASE . 'admin/editor/';
+$uri  = $_SERVER['REQUEST_URI'] ?? '';
+
+$section = match(true) {
+    str_contains($uri, '/valores')         => 'valores',
+    str_contains($uri, '/equipo')          => 'equipo',
+    str_contains($uri, '/socios')          => 'socios',
+    str_contains($uri, '/certificaciones') => 'certificaciones',
+    str_contains($uri, '/servicios')       => 'servicios',
+    str_contains($uri, '/proyectos')       => 'proyectos',
+    str_contains($uri, '/clientes')        => 'clientes',
+    str_contains($uri, '/mensajes')        => 'mensajes',
+    str_contains($uri, '/seguridad')       => 'seguridad',
+    default                                => 'dashboard',
+};
+
+// Obtener número de mensajes sin leer
+$mensajes_sin_leer = 0;
+$result = $conexion->query("SELECT COUNT(*) as total FROM contacto WHERE leido = FALSE");
+if ($result) {
+    $row = $result->fetch_assoc();
+    $mensajes_sin_leer = (int)($row['total'] ?? 0);
+}
+
+// Obtener datos de empresa con caché en sesión
+$empresa = $_SESSION['empresa_data'] ?? null;
+if (!$empresa) {
+    $row = $conexion->query(
+        "SELECT nombre, logo FROM empresa WHERE id = 1 LIMIT 1"
+    )->fetch_assoc();
+    $empresa = $row ?? ['nombre' => 'EGIDRA', 'logo' => null];
+    $_SESSION['empresa_data'] = $empresa;
+}
+
+function sbLinkEd(string $href, string $icon, string $label, string $key, string $cur, string $badge = ''): void {
+    $a = ($key === $cur) ? ' active' : '';
+    echo "<a href=\"{$href}\" class=\"sb-link{$a}\">"
+       . "<span class=\"sb-link-icon\"><i class=\"fas {$icon}\"></i></span>"
+       . "<span class=\"label\">{$label}</span>"
+       . ($badge ? "<span class=\"sb-badge\">{$badge}</span>" : '')
+       . "</a>";
+}
+?>
+<aside class="sidebar" id="sidebar">
+
+    <a class="sb-brand" href="<?php echo $base; ?>">
+        <div class="sb-brand-icon">
+            <?php if ($empresa['logo']): ?>
+                <img src="<?php echo htmlspecialchars($empresa['logo']); ?>" alt="<?php echo htmlspecialchars($empresa['nombre']); ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            <?php else: ?>
+                <i class="fas fa-layer-group"></i>
+            <?php endif; ?>
+        </div>
+        <div>
+            <div class="sb-brand-name"><?php echo htmlspecialchars($empresa['nombre']); ?></div>
+            <div class="sb-brand-sub">Editor</div>
+        </div>
+    </a>
+
+    <nav class="sb-nav">
+
+        <div class="sb-group">Principal</div>
+        <?php sbLinkEd($base,                   'fa-gauge-high',    'Dashboard',      'dashboard', $section); ?>
+        <?php sbLinkEd($base.'mensajes/',        'fa-envelope',      'Mensajes',       'mensajes',  $section, $mensajes_sin_leer > 0 ? (string)$mensajes_sin_leer : ''); ?>
+
+        <div class="sb-group">Contenido</div>
+        <?php sbLinkEd($base.'servicios/',       'fa-hard-hat',      'Servicios',      'servicios', $section); ?>
+        <?php sbLinkEd($base.'proyectos/',       'fa-folder-open',   'Proyectos',      'proyectos', $section); ?>
+        <?php sbLinkEd($base.'clientes/',        'fa-building',      'Clientes',       'clientes',  $section); ?>
+        <?php sbLinkEd($base.'seguridad/',       'fa-shield-halved', 'Seguridad HSE',  'seguridad', $section); ?>
+
+        <div class="sb-group">Corporativo</div>
+        <?php sbLinkEd($base.'valores/',         'fa-star',             'Valores',         'valores',         $section); ?>
+        <?php sbLinkEd($base.'equipo/',          'fa-users-gear',       'Equipo',          'equipo',          $section); ?>
+        <?php sbLinkEd($base.'socios/',          'fa-handshake',        'Socios',          'socios',          $section); ?>
+        <?php sbLinkEd($base.'certificaciones/', 'fa-certificate',      'Certificaciones', 'certificaciones', $section); ?>
+
+        <div class="sb-group">Web</div>
+        <?php sbLinkEd(RUTA_BASE, 'fa-arrow-up-right-from-square', 'Ver Sitio', '', $section); ?>
+
+    </nav>
+
+    <div class="sb-user">
+        <div class="sb-avatar"><i class="fas fa-user-pen"></i></div>
+        <div>
+            <div class="sb-user-name">Editor</div>
+            <div class="sb-user-role">Editor de Contenido</div>
+        </div>
+        <button type="button" class="sb-logout btn-logout" data-logout-url="<?php echo RUTA_BASE; ?>admin/api/logout.php" title="Salir" style="background:none;border:none;padding:0;cursor:pointer;">
+            <i class="fas fa-right-from-bracket"></i>
+        </button>
+    </div>
+
+</aside>
+<div class="sb-overlay" id="sb-overlay"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

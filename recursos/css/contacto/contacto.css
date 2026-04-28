@@ -1,0 +1,207 @@
+/* EGIDRA - Estilos Página Contacto */
+
+/* Page Header */
+.page-header {
+    position: relative;
+    min-height: 50vh;
+    background:
+        linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
+        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    margin-top: 70px;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.page-header .container { position: relative; z-index: 2; }
+.page-header h1     { line-height: 1.2; animation: fadeInUp 1s ease-out; }
+.page-header .badge { animation: fadeInUp 1s ease-out 0.2s both; }
+.page-header .lead  { animation: fadeInUp 1s ease-out 0.4s both; }
+
+.header-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+.header-scroll-indicator a { text-decoration: none; }
+
+/* ── Sección principal de contacto ──────────────────────────── */
+.contact-section {
+    background: var(--light-bg);
+    padding: 5rem 0;
+}
+
+/* ── Formulario ──────────────────────────────────────────────── */
+.contact-form-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,.10);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #333;
+    margin-bottom: 0.4rem;
+}
+
+.form-control,
+.form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 0.6rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.2);
+}
+
+.form-control.is-invalid { border-color: #dc3545; }
+
+textarea.form-control { resize: vertical; min-height: 140px; }
+
+.btn-submit {
+    background: var(--primary-color);
+    border: none;
+    color: #000;
+    font-weight: 700;
+    padding: 0.85rem 2.5rem;
+    border-radius: 0.6rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: #e0a800;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+.btn-submit:disabled {
+    opacity: .65;
+    transform: none;
+    cursor: not-allowed;
+}
+
+/* Alerta de éxito / error */
+.alert-success-custom {
+    background: rgba(25, 135, 84, 0.1);
+    border: 2px solid #198754;
+    border-radius: 0.75rem;
+    color: #0f5132;
+    padding: 1rem 1.25rem;
+}
+
+.alert-error-custom {
+    background: rgba(220, 53, 69, 0.08);
+    border: 2px solid #dc3545;
+    border-radius: 0.75rem;
+    color: #842029;
+    padding: 1rem 1.25rem;
+}
+
+/* ── Tarjetas de info de contacto ────────────────────────────── */
+.info-card {
+    border: none;
+    border-radius: 0.85rem;
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.12) !important;
+}
+
+.info-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.info-card:hover .info-icon {
+    background: rgba(255, 193, 7, 0.28);
+    transform: scale(1.1);
+}
+
+/* ── Mapa ────────────────────────────────────────────────────── */
+.map-section {
+    background: #fff;
+    padding: 5rem 0;
+}
+
+.map-placeholder {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 1rem;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(255, 193, 7, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.map-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255, 193, 7, 0.07) 0%, transparent 70%);
+}
+
+/* ── Animaciones ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40%                      { transform: translateX(-50%) translateY(-10px); }
+    60%                      { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .page-header {
+        min-height: 40vh;
+        background:
+            linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
+            url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+        background-size: cover;
+        background-position: center;
+    }
+    .page-header h1 { font-size: 2.5rem !important; }
+}
+
+@media (max-width: 767px) {
+    .page-header { min-height: 35vh; }
+    .page-header h1 { font-size: 1.75rem !important; }
+    .page-header .display-3 { font-size: 2rem !important; }
+    .contact-section, .map-section { padding: 3rem 0; }
+    .map-placeholder { height: 260px; }
+}

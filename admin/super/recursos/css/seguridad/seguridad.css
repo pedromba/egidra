@@ -1,0 +1,44 @@
+/* Seguridad HSE */
+.rule-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    transition: background .15s;
+}
+.rule-row:last-child { border-bottom: none; }
+.rule-row:hover { background: #fafafa; }
+.rule-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary); color: #000;
+    font-size: .8rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+}
+.rule-icon-box {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,193,7,.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; color: #8a6000; flex-shrink: 0; margin-top: 2px;
+}
+.rule-title { font-size: .85rem; font-weight: 700; margin-bottom: 3px; }
+.rule-desc  { font-size: .78rem; color: var(--muted); line-height: 1.5; }
+.rule-actions { margin-left: auto; display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px; }
+
+/* Cifras HSE */
+.stat-hse-cell {
+    padding: 22px 20px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.stat-hse-border { border-left: 1px solid var(--border); }
+.stat-hse-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: rgba(255,193,7,.12); color: #92650a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+}
+.stat-hse-val   { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-hse-label { font-size: .72rem; color: var(--muted); font-weight: 500; line-height: 1.4; }
+.stat-hse-actions { display: flex; gap: 5px; margin-top: 4px; }
+
+@media (max-width: 576px) {
+    .stat-hse-border { border-left: none; border-top: 1px solid var(--border); }
+}

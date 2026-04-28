@@ -1,0 +1,4 @@
+/* Usuarios */
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.role-super  { background: rgba(139,92,246,.12); color: #5b21b6; }
+.role-editor { background: rgba(59,130,246,.12);  color: #1e40af; }

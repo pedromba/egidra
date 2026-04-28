@@ -1,0 +1,253 @@
+/* EGIDRA - Estilos Página Seguridad HSE */
+
+/* Page Header */
+.page-header {
+    position: relative;
+    min-height: 50vh;
+    background:
+        linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
+        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    margin-top: 70px;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.page-header .container { position: relative; z-index: 2; }
+.page-header h1     { line-height: 1.2; animation: fadeInUp 1s ease-out; }
+.page-header .badge { animation: fadeInUp 1s ease-out 0.2s both; }
+.page-header .lead  { animation: fadeInUp 1s ease-out 0.4s both; }
+
+.header-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+.header-scroll-indicator a { text-decoration: none; }
+
+/* ── Política HSE ────────────────────────────────────────────── */
+.policy-section {
+    background: #fff;
+    padding: 5rem 0;
+}
+
+.policy-section img {
+    transition: var(--transition);
+}
+.policy-section img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.policy-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 2rem;
+    padding: 0.5rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #7a5500;
+    transition: var(--transition);
+}
+.policy-pill:hover {
+    background: rgba(255, 193, 7, 0.22);
+    transform: translateY(-2px);
+}
+
+/* ── 9 Reglas de Oro ─────────────────────────────────────────── */
+.rules-section {
+    background: var(--light-bg);
+    padding: 5rem 0;
+}
+
+.rule-card {
+    border: none;
+    border-radius: 0.75rem;
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.rule-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition);
+}
+
+.rule-card:hover { transform: translateY(-8px); }
+.rule-card:hover::before { transform: scaleX(1); }
+
+.rule-number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #000;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.rule-card:hover .rule-number {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 5px rgba(255, 193, 7, 0.25);
+}
+
+.rule-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.rule-card:hover .rule-icon {
+    background: rgba(255, 193, 7, 0.25);
+    transform: scale(1.1);
+}
+
+/* ── Estadísticas de Seguridad ───────────────────────────────── */
+.hse-stats-section {
+    background: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
+    padding: 5rem 0;
+    border-top: 3px solid var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.hse-stat-item {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    transition: var(--transition);
+}
+
+.hse-stat-item:hover { transform: translateY(-5px); }
+
+.hse-stat-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    transition: var(--transition);
+}
+
+.hse-stat-item:hover .hse-stat-icon {
+    background: rgba(255, 193, 7, 0.28);
+    transform: scale(1.1);
+}
+
+/* ── Certificaciones ─────────────────────────────────────────── */
+.certifications-section {
+    background: #fff;
+    padding: 5rem 0;
+}
+
+.cert-card {
+    border: none;
+    border-radius: 0.75rem;
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.cert-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+.cert-card .cert-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    transition: var(--transition);
+}
+
+.cert-card:hover .cert-icon {
+    background: rgba(255, 193, 7, 0.25);
+    transform: scale(1.1);
+}
+
+/* ── CTA ─────────────────────────────────────────────────────── */
+.cta-section {
+    background: var(--light-bg);
+    padding: 5rem 0;
+}
+
+.cta-section .card {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Animaciones ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40%                      { transform: translateX(-50%) translateY(-10px); }
+    60%                      { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .page-header {
+        min-height: 40vh;
+        background:
+            linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
+            url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+        background-size: cover;
+        background-position: center;
+    }
+    .page-header h1 { font-size: 2.5rem !important; }
+}
+
+@media (max-width: 767px) {
+    .page-header { min-height: 35vh; }
+    .page-header h1 { font-size: 1.75rem !important; }
+    .page-header .display-3 { font-size: 2rem !important; }
+
+    .policy-section,
+    .rules-section,
+    .certifications-section,
+    .cta-section { padding: 3rem 0; }
+
+    .hse-stats-section { padding: 3rem 0; }
+}

@@ -1,0 +1,6 @@
+/* Logs */
+.log-action-login   { background: rgba(16,185,129,.1);  color: #065f46; }
+.log-action-crear   { background: rgba(59,130,246,.1);  color: #1e40af; }
+.log-action-editar  { background: rgba(255,193,7,.12);  color: #7a4f00; }
+.log-action-eliminar{ background: rgba(239,68,68,.1);   color: #991b1b; }
+.log-action-sistema { background: rgba(107,114,128,.1); color: #374151; }

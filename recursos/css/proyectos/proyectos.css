@@ -1,0 +1,181 @@
+/* EGIDRA - Estilos Página Proyectos */
+
+/* Page Header */
+.page-header {
+    position: relative;
+    min-height: 50vh;
+    background:
+        linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
+        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    margin-top: 70px;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.page-header .container { position: relative; z-index: 2; }
+.page-header h1     { line-height: 1.2; animation: fadeInUp 1s ease-out; }
+.page-header .badge { animation: fadeInUp 1s ease-out 0.2s both; }
+.page-header .lead  { animation: fadeInUp 1s ease-out 0.4s both; }
+
+.header-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+.header-scroll-indicator a { text-decoration: none; }
+
+/* ── Filtros ─────────────────────────────────────────────────── */
+.filter-section {
+    background: #fff;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+}
+
+.filter-btn {
+    border: 2px solid #dee2e6;
+    background: #fff;
+    color: #333;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    transition: var(--transition);
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #000;
+}
+
+/* ── Grid de proyectos ───────────────────────────────────────── */
+.projects-section {
+    background: var(--light-bg);
+    padding: 4rem 0 5rem;
+}
+
+.project-card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.project-card img {
+    height: 210px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.14) !important;
+}
+
+.project-card:hover img { transform: scale(1.07); }
+
+.project-card .card-body { padding: 1.25rem; }
+
+.project-card .card-footer {
+    background: transparent;
+    border-top: 1px solid rgba(0,0,0,.07);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ── Clientes ────────────────────────────────────────────────── */
+.clients-section {
+    background: #fff;
+    padding: 4rem 0;
+    border-top: 1px solid rgba(0,0,0,.06);
+}
+
+.client-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    transition: var(--transition);
+    cursor: default;
+}
+
+.client-logo:hover {
+    background: rgba(255, 193, 7, 0.08);
+    transform: translateY(-3px);
+}
+
+.client-logo span {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #aaa;
+    transition: var(--transition);
+}
+
+.client-logo:hover span { color: var(--primary-color); }
+
+/* ── CTA ─────────────────────────────────────────────────────── */
+.cta-section {
+    background: var(--light-bg);
+    padding: 5rem 0;
+}
+
+.cta-section .card { box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+
+/* ── Animaciones ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40%                      { transform: translateX(-50%) translateY(-10px); }
+    60%                      { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .page-header {
+        min-height: 40vh;
+        background:
+            linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
+            url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+        background-size: cover;
+        background-position: center;
+    }
+    .page-header h1 { font-size: 2.5rem !important; }
+    .filter-section { overflow-x: auto; }
+}
+
+@media (max-width: 767px) {
+    .page-header { min-height: 35vh; }
+    .page-header h1 { font-size: 1.75rem !important; }
+    .page-header .display-3 { font-size: 2rem !important; }
+    .projects-section, .cta-section { padding: 3rem 0; }
+    .filter-section { padding: 1.5rem 0; }
+}
