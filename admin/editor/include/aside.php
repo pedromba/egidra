@@ -89,12 +89,10 @@ function sbLinkEd(string $href, string $icon, string $label, string $key, string
     <div class="sb-user">
         <div class="sb-avatar"><i class="fas fa-user-pen"></i></div>
         <div>
-            <div class="sb-user-name">Editor</div>
+            <div class="sb-user-name"><?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Editor'); ?></div>
             <div class="sb-user-role">Editor de Contenido</div>
         </div>
-        <button type="button" class="sb-logout btn-logout" data-logout-url="<?php echo RUTA_BASE; ?>admin/api/logout.php" title="Salir" style="background:none;border:none;padding:0;cursor:pointer;">
-            <i class="fas fa-right-from-bracket"></i>
-        </button>
+        
     </div>
 
 </aside>

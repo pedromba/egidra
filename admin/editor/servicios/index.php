@@ -1,12 +1,7 @@
-﻿<?php
+<?php
+require_once '../include/auth.php';
 require_once '../../../config/rutas.php';
 $pageTitle = 'Servicios'; $pageBreadcrumb = 'Servicios';
-$cats = [
-    ['fa-diving-mask',    'Buceo & Subsea',    ['Inspección Submarina','Mantenimiento y Reparación','Instalación Subsea']],
-    ['fa-rope',           'Acceso por Cuerda', ['Inspección en Altura','Pintura Anticorrosiva','Mantenimiento Estructural']],
-    ['fa-truck-loading',  'Logística',         ['Suministro Offshore','Almacenamiento y Distribución','Movilización Personal']],
-    ['fa-clipboard-check','Estudios Técnicos', ['Análisis de Integridad','Ingeniería de Proyecto','Estudios de Riesgo']],
-];
 ?>
 <!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -23,44 +18,38 @@ $cats = [
     <?php include '../include/header.php'; ?>
     <main class="ci">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <p class="mb-0" style="font-size:.82rem;color:var(--muted);">4 categorías · 12 servicios activos</p>
-            <button class="btn-pri" data-modal-open="modal-add-svc"><i class="fas fa-plus"></i>Nuevo servicio</button>
+            <p class="mb-0" id="stats-servicios" style="font-size:.82rem;color:var(--muted);">Cargando...</p>
+            <button class="btn-pri" id="btn-nuevo-svc"><i class="fas fa-plus"></i>Nuevo servicio</button>
         </div>
-        <div class="row g-3">
-        <?php foreach ($cats as [$icon,$name,$items]): ?>
-            <div class="col-md-6">
-                <div class="svc-card">
-                    <div class="svc-card-head">
-                        <div class="svc-icon"><i class="fas <?php echo $icon; ?>"></i></div>
-                        <h6><?php echo $name; ?></h6>
-                        <button class="btn-icon edit ms-auto"><i class="fas fa-pen"></i></button>
-                    </div>
-                    <?php foreach ($items as $item): ?>
-                    <div class="svc-item">
-                        <span><?php echo $item; ?></span>
-                        <div class="d-flex gap-1">
-                            <button class="btn-icon edit"><i class="fas fa-pen"></i></button>
-                            <button class="btn-icon del"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
+        <div class="row g-3" id="grid-servicios">
+            <div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>
         </div>
     </main>
 </div>
-<div class="modal-backdrop-custom" id="modal-add-svc">
+
+<!-- Modal Servicio -->
+<div class="modal-backdrop-custom" id="modal-svc">
     <div class="modal-box">
-        <div class="modal-head"><h6>Nuevo Servicio</h6><button class="modal-close" data-modal-close="modal-add-svc"><i class="fas fa-times"></i></button></div>
+        <div class="modal-head"><h6 id="modal-svc-title">Nuevo Servicio</h6><button class="modal-close" data-modal-close="modal-svc"><i class="fas fa-times"></i></button></div>
         <div class="modal-body">
-            <div class="mb-3"><label class="f-label">Categoría</label><select class="f-select"><option>Buceo & Subsea</option><option>Acceso por Cuerda</option><option>Logística</option><option>Estudios Técnicos</option></select></div>
-            <div class="mb-3"><label class="f-label">Título <span class="text-danger">*</span></label><input class="f-input" type="text" placeholder="Ej: Inspección ROV"></div>
-            <div class="mb-0"><label class="f-label">Descripción</label><textarea class="f-textarea" placeholder="Descripción detallada..."></textarea></div>
+            <input type="hidden" id="svc-id">
+            <div class="mb-3"><label class="f-label">Categoría <span class="text-danger">*</span></label><select class="f-select" id="svc-cat"><option value="">— Seleccionar —</option></select></div>
+            <div class="mb-3"><label class="f-label">Título <span class="text-danger">*</span></label><input class="f-input" id="svc-titulo" type="text" placeholder="Ej: Inspección ROV"></div>
+            <div class="mb-3"><label class="f-label">Descripción</label><textarea class="f-textarea" id="svc-desc" placeholder="Descripción detallada..."></textarea></div>
+            <div class="mb-3"><label class="f-label">Icono (clase FA)</label><input class="f-input" id="svc-icono" type="text" placeholder="fa-water"></div>
+            <div class="row g-2 mb-3">
+                <div class="col-6"><label class="f-label">Orden</label><input class="f-input" id="svc-orden" type="number" min="0" max="99" placeholder="0"></div>
+            </div>
+            <div class="d-flex gap-4">
+                <div class="d-flex align-items-center justify-content-between flex-grow-1"><label class="f-label mb-0">Destacado</label><label class="toggle-sw"><input type="checkbox" id="svc-dest"><span class="toggle-slider"></span></label></div>
+                <div class="d-flex align-items-center justify-content-between flex-grow-1"><label class="f-label mb-0">Activo</label><label class="toggle-sw"><input type="checkbox" id="svc-activo" checked><span class="toggle-slider"></span></label></div>
+            </div>
         </div>
-        <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-add-svc">Cancelar</button><button class="btn-pri"><i class="fas fa-check me-1"></i>Crear</button></div>
+        <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-svc">Cancelar</button><button class="btn-pri" id="btn-guardar-svc"><i class="fas fa-check me-1"></i>Guardar</button></div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/servicios/servicios.js"></script>
 </body></html>
