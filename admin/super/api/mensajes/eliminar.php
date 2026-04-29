@@ -20,11 +20,13 @@ if ($id <= 0) {
 }
 
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/logger.php';
 
 $stmt = $conexion->prepare("DELETE FROM contacto WHERE id = ?");
 $stmt->bind_param('i', $id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
+    registrar_log($conexion, $_SESSION['user_id'], 'ELIMINAR', 'Eliminado registro id=' . $id, 'contacto', $id);
     echo json_encode(['estado' => true, 'mensaje' => 'Mensaje eliminado.']);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'No se pudo eliminar el mensaje.']);

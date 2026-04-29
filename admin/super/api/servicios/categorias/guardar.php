@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../../config/conexion.php';
+require_once '../../../../../config/logger.php';
 
 $id     = isset($_POST['id'])               ? (int) $_POST['id']             : 0;
 $nombre = isset($_POST['nombre'])           ? trim($_POST['nombre'])          : '';
@@ -38,6 +39,7 @@ if ($id > 0) {
 
 if ($stmt->execute()) {
     $nuevo_id = $id > 0 ? $id : $conexion->insert_id;
+    registrar_log($conexion, $_SESSION['user_id'], $id > 0 ? 'EDITAR' : 'CREAR', ($id > 0 ? 'Editado' : 'Creado') . ': ' . ($nombre ?? 'registro'), 'categorias_servicios', $nuevo_id);
     echo json_encode(['estado' => true, 'mensaje' => 'Categoría guardada.', 'id' => $nuevo_id]);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'Error al guardar la categoría.']);

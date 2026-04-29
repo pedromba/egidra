@@ -55,7 +55,7 @@ function sbLink(string $href, string $icon, string $label, string $key, string $
     <a class="sb-brand" href="<?php echo $base; ?>">
         <div class="sb-brand-icon">
             <?php if ($empresa['logo']): ?>
-                <img src="<?php echo htmlspecialchars($empresa['logo']); ?>" alt="<?php echo htmlspecialchars($empresa['nombre']); ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                <img src="<?php echo htmlspecialchars(RUTA_BASE . ltrim($empresa['logo'], '/')); ?>" alt="<?php echo htmlspecialchars($empresa['nombre']); ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             <?php else: ?>
                 <i class="fas fa-layer-group"></i>
             <?php endif; ?>

@@ -1,6 +1,6 @@
 ﻿<?php
 require_once 'include/auth.php';
-require_once '../../config/rutas.php';
+require_once '../../config/init.php';
 $pageTitle = $pageBreadcrumb = 'Dashboard';
 ?>
 <!DOCTYPE html>

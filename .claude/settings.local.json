@@ -3,7 +3,10 @@
     "allow": [
       "Bash(xargs grep *)",
       "PowerShell(& \"C:\\\\laragon\\\\bin\\\\php\\\\php8.2.28\\\\php.exe\" -r \"echo password_hash\\('11223344', PASSWORD_DEFAULT\\);\")",
-      "PowerShell(& \"C:\\\\laragon\\\\bin\\\\php\\\\php-8.1.10-Win32-vs16-x64\\\\php.exe\" -r \"echo password_hash\\('11223344', PASSWORD_DEFAULT\\);\")"
+      "PowerShell(& \"C:\\\\laragon\\\\bin\\\\php\\\\php-8.1.10-Win32-vs16-x64\\\\php.exe\" -r \"echo password_hash\\('11223344', PASSWORD_DEFAULT\\);\")",
+      "Bash(\"/c/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysql.exe\" -u root --password=\"\" egidra -e \"DESCRIBE valores; DESCRIBE equipo; DESCRIBE socios;\")",
+      "Bash(\"/c/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysql.exe\" -u root --password=\"\" egidra -e \"DESCRIBE certificaciones;\")",
+      "Bash(\"/c/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysql.exe\" -u root --password=\"\" egidra -e \"SELECT id, nombre, organismo_emisor, fecha_vencimiento, CASE WHEN fecha_vencimiento IS NULL THEN 'vigente' WHEN fecha_vencimiento < CURDATE\\(\\) THEN 'vencida' WHEN fecha_vencimiento < DATE_ADD\\(CURDATE\\(\\), INTERVAL 60 DAY\\) THEN 'vence' ELSE 'vigente' END AS estado_label FROM certificaciones ORDER BY orden;\")"
     ]
   }
 }

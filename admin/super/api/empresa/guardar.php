@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/logger.php';
 
 // Directorio para logos
 $logoDir = '../../../../img/logo/';
@@ -94,6 +95,7 @@ $stmt = $conexion->prepare("UPDATE empresa SET $sets, fecha_actualizacion=NOW() 
 $stmt->bind_param($tipos, ...$valores);
 
 if ($stmt->execute()) {
+    registrar_log($conexion, $_SESSION['user_id'], 'EDITAR', 'Editado: datos de empresa', 'empresa', 1);
     echo json_encode(['estado' => true, 'mensaje' => 'Datos de empresa guardados.']);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'Error al guardar.']);

@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/rutas.php';
 
 $rows = $conexion->query(
     "SELECT p.id_proyecto AS id, p.titulo, p.descripcion_tecnica, p.ubicacion,
@@ -23,6 +24,7 @@ $datos = [];
 while ($r = $rows->fetch_assoc()) {
     $r['es_destacado'] = (bool) $r['es_destacado'];
     $r['activo']       = (bool) $r['activo'];
+    if (!empty($r['imagen'])) $r['imagen_url'] = RUTA_BASE . $r['imagen'];
     $datos[] = $r;
 }
 

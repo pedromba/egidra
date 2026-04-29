@@ -16,3 +16,10 @@
 }
 .client-name   { font-size: .85rem; font-weight: 700; color: var(--text); }
 .client-foot   { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; }
+
+/* Avatar color variants */
+.av-y { background: rgba(255,193,7,.14);  color: #92650a; border-color: rgba(255,193,7,.35); }
+.av-b { background: rgba(59,130,246,.12); color: #1d4ed8; border-color: rgba(59,130,246,.3); }
+.av-g { background: rgba(16,185,129,.12); color: #047857; border-color: rgba(16,185,129,.3); }
+.av-p { background: rgba(139,92,246,.12); color: #6d28d9; border-color: rgba(139,92,246,.3); }
+.av-r { background: rgba(239,68,68,.1);   color: #b91c1c; border-color: rgba(239,68,68,.25); }

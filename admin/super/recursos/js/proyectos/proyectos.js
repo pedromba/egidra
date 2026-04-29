@@ -17,9 +17,12 @@
     const fUbicacion = document.getElementById('proy-ubicacion');
     const fAno       = document.getElementById('proy-ano');
     const fDesc      = document.getElementById('proy-desc');
-    const fImg       = document.getElementById('proy-img');
     const fDest      = document.getElementById('proy-dest');
     const fActivo    = document.getElementById('proy-activo');
+    const fImgFile   = document.getElementById('proy-img-file');
+    const fImgActual = document.getElementById('proy-img-actual');
+    const fImgPrev   = document.getElementById('proy-img-preview');
+    const fImgPh     = document.getElementById('proy-img-ph');
 
     const CAT_COLORS = ['bp-blue','bp-purple','bp-green','bp-yellow','bp-red'];
     let todos = [];
@@ -99,11 +102,43 @@
             .catch(function () { tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Error al cargar.</td></tr>'; });
     }
 
+    function setImgPreview(url) {
+        if (url) {
+            fImgPrev.src = url;
+            fImgPrev.style.display = 'block';
+            if (fImgPh) fImgPh.style.display = 'none';
+        } else {
+            fImgPrev.src = '';
+            fImgPrev.style.display = 'none';
+            if (fImgPh) fImgPh.style.display = '';
+        }
+        if (fImgFile) fImgFile.value = '';
+    }
+
+    fImgFile?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+            Swal.fire({ title: 'Archivo muy grande', text: 'Máximo 2 MB.', icon: 'warning' });
+            this.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            fImgPrev.src = e.target.result;
+            fImgPrev.style.display = 'block';
+            if (fImgPh) fImgPh.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    });
+
     function abrirNuevo() {
         tituloMod.textContent = 'Nuevo proyecto';
         fId.value = ''; fTitulo.value = ''; fCat.value = ''; fCli.value = '';
         fUbicacion.value = ''; fAno.value = ''; fDesc.value = '';
-        fImg.value = ''; fDest.checked = false; fActivo.checked = true;
+        fDest.checked = false; fActivo.checked = true;
+        fImgActual.value = '';
+        setImgPreview('');
         window.EgAdmin.openModal('modal-proy');
     }
 
@@ -118,9 +153,10 @@
         fUbicacion.value = p.ubicacion           || '';
         fAno.value       = p.ano_finalizacion    || '';
         fDesc.value      = p.descripcion_tecnica || '';
-        fImg.value       = p.imagen              || '';
         fDest.checked    = !!p.es_destacado;
         fActivo.checked  = !!p.activo;
+        fImgActual.value = p.imagen              || '';
+        setImgPreview(p.imagen_url || '');
         window.EgAdmin.openModal('modal-proy');
     }
 
@@ -137,9 +173,10 @@
         fd.append('ubicacion',        fUbicacion.value.trim());
         fd.append('ano_finalizacion', fAno.value || '');
         fd.append('descripcion',      fDesc.value.trim());
-        fd.append('imagen',           fImg.value.trim());
+        fd.append('imagen_actual',    fImgActual.value);
         fd.append('es_destacado',     fDest.checked ? '1' : '0');
         fd.append('activo',           fActivo.checked ? '1' : '0');
+        if (fImgFile && fImgFile.files[0]) fd.append('imagen_file', fImgFile.files[0]);
 
         fetch('../api/proyectos/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })

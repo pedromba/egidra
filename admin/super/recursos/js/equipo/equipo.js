@@ -8,15 +8,23 @@
     const btnGuardar= document.getElementById('btn-guardar-miembro');
     const tituloMod = document.getElementById('modal-miembro-title');
 
-    const fId      = document.getElementById('eq-id');
-    const fNombre  = document.getElementById('eq-nombre');
-    const fIni     = document.getElementById('eq-ini');
-    const fCargo   = document.getElementById('eq-cargo');
-    const fBio     = document.getElementById('eq-bio');
-    const fFoto    = document.getElementById('eq-foto');
-    const fLinkedin= document.getElementById('eq-linkedin');
-    const fOrden   = document.getElementById('eq-orden');
-    const fActivo  = document.getElementById('eq-activo');
+    const fId         = document.getElementById('eq-id');
+    const fNombre     = document.getElementById('eq-nombre');
+    const fIni        = document.getElementById('eq-ini');
+    const fCargo      = document.getElementById('eq-cargo');
+    const fBio        = document.getElementById('eq-bio');
+    const fFoto       = document.getElementById('eq-foto');
+    const fFotoActual = document.getElementById('eq-foto-actual');
+    const fLinkedin   = document.getElementById('eq-linkedin');
+    const fOrden      = document.getElementById('eq-orden');
+    const fActivo     = document.getElementById('eq-activo');
+
+    const fotoArea      = document.getElementById('foto-area');
+    const fotoPreviewW  = document.getElementById('foto-preview-wrap');
+    const fotoPreview   = document.getElementById('foto-preview');
+    const fotoLabelTxt  = document.getElementById('foto-label-txt');
+    const fotoLabel     = document.getElementById('foto-label');
+    const btnFotoRemove = document.getElementById('foto-remove');
 
     const COLORES = ['av-y','av-b','av-g','av-p','av-r'];
     let todos = [];
@@ -27,15 +35,70 @@
         return d.innerHTML;
     }
 
+    /* ── Foto preview ── */
+    function mostrarPreview(src) {
+        fotoPreview.src             = src;
+        fotoPreviewW.style.display  = '';
+        fotoLabel.style.display     = 'none';
+    }
+
+    function ocultarPreview() {
+        fotoPreview.src             = '';
+        fotoPreviewW.style.display  = 'none';
+        fotoLabel.style.display     = '';
+        fotoLabelTxt.textContent    = 'Haz clic o arrastra una imagen';
+        fFoto.value       = '';
+        fFotoActual.value = '';
+    }
+
+    fFoto?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        fotoLabelTxt.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function (e) { mostrarPreview(e.target.result); };
+        reader.readAsDataURL(file);
+    });
+
+    btnFotoRemove?.addEventListener('click', function (e) {
+        e.stopPropagation();
+        ocultarPreview();
+    });
+
+    fotoArea?.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+    fotoArea?.addEventListener('dragleave', function () { this.classList.remove('drag-over'); });
+    fotoArea?.addEventListener('drop', function (e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fFoto.files = dt.files;
+        fFoto.dispatchEvent(new Event('change'));
+    });
+
+    fotoLabel?.addEventListener('click', function () { fFoto.click(); });
+
+    /* ── Grid ── */
     function renderGrid(lista) {
         if (!lista.length) {
             grid.innerHTML = '<div class="col-12 text-center text-muted py-4">No hay miembros registrados.</div>';
             return;
         }
-        grid.innerHTML = lista.map((m, i) => `
+        grid.innerHTML = lista.map((m, i) => {
+            const ini    = (m.iniciales || m.nombre.substring(0,2)).toUpperCase();
+            const color  = COLORES[i % COLORES.length];
+            const avatar = m.foto
+                ? '<img src="' + esc(m.foto) + '" alt="' + esc(m.nombre) + '" class="team-avatar" style="object-fit:cover;">'
+                : '<div class="team-avatar ' + color + '">' + esc(ini) + '</div>';
+            return `
             <div class="col-sm-6 col-lg-4 col-xl-3 team-card-wrap">
                 <div class="team-card">
-                    <div class="team-avatar ${COLORES[i % COLORES.length]}">${esc((m.iniciales || m.nombre.substring(0,2)).toUpperCase())}</div>
+                    ${avatar}
                     <div class="team-name">${esc(m.nombre)}</div>
                     <div class="team-cargo">${esc(m.cargo || '')}</div>
                     <div class="team-bio">${esc(m.bio || '')}</div>
@@ -48,7 +111,8 @@
                         </div>
                     </div>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
     }
 
     function cargar() {
@@ -59,10 +123,15 @@
             .catch(() => { grid.innerHTML = '<div class="col-12 text-center text-muted py-4">Error al cargar.</div>'; });
     }
 
+    function limpiarModal() {
+        fId.value = ''; fNombre.value = ''; fIni.value = ''; fCargo.value = '';
+        fBio.value = ''; fLinkedin.value = ''; fOrden.value = '0'; fActivo.checked = true;
+        ocultarPreview();
+    }
+
     function abrirNuevo() {
         tituloMod.textContent = 'Nuevo miembro';
-        fId.value = ''; fNombre.value = ''; fIni.value = ''; fCargo.value = '';
-        fBio.value = ''; fFoto.value = ''; fLinkedin.value = ''; fOrden.value = '0'; fActivo.checked = true;
+        limpiarModal();
         window.EgAdmin.openModal('modal-miembro');
     }
 
@@ -75,10 +144,14 @@
         fIni.value      = m.iniciales|| '';
         fCargo.value    = m.cargo    || '';
         fBio.value      = m.bio      || '';
-        fFoto.value     = m.foto     || '';
         fLinkedin.value = m.linkedin || '';
         fOrden.value    = m.orden ?? 0;
         fActivo.checked = !!m.activo;
+        ocultarPreview();
+        if (m.foto) {
+            fFotoActual.value = m.foto;
+            mostrarPreview(m.foto);
+        }
         window.EgAdmin.openModal('modal-miembro');
     }
 
@@ -88,15 +161,18 @@
             return;
         }
         const fd = new FormData();
-        fd.append('id',       fId.value);
-        fd.append('nombre',   fNombre.value.trim());
-        fd.append('iniciales',fIni.value.trim());
-        fd.append('cargo',    fCargo.value.trim());
-        fd.append('bio',      fBio.value.trim());
-        fd.append('foto',     fFoto.value.trim());
-        fd.append('linkedin', fLinkedin.value.trim());
-        fd.append('orden',    fOrden.value || '0');
-        fd.append('activo',   fActivo.checked ? '1' : '0');
+        fd.append('id',          fId.value);
+        fd.append('nombre',      fNombre.value.trim());
+        fd.append('iniciales',   fIni.value.trim());
+        fd.append('cargo',       fCargo.value.trim());
+        fd.append('bio',         fBio.value.trim());
+        fd.append('foto_actual', fFotoActual.value);
+        fd.append('linkedin',    fLinkedin.value.trim());
+        fd.append('orden',       fOrden.value || '0');
+        fd.append('activo',      fActivo.checked ? '1' : '0');
+        if (fFoto.files[0]) {
+            fd.append('foto', fFoto.files[0]);
+        }
 
         fetch('../api/equipo/guardar.php', { method: 'POST', body: fd })
             .then(r => r.json())

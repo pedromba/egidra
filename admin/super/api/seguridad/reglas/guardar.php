@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../../config/conexion.php';
+require_once '../../../../../config/logger.php';
 
 $id     = isset($_POST['id'])          ? (int) $_POST['id']              : 0;
 $titulo = isset($_POST['titulo'])      ? trim($_POST['titulo'])           : '';
@@ -24,6 +25,7 @@ $stmt = $conexion->prepare(
 $stmt->bind_param('sssi', $titulo, $desc, $icono, $id);
 
 if ($stmt->execute()) {
+    registrar_log($conexion, $_SESSION['user_id'], 'EDITAR', 'Editado: ' . ($titulo ?? 'registro'), 'reglas_oro', $id);
     echo json_encode(['estado' => true, 'mensaje' => 'Regla actualizada.']);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'Error al guardar la regla.']);

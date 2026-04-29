@@ -1,5 +1,90 @@
-/* Proyectos */
+/* Proyectos — categoría badges (legacy slugs) */
 .cat-buceo   { background: rgba(59,130,246,.12);  color: #1e40af; }
 .cat-cuerda  { background: rgba(139,92,246,.12);  color: #5b21b6; }
 .cat-logist  { background: rgba(16,185,129,.12);  color: #065f46; }
 .cat-estudio { background: rgba(245,158,11,.12);  color: #7c2d12; }
+
+/* ── Área de subida de imagen ────────────────────────────────── */
+.img-upload-area {
+    width: 100%;
+    height: 130px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--light-bg);
+    overflow: hidden;
+    transition: var(--ease);
+}
+.img-upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(255,193,7,.05);
+}
+
+/* ── Botones de cambio de vista ─────────────────────────────── */
+.view-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.vt-btn {
+    width: 34px; height: 34px;
+    border: none; background: none;
+    color: var(--muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; transition: var(--ease);
+}
+.vt-btn:hover  { background: #f3f4f6; color: var(--text); }
+.vt-btn.active { background: var(--primary); color: #000; }
+.vt-btn + .vt-btn { border-left: 1px solid var(--border); }
+
+/* ── Cards de proyecto ───────────────────────────────────────── */
+.proy-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex; flex-direction: column;
+    height: 100%;
+    transition: var(--ease);
+}
+.proy-card:hover {
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+}
+
+.proy-card-head {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.proy-card-titulo {
+    font-size: .88rem; font-weight: 700;
+    color: var(--text); margin: 0 0 10px;
+    line-height: 1.35;
+}
+
+.proy-card-meta {
+    flex: 1;
+    display: flex; flex-direction: column; gap: 5px;
+    margin-bottom: 12px;
+}
+.proy-card-meta span {
+    font-size: .75rem; color: var(--muted);
+    display: flex; align-items: center; gap: 7px;
+}
+.proy-card-meta i {
+    width: 12px; text-align: center; flex-shrink: 0;
+}
+
+.proy-card-foot {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}

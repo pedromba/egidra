@@ -12,6 +12,8 @@ if (ini_get('session.use_cookies')) {
 
 session_destroy();
 
-require_once '../../config/rutas.php';
-header('Location: ' . RUTA_BASE . 'admin/');
+// admin/api/logout.php → sube 2 niveles para llegar a la raíz
+require_once __DIR__ . '/../../config/init.php';
+
+header('Location: ' . RUTA_ADMIN);
 exit;

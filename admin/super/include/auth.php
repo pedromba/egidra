@@ -6,9 +6,9 @@ if (session_status() === PHP_SESSION_NONE) {
 if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     session_unset();
     session_destroy();
-    if (!defined('RUTA_BASE')) {
-        require_once __DIR__ . '/../../../config/rutas.php';
+    if (!defined('RUTA_ADMIN')) {
+        require_once __DIR__ . '/../../../config/config.php';
     }
-    header('Location: ' . RUTA_BASE . 'admin/');
+    header('Location: ' . RUTA_ADMIN);
     exit;
 }

@@ -1,40 +1,46 @@
 // EGIDRA - JavaScript Página de Inicio
 
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Navbar scroll effect
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ── Navbar scroll ────────────────────────────────────────────────
     const navbar = document.querySelector('.navbar');
-    
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         if (window.scrollY > 50) {
-            navbar.style.padding = '0.5rem 0';
-            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+            navbar.style.padding   = '0.5rem 0';
+            navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
         } else {
-            navbar.style.padding = '1rem 0';
+            navbar.style.padding   = '1rem 0';
             navbar.style.boxShadow = 'none';
         }
     });
-    
-    // Smooth scroll para enlaces internos
+
+    // ── Smooth scroll ────────────────────────────────────────────────
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
-    
-    // Animación de números en stats (contador)
-    const statsSection = document.querySelector('.stats-section');
-    let animated = false;
-    
-    if (statsSection) {
-        const observer = new IntersectionObserver((entries) => {
+
+    // ── Stats: carga real desde API ──────────────────────────────────
+    fetch(BASE_URL + 'recursos/api/inicio/stats.php')
+        .then(r => r.json())
+        .then(({ success, data }) => {
+            if (!success) return;
+            document.querySelectorAll('.stat-number[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                if (data[key] !== undefined) el.dataset.target = data[key];
+            });
+            initStatsObserver();
+        })
+        .catch(() => initStatsObserver());
+
+    function initStatsObserver() {
+        const statsSection = document.querySelector('.stats-section');
+        if (!statsSection) return;
+        let animated = false;
+        const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !animated) {
                     animated = true;
@@ -42,91 +48,158 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }, { threshold: 0.3 });
-        
         observer.observe(statsSection);
     }
-    
+
     function animateCounters() {
-        const counters = document.querySelectorAll('.stat-number');
-        
-        counters.forEach(counter => {
-            const target = parseInt(counter.dataset.target);
-            const suffix = counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+';
+        document.querySelectorAll('.stat-number').forEach(counter => {
+            const target   = parseInt(counter.dataset.target) || 0;
             const duration = 2000;
-            const step = target / (duration / 16);
+            const steps    = Math.max(target, 1);
+            const delay    = duration / steps;
             let current = 0;
-            
-            const updateCounter = () => {
-                current += step;
-                if (current < target) {
-                    counter.textContent = Math.floor(current);
-                } else {
-                    counter.textContent = target + suffix;
-                }
-            };
-            
+            const suffix = counter.closest('.stat-item').querySelector('p')
+                .textContent.includes('%') ? '%' : '+';
             const interval = setInterval(() => {
-                current += step;
+                current++;
                 if (current >= target) {
                     counter.textContent = target + suffix;
                     clearInterval(interval);
                 } else {
-                    counter.textContent = Math.floor(current);
+                    counter.textContent = current;
                 }
-            }, duration / target);
+            }, Math.max(delay, 10));
         });
     }
-    
-    // Efecto hover en cards de servicios
-    const serviceCards = document.querySelectorAll('.service-card');
-    
-    serviceCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.zIndex = '10';
+
+    // ── Proyectos destacados ─────────────────────────────────────────
+    fetch(BASE_URL + 'recursos/api/inicio/proyectos.php')
+        .then(r => r.json())
+        .then(({ success, data }) => {
+            const container = document.getElementById('proyectosContainer');
+            if (!container) return;
+            if (!success || !data.length) {
+                container.innerHTML = renderProyectosFallback();
+                return;
+            }
+            container.innerHTML = data.map(p => {
+                const img = p.imagen_url
+                    ? `<img src="${p.imagen_url}" class="card-img-top" alt="${esc(p.titulo)}" style="height:200px;object-fit:cover;">`
+                    : `<div class="bg-secondary d-flex align-items-center justify-content-center" style="height:200px;"><i class="fas fa-${p.icono || 'anchor'} fa-3x text-white-50"></i></div>`;
+                return `
+                <div class="col-md-4">
+                    <div class="card project-card border-0 shadow-sm h-100">
+                        ${img}
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">${esc(p.categoria || 'Proyecto')}</span>
+                            <h5 class="card-title fw-bold">${esc(p.titulo)}</h5>
+                            <p class="card-text text-muted small">${esc(p.descripcion_tecnica || '')}</p>
+                            ${p.ubicacion ? `<span class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i>${esc(p.ubicacion)}</span>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        })
+        .catch(() => {
+            const c = document.getElementById('proyectosContainer');
+            if (c) c.innerHTML = renderProyectosFallback();
         });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.zIndex = '1';
+
+    function renderProyectosFallback() {
+        return `
+        <div class="col-12 text-center py-5 text-muted">
+            <i class="fas fa-folder-open fa-3x mb-3 opacity-50"></i>
+            <p>Los proyectos se mostrarán aquí una vez publicados desde el panel de administración.</p>
+        </div>`;
+    }
+
+    // ── Clientes logo strip ──────────────────────────────────────────
+    fetch(BASE_URL + 'recursos/api/inicio/clientes.php')
+        .then(r => r.json())
+        .then(({ success, data }) => {
+            const row = document.getElementById('clientesRow');
+            if (!row) return;
+            if (!success || !data.length) {
+                row.innerHTML = '<div class="col-12 text-center text-muted opacity-50 py-2">Clientes se añadirán desde el panel de administración.</div>';
+                return;
+            }
+            row.innerHTML = data.map(c => {
+                if (c.logo_url) {
+                    return `<div class="col-4 col-md-2 mb-3 mb-md-0">
+                        <img src="${esc(c.logo_url)}" alt="${esc(c.nombre)}" style="max-height:50px;max-width:120px;object-fit:contain;filter:grayscale(1) brightness(1.5);opacity:.6;">
+                    </div>`;
+                }
+                return `<div class="col-4 col-md-2 mb-3 mb-md-0">
+                    <h4 class="text-muted opacity-50">${esc(c.iniciales || c.nombre)}</h4>
+                </div>`;
+            }).join('');
         });
+
+    // ── Socios ───────────────────────────────────────────────────────
+    fetch(BASE_URL + 'recursos/api/inicio/socios.php')
+        .then(r => r.json())
+        .then(({ success, data }) => {
+            const container = document.getElementById('sociosContainer');
+            if (!container) return;
+
+            // Quitar loader
+            const loader = document.getElementById('sociosLoader');
+            if (loader) loader.remove();
+
+            if (!success || !data.length) {
+                container.innerHTML = '<div class="col-12 text-center text-muted py-4">Los socios se publicarán desde el panel de administración.</div>';
+                return;
+            }
+
+            container.innerHTML = data.map(s => {
+                const logo = s.logo_url
+                    ? `<img src="${esc(s.logo_url)}" alt="${esc(s.nombre)}" style="max-height:60px;max-width:140px;object-fit:contain;" class="mb-2">`
+                    : `<div class="partner-logo">${esc(s.iniciales)}</div>`;
+                const link = s.url_web
+                    ? `<a href="${esc(s.url_web)}" target="_blank" rel="noopener noreferrer" class="partner-link"><i class="fas fa-arrow-up-right-from-square me-1"></i>Ver sitio</a>`
+                    : '';
+                return `
+                <div class="col-6 col-md-3">
+                    <div class="partner-card">
+                        ${logo}
+                        <div class="partner-name">${esc(s.nombre)}</div>
+                        <p class="partner-desc">${esc(s.descripcion || '')}</p>
+                        ${link}
+                    </div>
+                </div>`;
+            }).join('');
+        });
+
+    // ── Hover en service cards ────────────────────────────────────────
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('mouseenter', function () { this.style.zIndex = '10'; });
+        card.addEventListener('mouseleave', function () { this.style.zIndex = '1'; });
     });
-    
-    // Tooltip para elementos que lo requieran
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-    
-    // Lazy loading para imágenes
+
+    // ── Tooltips Bootstrap ────────────────────────────────────────────
+    [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        .map(el => new bootstrap.Tooltip(el));
+
+    // ── Lazy loading imágenes ─────────────────────────────────────────
     if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
+        const imgObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        imageObserver.unobserve(img);
-                    }
+                    if (img.dataset.src) { img.src = img.dataset.src; observer.unobserve(img); }
                 }
             });
         });
-        
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
+        document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
     }
-    
-    // Animación de entrada para elementos
-    const animateOnScroll = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate__animated', 'animate__fadeInUp');
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.service-card, .project-card, .stat-item').forEach(el => {
-        animateOnScroll.observe(el);
-    });
-    
+
+    // ── Helper escape HTML ────────────────────────────────────────────
+    function esc(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     console.log('EGIDRA - Inicio cargado correctamente');
 });

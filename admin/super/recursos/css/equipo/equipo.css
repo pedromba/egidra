@@ -25,3 +25,26 @@
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
 .team-foot  { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 4px; }
+
+/* Foto upload */
+.foto-upload-area {
+    border: 1.5px dashed var(--border); border-radius: 10px;
+    padding: 14px; display: flex; align-items: center; gap: 14px;
+    transition: border-color .2s;
+}
+.foto-upload-area.drag-over { border-color: var(--primary); background: rgba(255,193,7,.04); }
+.foto-label {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; flex: 1; text-align: center; color: var(--muted);
+    font-size: .78rem; line-height: 1.4;
+}
+.foto-label i { font-size: 1.4rem; color: var(--primary); margin-bottom: 2px; }
+.foto-label small { font-size: .68rem; color: var(--muted); }
+.foto-preview-wrap { position: relative; flex-shrink: 0; }
+.foto-remove {
+    position: absolute; top: -4px; right: -4px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #ef4444; border: none; color: #fff;
+    font-size: .55rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}

@@ -1,3 +1,22 @@
+/* ── Área de subida de imagen ────────────────────────────────── */
+.img-upload-area {
+    width: 100%;
+    height: 130px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--light-bg);
+    overflow: hidden;
+    transition: var(--ease);
+}
+.img-upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(255,193,7,.05);
+}
+
 /* Proyectos */
 .cat-buceo   { background: rgba(59,130,246,.12);  color: #1e40af; }
 .cat-cuerda  { background: rgba(139,92,246,.12);  color: #5b21b6; }

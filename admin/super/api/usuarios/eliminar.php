@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/logger.php';
 
 $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 if ($id <= 0) {
@@ -22,6 +23,7 @@ $stmt = $conexion->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
 $stmt->bind_param('i', $id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
+    registrar_log($conexion, $_SESSION['user_id'], 'ELIMINAR', 'Eliminado registro id=' . $id, 'usuarios', $id);
     echo json_encode(['estado' => true, 'mensaje' => 'Usuario eliminado.']);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'No se pudo eliminar el usuario.']);

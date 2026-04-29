@@ -1,6 +1,6 @@
 <?php
 require_once '../include/auth.php';
-require_once '../../../config/rutas.php';
+require_once '../../../config/init.php';
 $pageTitle = 'Logs de Actividad'; $pageBreadcrumb = 'Logs';
 ?>
 <!DOCTYPE html><html lang="es"><head>
@@ -29,15 +29,36 @@ $pageTitle = 'Logs de Actividad'; $pageBreadcrumb = 'Logs';
         <div class="card-admin">
             <div class="tbl-wrap">
                 <table class="tbl">
-                    <thead><tr><th>Acción</th><th>Usuario</th><th>Tabla</th><th>Detalle</th><th>IP</th><th>Fecha</th></tr></thead>
+                    <thead><tr><th>Acción</th><th>Usuario</th><th>Tabla</th><th>Detalle</th><th>IP</th><th>Fecha</th><th style="width:48px"></th></tr></thead>
                     <tbody id="tbody-logs">
-                        <tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>
+                        <tr><td colspan="7" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
 </div>
+<!-- Modal detalle log -->
+<div class="modal fade" id="modal-log-detalle" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:12px;overflow:hidden;">
+            <div class="modal-header" style="background:var(--primary,#0d6efd);color:#fff;border:none;">
+                <h6 class="modal-title fw-bold mb-0"><i class="fas fa-list-check me-2"></i>Detalle del Registro</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <table class="table table-sm mb-0" id="tbl-log-detalle">
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/logs/logs.js"></script>
 </body></html>

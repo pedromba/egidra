@@ -1,5 +1,7 @@
 <?php
-if (!defined('RUTA_BASE')) require_once __DIR__ . '/../../../config/rutas.php';
+if (!defined('PROJECT_ROOT')) {
+    require_once __DIR__ . '/../../../config/init.php';
+}
 $pageTitle      ??= 'Dashboard';
 $pageBreadcrumb ??= 'Panel de Control';
 ?>
@@ -12,10 +14,10 @@ $pageBreadcrumb ??= 'Panel de Control';
         </div>
     </div>
     <div class="tb-right">
-        <a href="<?php echo RUTA_BASE; ?>admin/super/mensajes/" class="tb-btn" title="Mensajes">
+        <a href="<?php echo RUTA_ADMIN_SUPER; ?>mensajes/" class="tb-btn" title="Mensajes">
             <i class="fas fa-envelope"></i><span class="tb-dot"></span>
         </a>
-        <a href="<?php echo RUTA_BASE; ?>admin/super/logs/" class="tb-btn" title="Logs">
+        <a href="<?php echo RUTA_ADMIN_SUPER; ?>logs/" class="tb-btn" title="Logs">
             <i class="fas fa-bell"></i>
         </a>
 
@@ -32,11 +34,11 @@ $pageBreadcrumb ??= 'Panel de Control';
                     <div class="tb-dd-email"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></div>
                 </div>
                 <div class="tb-dd-sep"></div>
-                <a href="<?php echo RUTA_BASE; ?>admin/super/perfil/" class="tb-dd-item" role="menuitem">
+                <a href="<?php echo RUTA_ADMIN_SUPER; ?>perfil/" class="tb-dd-item" role="menuitem">
                     <i class="fas fa-user-pen"></i>Mi perfil
                 </a>
                 <div class="tb-dd-sep"></div>
-                <button type="button" class="tb-dd-item tb-dd-danger btn-logout" data-logout-url="<?php echo RUTA_BASE; ?>admin/api/logout.php" role="menuitem" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">
+                <button type="button" class="tb-dd-item tb-dd-danger btn-logout" data-logout-url="<?php echo RUTA_ADMIN; ?>api/logout.php" role="menuitem" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">
                     <i class="fas fa-right-from-bracket"></i>Cerrar sesión
                 </button>
             </div>

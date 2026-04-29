@@ -1,18 +1,7 @@
-﻿<?php
+<?php
+require_once '../include/auth.php';
 require_once '../../../config/rutas.php';
 $pageTitle = 'Proyectos'; $pageBreadcrumb = 'Proyectos';
-$proyectos = [
-    ['Inspección PLEM',           'buceo',   'Marathon','Pta. Europa',        2023, true ],
-    ['Mantenimiento Plataforma',  'cuerda',  'Chevron', 'Región Insular',     2023, true ],
-    ['Suministro Offshore',       'logist',  'Trident', 'Múltiples',          2022, true ],
-    ['Instalación Riser',         'buceo',   'Repsol',  'Costa Atlántica',    2022, false],
-    ['Análisis de Integridad',    'estudio', 'BP',      'Mar del Norte',      2023, false],
-    ['Pintura Anticorrosiva',     'cuerda',  'Cepsa',   'Refinería Sur',      2022, false],
-    ['Reemplazo Ánodos',          'buceo',   'Marathon','Terminal Cargadero', 2021, false],
-    ['Movilización Campaña',      'logist',  'Trident', 'Guinea Ecuatorial',  2021, false],
-    ['Estudio HAZOP',             'estudio', 'Repsol',  'Planta Onshore',     2024, false],
-];
-$labels=['buceo'=>['Buceo','bp-blue'],'cuerda'=>['Cuerda','bp-purple'],'logist'=>['Logística','bp-green'],'estudio'=>['Estudios','bp-yellow']];
 ?>
 <!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -28,57 +17,116 @@ $labels=['buceo'=>['Buceo','bp-blue'],'cuerda'=>['Cuerda','bp-purple'],'logist'=
 <div class="cw">
     <?php include '../include/header.php'; ?>
     <main class="ci">
-        <div class="d-flex align-items-center justify-content-between gap-3 mb-4 flex-wrap">
+
+        <!-- Toolbar -->
+        <div class="d-flex align-items-center justify-content-between gap-3 mb-3 flex-wrap">
             <div class="d-flex gap-2 flex-wrap">
                 <div class="f-search" style="width:220px;"><i class="fas fa-search"></i><input type="text" id="search-proy" placeholder="Buscar..."></div>
                 <button class="btn-sec active" data-cat-filter="">Todos</button>
-                <button class="btn-sec" data-cat-filter="buceo">Buceo</button>
-                <button class="btn-sec" data-cat-filter="cuerda">Cuerda</button>
-                <button class="btn-sec" data-cat-filter="logist">Logística</button>
-                <button class="btn-sec" data-cat-filter="estudio">Estudios</button>
+                <div id="filter-cats-proy" class="d-flex gap-2 flex-wrap"></div>
             </div>
-            <button class="btn-pri" data-modal-open="modal-add-proy"><i class="fas fa-plus"></i>Nuevo proyecto</button>
+            <div class="d-flex align-items-center gap-2">
+                <div class="view-toggle">
+                    <button class="vt-btn active" id="btn-vista-tabla" title="Vista tabla"><i class="fas fa-list"></i></button>
+                    <button class="vt-btn" id="btn-vista-cards" title="Vista tarjetas"><i class="fas fa-th-large"></i></button>
+                </div>
+                <button class="btn-pri" id="btn-nuevo-proy"><i class="fas fa-plus"></i>Nuevo proyecto</button>
+            </div>
         </div>
-        <div class="card-admin">
+
+        <p class="mb-3" id="stats-proy" style="font-size:.8rem;color:var(--muted);">Cargando...</p>
+
+        <!-- Vista tabla -->
+        <div class="card-admin" id="vista-tabla">
             <div class="tbl-wrap">
                 <table class="tbl">
-                    <thead><tr><th>Título</th><th>Categoría</th><th>Cliente</th><th>Ubicación</th><th>Año</th><th>Destacado</th><th></th></tr></thead>
-                    <tbody>
-                    <?php foreach ($proyectos as [$t,$cat,$cli,$ubi,$ano,$dest]): ?>
-                    <tr data-cat="<?php echo $cat; ?>">
-                        <td style="font-weight:600;font-size:.82rem;"><?php echo $t; ?></td>
-                        <td><span class="badge-pill <?php echo $labels[$cat][1]; ?>"><?php echo $labels[$cat][0]; ?></span></td>
-                        <td style="font-size:.8rem;"><?php echo $cli; ?></td>
-                        <td style="font-size:.78rem;color:var(--muted);"><i class="fas fa-map-marker-alt me-1"></i><?php echo $ubi; ?></td>
-                        <td style="font-size:.8rem;"><?php echo $ano; ?></td>
-                        <td><label class="toggle-sw"><input type="checkbox" <?php echo $dest?'checked':''; ?>><span class="toggle-slider"></span></label></td>
-                        <td><div class="d-flex gap-1"><button class="btn-icon edit"><i class="fas fa-pen"></i></button><button class="btn-icon del"><i class="fas fa-trash"></i></button></div></td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <thead><tr>
+                        <th>Título</th><th>Categoría</th><th>Cliente</th>
+                        <th>Ubicación</th><th>Año</th><th>Destacado</th><th>Activo</th><th></th>
+                    </tr></thead>
+                    <tbody id="tbody-proy">
+                        <tr><td colspan="8" class="text-center text-muted py-4">
+                            <i class="fas fa-spinner fa-spin me-2"></i>Cargando...
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Vista tarjetas -->
+        <div class="row g-3" id="grid-proy" style="display:none!important;"></div>
+
     </main>
 </div>
-<div class="modal-backdrop-custom" id="modal-add-proy">
+
+<!-- Modal Proyecto -->
+<div class="modal-backdrop-custom" id="modal-proy">
     <div class="modal-box">
-        <div class="modal-head"><h6>Nuevo Proyecto</h6><button class="modal-close" data-modal-close="modal-add-proy"><i class="fas fa-times"></i></button></div>
-        <div class="modal-body">
-            <div class="mb-3"><label class="f-label">Título <span class="text-danger">*</span></label><input class="f-input" type="text" placeholder="Ej: Inspección PLEM"></div>
-            <div class="row g-2 mb-3">
-                <div class="col-6"><label class="f-label">Categoría</label><select class="f-select"><option>Buceo Industrial</option><option>Rope Access</option><option>Logística</option><option>Estudios Técnicos</option></select></div>
-                <div class="col-6"><label class="f-label">Cliente</label><select class="f-select"><option>Marathon</option><option>Chevron</option><option>Trident</option><option>Repsol</option><option>Cepsa</option><option>BP</option></select></div>
-            </div>
-            <div class="row g-2 mb-3">
-                <div class="col-8"><label class="f-label">Ubicación</label><input class="f-input" type="text" placeholder="Ej: Malabo, GE"></div>
-                <div class="col-4"><label class="f-label">Año</label><input class="f-input" type="number" placeholder="2026"></div>
-            </div>
-            <div class="mb-0"><label class="f-label">Descripción técnica</label><textarea class="f-textarea" placeholder="Detalles de ejecución..."></textarea></div>
+        <div class="modal-head">
+            <h6 id="modal-proy-title">Nuevo Proyecto</h6>
+            <button class="modal-close" data-modal-close="modal-proy"><i class="fas fa-times"></i></button>
         </div>
-        <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-add-proy">Cancelar</button><button class="btn-pri"><i class="fas fa-check me-1"></i>Crear</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="proy-id">
+            <div class="mb-3">
+                <label class="f-label">Título <span class="text-danger">*</span></label>
+                <input class="f-input" id="proy-titulo" type="text" placeholder="Ej: Inspección PLEM">
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                    <label class="f-label">Categoría</label>
+                    <select class="f-select" id="proy-cat"><option value="">— Categoría —</option></select>
+                </div>
+                <div class="col-6">
+                    <label class="f-label">Cliente</label>
+                    <select class="f-select" id="proy-cli"><option value="">— Cliente —</option></select>
+                </div>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-8">
+                    <label class="f-label">Ubicación</label>
+                    <input class="f-input" id="proy-ubic" type="text" placeholder="Ej: Malabo, GE">
+                </div>
+                <div class="col-4">
+                    <label class="f-label">Año</label>
+                    <input class="f-input" id="proy-ano" type="number" placeholder="2026">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="f-label">Imagen del proyecto</label>
+                <div class="img-upload-area" id="proy-img-area" onclick="document.getElementById('proy-img-file').click()" title="Clic para subir imagen">
+                    <img id="proy-img-preview" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                    <div id="proy-img-ph" class="text-center">
+                        <i class="fas fa-image fa-2x text-muted mb-1 d-block"></i>
+                        <span class="text-muted" style="font-size:.75rem;">Clic para subir · JPG, PNG, WebP · máx. 2 MB</span>
+                    </div>
+                </div>
+                <input type="file" id="proy-img-file" name="imagen_file" accept="image/jpeg,image/png,image/webp" style="display:none">
+                <input type="hidden" id="proy-img-actual" name="imagen_actual">
+            </div>
+            <div class="mb-3">
+                <label class="f-label">Descripción técnica</label>
+                <textarea class="f-textarea" id="proy-desc" placeholder="Detalles de ejecución..."></textarea>
+            </div>
+            <div class="d-flex gap-4">
+                <div class="d-flex align-items-center justify-content-between flex-grow-1">
+                    <label class="f-label mb-0">Destacado</label>
+                    <label class="toggle-sw"><input type="checkbox" id="proy-dest"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="d-flex align-items-center justify-content-between flex-grow-1">
+                    <label class="f-label mb-0">Activo</label>
+                    <label class="toggle-sw"><input type="checkbox" id="proy-activo" checked><span class="toggle-slider"></span></label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn-sec" data-modal-close="modal-proy">Cancelar</button>
+            <button class="btn-pri" id="btn-guardar-proy"><i class="fas fa-check me-1"></i>Guardar</button>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/proyectos/proyectos.js"></script>
 </body></html>
