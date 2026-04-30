@@ -1,4 +1,4 @@
-/* EGIDRA - Estilos Página de Inicio */
+﻿/* EGIDRA - Estilos Página de Inicio */
 
 /* Variables */
 :root {
@@ -69,7 +69,7 @@ body {
     min-height: 100vh;
     background: 
         linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.65) 50%, rgba(13, 13, 13, 0.4) 100%),
-        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+        url('../../../img/template/bg-offshore.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -341,7 +341,7 @@ body {
     .hero-section {
         background: 
             linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
-            url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+            url('../../img/template/bg-offshore.jpg');
         background-size: cover;
         background-position: center;
     }

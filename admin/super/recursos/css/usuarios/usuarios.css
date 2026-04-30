@@ -2,3 +2,7 @@
 .user-cell { display: flex; align-items: center; gap: 10px; }
 .role-super  { background: rgba(139,92,246,.12); color: #5b21b6; }
 .role-editor { background: rgba(59,130,246,.12);  color: #1e40af; }
+
+.btn-icon.reset-pass:hover { background: rgba(37,99,235,.1);  border-color: #93c5fd; color: #1d4ed8; }
+.btn-icon.deact:hover      { background: rgba(239,68,68,.08); border-color: #fca5a5; color: #b91c1c; }
+.btn-icon.react:hover      { background: rgba(5,150,105,.08); border-color: #6ee7b7; color: #047857; }

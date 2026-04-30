@@ -23,6 +23,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── Empresa: datos dinámicos desde API ──────────────────────────
+    fetch(BASE_URL + 'recursos/api/inicio/empresa.php')
+        .then(r => r.json())
+        .then(({ success, data }) => {
+            if (!success || !data) return;
+            document.title = data.nombre + ' - Servicios Industriales Especializados';
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute('content', data.nombre + ' - ' + (data.slogan || 'Expertos en Soluciones Industriales') + '.');
+            const heroSlogan = document.getElementById('heroSlogan');
+            if (heroSlogan && data.slogan) heroSlogan.textContent = data.slogan;
+            const heroDesc = document.getElementById('heroDesc');
+            if (heroDesc && data.descripcion) heroDesc.textContent = data.descripcion;
+            const aboutDesc = document.getElementById('aboutDesc');
+            if (aboutDesc && data.descripcion) aboutDesc.textContent = data.descripcion;
+            if (data.img_nosotros_url) {
+                const col = document.getElementById('imgNosotrosCol');
+                if (col) col.innerHTML = `<img src="${esc(data.img_nosotros_url)}" alt="Equipo ${esc(data.nombre)}" class="img-fluid rounded-3 shadow" style="width:100%;height:400px;object-fit:cover;">`;
+            }
+            const partnersTrust = document.getElementById('partnersTrust');
+            if (partnersTrust && data.nombre) partnersTrust.innerHTML = `Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. ${esc(data.nombre)} es miembro activo de los principales organismos de la industria subsea y rope access.`;
+            if (data.telefono) {
+                const telDiv = document.getElementById('contactTelDiv');
+                const telSpan = document.getElementById('contactTel');
+                if (telSpan) telSpan.textContent = data.telefono;
+                if (telDiv) telDiv.style.display = '';
+            }
+            const emailSpan = document.getElementById('contactEmail');
+            if (emailSpan) emailSpan.textContent = data.email || 'info@egidra.com';
+            const dirSpan = document.getElementById('contactDir');
+            if (dirSpan) dirSpan.textContent = (data.ciudad || 'Malabo') + ', ' + (data.pais || 'Guinea Ecuatorial');
+        });
+
     // ── Stats: carga real desde API ──────────────────────────────────
     fetch(BASE_URL + 'recursos/api/inicio/stats.php')
         .then(r => r.json())
@@ -81,6 +113,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!success || !data.length) {
                 container.innerHTML = renderProyectosFallback();
                 return;
+            }
+            const firstWithImg = data.find(p => p.imagen_url);
+            if (firstWithImg) {
+                const hseCol = document.getElementById('imgHSECol');
+                if (hseCol) hseCol.innerHTML = `<img src="${esc(firstWithImg.imagen_url)}" alt="Seguridad HSE" class="img-fluid rounded-3 shadow" style="width:100%;height:400px;object-fit:cover;">`;
             }
             container.innerHTML = data.map(p => {
                 const img = p.imagen_url

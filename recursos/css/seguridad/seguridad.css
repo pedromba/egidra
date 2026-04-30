@@ -1,4 +1,4 @@
-/* EGIDRA - Estilos Página Seguridad HSE */
+﻿/* EGIDRA - Estilos Página Seguridad HSE */
 
 /* Page Header */
 .page-header {
@@ -6,7 +6,7 @@
     min-height: 50vh;
     background:
         linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
-        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+        url('../../../img/template/bg-industrial.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -232,7 +232,7 @@
         min-height: 40vh;
         background:
             linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
-            url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+            url('../../img/template/bg-industrial.jpg');
         background-size: cover;
         background-position: center;
     }

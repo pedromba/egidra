@@ -7,14 +7,16 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Editor') {
     exit;
 }
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/rutas.php';
 
 $rows  = $conexion->query(
-    "SELECT id_cliente AS id, nombre, iniciales, sector, descripcion, activo
+    "SELECT id_cliente AS id, nombre, iniciales, sector, descripcion, logo, activo
      FROM clientes ORDER BY nombre ASC"
 );
 $datos = [];
 while ($r = $rows->fetch_assoc()) {
-    $r['activo'] = (bool) $r['activo'];
+    $r['activo']   = (bool) $r['activo'];
+    $r['logo_url'] = !empty($r['logo']) ? RUTA_BASE . $r['logo'] : null;
     $datos[] = $r;
 }
 echo json_encode(['estado' => true, 'datos' => $datos]);

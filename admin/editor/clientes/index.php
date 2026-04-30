@@ -24,10 +24,8 @@ $pageTitle = 'Clientes'; $pageBreadcrumb = 'Clientes';
             </div>
             <button class="btn-pri" id="btn-nuevo-cli"><i class="fas fa-plus"></i>Nuevo cliente</button>
         </div>
-        <div class="row g-3" id="grid-clientes">
-            <div class="col-12 text-center text-muted py-4">
-                <i class="fas fa-spinner fa-spin me-2"></i>Cargando...
-            </div>
+        <div id="grid-clientes">
+            <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>
         </div>
     </main>
 </div>
@@ -41,6 +39,28 @@ $pageTitle = 'Clientes'; $pageBreadcrumb = 'Clientes';
         </div>
         <div class="modal-body">
             <input type="hidden" id="cli-id">
+            <input type="hidden" id="cli-logo-actual">
+
+            <!-- Logo -->
+            <div class="mb-3">
+                <label class="f-label">Logo</label>
+                <div class="d-flex align-items-center gap-3">
+                    <div id="cli-logo-preview" style="width:64px;height:64px;border-radius:12px;border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--body-bg);flex-shrink:0;">
+                        <i class="fas fa-image fa-lg" style="color:var(--muted);"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <input type="file" id="cli-logo-file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+                        <button type="button" class="btn-sec btn-sm w-100 mb-1" id="btn-logo-sel" style="font-size:.78rem;">
+                            <i class="fas fa-upload me-1"></i>Subir logo
+                        </button>
+                        <button type="button" class="btn-sec btn-sm w-100" id="btn-logo-quitar" style="font-size:.78rem;display:none;">
+                            <i class="fas fa-trash me-1"></i>Quitar logo
+                        </button>
+                        <p style="font-size:.7rem;color:var(--muted);margin:.3rem 0 0;">JPG, PNG o WebP · máx. 2 MB</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="mb-3">
                 <label class="f-label">Nombre <span class="text-danger">*</span></label>
                 <input class="f-input" type="text" id="cli-nombre" placeholder="Ej: Marathon Oil">
@@ -59,7 +79,7 @@ $pageTitle = 'Clientes'; $pageBreadcrumb = 'Clientes';
                 <label class="f-label">Descripción</label>
                 <textarea class="f-textarea" id="cli-desc" placeholder="Relación comercial, sector..."></textarea>
             </div>
-            <div class="mb-0 d-flex align-items-center justify-content-between">
+            <div id="row-activo" class="mb-0 d-flex align-items-center justify-content-between">
                 <label class="f-label mb-0">Activo</label>
                 <label class="toggle-sw"><input type="checkbox" id="cli-activo" checked><span class="toggle-slider"></span></label>
             </div>

@@ -61,6 +61,7 @@ $pageTitle = 'Equipo'; $pageBreadcrumb = 'Gestión del Equipo';
         <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-miembro">Cancelar</button><button class="btn-pri" id="btn-guardar-miembro"><i class="fas fa-check me-1"></i>Guardar</button></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/equipo/equipo.js"></script>
 </body>

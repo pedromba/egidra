@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once '../config/rutas.php';
 require_once '../config/conexion.php';
 
@@ -52,7 +52,7 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=450&fit=crop" alt="Historia <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow">
+                    <img src="../img/template/bg-industrial.jpg" alt="Historia <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">
                     <span class="text-warning fw-bold text-uppercase">Nuestra Historia</span>
@@ -161,7 +161,7 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop" alt="Certificaciones" class="img-fluid rounded-3 shadow">
+                    <img src="../img/template/srv-tecnico.jpg" alt="Certificaciones" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6 order-lg-1">
                     <span class="text-warning fw-bold text-uppercase">Certificaciones</span>

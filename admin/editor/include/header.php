@@ -14,8 +14,9 @@ $pageBreadcrumb ??= 'Panel de Control';
         </div>
     </div>
     <div class="tb-right">
-        <a href="<?php echo RUTA_ADMIN_EDITOR; ?>mensajes/" class="tb-btn" title="Mensajes">
-            <i class="fas fa-envelope"></i><span class="tb-dot"></span>
+        <a href="<?php echo RUTA_ADMIN_EDITOR; ?>mensajes/" class="tb-btn" title="Mensajes" id="btn-header-mensajes">
+            <i class="fas fa-envelope"></i>
+            <span class="tb-badge" id="badge-mensajes" style="display:none;"></span>
         </a>
 
         <!-- User dropdown -->

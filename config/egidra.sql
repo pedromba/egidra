@@ -57,6 +57,7 @@ CREATE TABLE valores (
 CREATE TABLE equipo (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(150) NOT NULL,
+    iniciales   VARCHAR(5),
     cargo       VARCHAR(150),
     bio         TEXT,
     foto        VARCHAR(255),

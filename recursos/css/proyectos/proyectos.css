@@ -1,4 +1,4 @@
-/* EGIDRA - Estilos Página Proyectos */
+﻿/* EGIDRA - Estilos Página Proyectos */
 
 /* Page Header */
 .page-header {
@@ -6,7 +6,7 @@
     min-height: 50vh;
     background:
         linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
-        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+        url('../../../img/template/bg-offshore.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -164,7 +164,7 @@
         min-height: 40vh;
         background:
             linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
-            url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+            url('../../img/template/bg-offshore.jpg');
         background-size: cover;
         background-position: center;
     }

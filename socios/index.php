@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once '../config/rutas.php';
 require_once '../config/conexion.php';
 
@@ -46,7 +46,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&h=450&fit=crop"
+                    <img src="../img/template/bg-socios.jpg"
                          alt="Alianzas <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">
@@ -159,7 +159,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop"
+                    <img src="../img/template/srv-tecnico.jpg"
                          alt="Certificaciones <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6 order-lg-1">

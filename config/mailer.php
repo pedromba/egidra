@@ -4,20 +4,30 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// ─── Configuración SMTP ───────────────────────────────────────────────────────
-// Editar estos valores según el servidor de correo en uso.
-// En Laragon local: SMTP_HOST = 'localhost', SMTP_PORT = 25, SMTP_AUTH = false
-// En producción con Gmail/Zoho/etc: completar usuario, contraseña y activar auth.
+// ─── Transporte SMTP ──────────────────────────────────────────────────────────
+// Para cambiar al servidor corporativo en producción, editar solo estas líneas:
+//   SMTP_HOST = 'mail.egidra.com' | SMTP_PORT = 465 | SMTP_SECURE = 'ssl'
+//   SMTP_USER = 'acc.ops@egidra.com' | SMTP_PASS = '<contraseña>'
+if (!defined('SMTP_HOST'))   define('SMTP_HOST',   'smtp.gmail.com');
+if (!defined('SMTP_PORT'))   define('SMTP_PORT',   465);
+if (!defined('SMTP_AUTH'))   define('SMTP_AUTH',   true);
+if (!defined('SMTP_USER'))   define('SMTP_USER',   'pmba098@gmail.com');
+if (!defined('SMTP_PASS'))   define('SMTP_PASS',   'sqbh wzyi bwkk cqrs');
+if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'ssl');  // 'ssl'=465 | 'tls'=587
 
-if (!defined('SMTP_HOST'))      define('SMTP_HOST',      'mail.egidra.com');
-if (!defined('SMTP_PORT'))      define('SMTP_PORT',      587);
-if (!defined('SMTP_AUTH'))      define('SMTP_AUTH',      true);
-if (!defined('SMTP_USER'))      define('SMTP_USER',      'acc.ops@egidra.com');
-if (!defined('SMTP_PASS'))      define('SMTP_PASS',      'sqbh wzyi bwkk cqrs');
-if (!defined('SMTP_SECURE'))    define('SMTP_SECURE',    'tls');        // '' | 'tls' | 'ssl'
-// Con Gmail/SMTP autenticado el From DEBE coincidir con SMTP_USER
-if (!defined('SMTP_FROM'))      define('SMTP_FROM',      SMTP_USER);
-if (!defined('SMTP_FROM_NAME')) define('SMTP_FROM_NAME', 'EGIDRA');
+// ─── Identidad, buzones y URLs ───────────────────────────────────────────────
+// MAIL_FROM:       dirección visible en "De:". Con Gmail debe ser igual a SMTP_USER.
+//                  En producción con servidor propio: 'acc.ops@egidra.com'
+// MAIL_FROM_NAME:  nombre visible en el cliente de correo del destinatario.
+// MAIL_EMPRESA:    buzón que recibe los mensajes del formulario de contacto web.
+//                  En producción: 'acc.ops@egidra.com'
+// SITE_URL:        URL raíz del sitio web público.       En producción: 'https://egidra.com'
+// ADMIN_URL:       URL de la página de login del panel.  En producción: 'https://egidra.com/admin'
+if (!defined('MAIL_FROM'))      define('MAIL_FROM',      SMTP_USER);
+if (!defined('MAIL_FROM_NAME')) define('MAIL_FROM_NAME', 'EGIDRA');
+if (!defined('MAIL_EMPRESA'))   define('MAIL_EMPRESA',   'pmba098@gmail.com');
+if (!defined('SITE_URL'))       define('SITE_URL',       'http://localhost/egidra.com');
+if (!defined('ADMIN_URL'))      define('ADMIN_URL',       SITE_URL . '/admin');
 
 /**
  * Devuelve una instancia de PHPMailer lista para usar.
@@ -35,11 +45,159 @@ function crearMailer(): PHPMailer
   $mail->Password   = SMTP_PASS;
   $mail->SMTPSecure = SMTP_SECURE;
   $mail->Port       = SMTP_PORT;
+  $mail->Timeout    = 5; // seconds — fail fast instead of hanging
   $mail->CharSet    = PHPMailer::CHARSET_UTF8;
-  $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
+  $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
   $mail->isHTML(true);
 
   return $mail;
+}
+
+/**
+ * Genera una contraseña aleatoria de $len caracteres (sin caracteres ambiguos).
+ */
+function generarPassword(int $len = 8): string
+{
+    $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+    $pass  = '';
+    for ($i = 0; $i < $len; $i++) {
+        $pass .= $chars[random_int(0, strlen($chars) - 1)];
+    }
+    return $pass;
+}
+
+/**
+ * Construye el cuerpo HTML para envío de credenciales de acceso.
+ *
+ * @param string $nombre    Nombre del destinatario
+ * @param string $email     Email del destinatario
+ * @param string $password  Contraseña en texto plano
+ * @param string $rol       Rol asignado (Editor / Super)
+ * @param string $tipo      'nueva' (cuenta nueva) | 'reset' (contraseña reseteada)
+ */
+function buildPlantillaCredenciales(string $nombre, string $email, string $password, string $rol, string $tipo = 'nueva'): string
+{
+    $esc     = fn(string $s) => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $fecha   = date('d/m/Y H:i');
+    $eNombre = $esc($nombre);
+    $eEmail  = $esc($email);
+    $ePass   = $esc($password);
+    $eRol    = $esc($rol);
+    $eAdmin  = $esc(ADMIN_URL);
+    $eSite   = $esc(SITE_URL);
+    $eName   = $esc(MAIL_FROM_NAME);
+
+    $titulo    = $tipo === 'reset'
+        ? '🔑 Tu contraseña ha sido reseteada'
+        : '🎉 Tu cuenta en ' . MAIL_FROM_NAME . ' ha sido creada';
+    $subtitulo = $tipo === 'reset'
+        ? 'El administrador ha generado una nueva contraseña para tu cuenta.'
+        : 'Bienvenido/a al panel de administración de ' . MAIL_FROM_NAME . '.';
+    $btnTexto  = $tipo === 'reset' ? 'Acceder con mi nueva contraseña' : 'Acceder al panel ahora';
+
+    return <<<HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{$titulo}</title>
+</head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f5;padding:32px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+  <!-- HEADER -->
+  <tr>
+    <td style="background:#1a1a2e;border-radius:12px 12px 0 0;padding:28px 36px;text-align:center;">
+      <a href="{$eSite}" style="text-decoration:none;">
+        <span style="font-size:22px;font-weight:700;letter-spacing:1px;color:#ffffff;">{$eName}</span>
+      </a>
+    </td>
+  </tr>
+
+  <!-- FRANJA AMARILLA -->
+  <tr><td style="background:#f59e0b;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+  <!-- TÍTULO -->
+  <tr>
+    <td style="background:#ffffff;padding:32px 36px 16px;">
+      <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#1a1a2e;">{$titulo}</h1>
+      <p style="margin:0;font-size:13px;color:#888;">Hola <strong>{$eNombre}</strong>, {$subtitulo}</p>
+    </td>
+  </tr>
+
+  <!-- CREDENCIALES -->
+  <tr>
+    <td style="background:#ffffff;padding:16px 36px 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0"
+             style="background:#f8f9fb;border-radius:8px;border:1px solid #e8eaed;">
+        <tr>
+          <td colspan="2" style="background:#1a1a2e;padding:10px 16px;border-radius:8px 8px 0 0;">
+            <span style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:1px;">Tus credenciales de acceso</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;color:#555;font-size:13px;width:130px;border-bottom:1px solid #e8eaed;"><strong>Email</strong></td>
+          <td style="padding:12px 16px;color:#1a1a2e;font-size:14px;border-bottom:1px solid #e8eaed;">{$eEmail}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;color:#555;font-size:13px;border-bottom:1px solid #e8eaed;"><strong>Contraseña</strong></td>
+          <td style="padding:12px 16px;border-bottom:1px solid #e8eaed;">
+            <code style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:6px;font-size:15px;font-weight:700;letter-spacing:1px;">{$ePass}</code>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;color:#555;font-size:13px;"><strong>Rol</strong></td>
+          <td style="padding:12px 16px;color:#1a1a2e;font-size:14px;">{$eRol}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- BOTÓN ACCESO -->
+  <tr>
+    <td style="background:#ffffff;padding:0 36px 32px;text-align:center;">
+      <a href="{$eAdmin}"
+         style="display:inline-block;background:#f59e0b;color:#1a1a2e;font-weight:700;font-size:15px;
+                padding:14px 36px;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+        🔐&nbsp; {$btnTexto}
+      </a>
+      <p style="margin:12px 0 0;font-size:11px;color:#9ca3af;">
+        O copia este enlace en tu navegador:<br>
+        <a href="{$eAdmin}" style="color:#6b7280;font-size:11px;">{$eAdmin}</a>
+      </p>
+    </td>
+  </tr>
+
+  <!-- AVISO -->
+  <tr>
+    <td style="background:#f8f9fb;border-top:1px solid #e8eaed;padding:18px 36px;">
+      <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
+        Por seguridad, te recomendamos cambiar esta contraseña tras tu primer acceso.<br>
+        Si no esperabas este correo, ignóralo o contacta al administrador.
+      </p>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#f8f9fb;border-radius:0 0 12px 12px;padding:12px 36px 20px;text-align:center;">
+      <p style="margin:0;font-size:11px;color:#9ca3af;">Generado automáticamente el {$fecha} · {$eName}</p>
+    </td>
+  </tr>
+
+  <tr><td style="background:#f59e0b;height:4px;border-radius:0 0 4px 4px;font-size:0;">&nbsp;</td></tr>
+
+</table>
+</td></tr>
+</table>
+
+</body>
+</html>
+HTML;
 }
 
 /**

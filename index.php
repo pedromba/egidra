@@ -1,39 +1,13 @@
 <?php
 require_once 'config/rutas.php';
-require_once 'config/conexion.php';
-
-$empresa = $conexion->query(
-    "SELECT nombre, slogan, descripcion, email, telefono, direccion, ciudad, pais FROM empresa WHERE id = 1 LIMIT 1"
-)->fetch_assoc();
-
-$empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
-$empSlogan = htmlspecialchars($empresa['slogan'] ?? 'Expertos en Soluciones Industriales');
-$empDesc   = htmlspecialchars($empresa['descripcion'] ?? '');
-$empEmail  = htmlspecialchars($empresa['email']    ?? 'info@egidra.com');
-$empTel    = htmlspecialchars($empresa['telefono'] ?? '');
-$empDir    = htmlspecialchars(($empresa['ciudad'] ?? 'Malabo') . ', ' . ($empresa['pais'] ?? 'Guinea Ecuatorial'));
-
-// Imagen sección Sobre Nosotros: primer miembro de equipo con foto
-$imgNosotros = null;
-$qImg = $conexion->query("SELECT foto FROM equipo WHERE activo=1 AND foto IS NOT NULL AND foto!='' ORDER BY orden ASC LIMIT 1");
-if ($rImg = $qImg->fetch_assoc()) {
-    $imgNosotros = RUTA_BASE . $rImg['foto'];
-}
-
-// Imagen sección HSE: primera imagen de proyecto disponible
-$imgHSE = null;
-$qHSE = $conexion->query("SELECT imagen FROM proyectos WHERE activo=1 AND imagen IS NOT NULL AND imagen!='' ORDER BY id_proyecto DESC LIMIT 1");
-if ($rHSE = $qHSE->fetch_assoc()) {
-    $imgHSE = RUTA_BASE . $rHSE['imagen'];
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $empNombre; ?> - Servicios Industriales Especializados</title>
-    <meta name="description" content="<?php echo $empNombre; ?> - <?php echo $empSlogan; ?>.">
+    <title>EGIDRA - Servicios Industriales Especializados</title>
+    <meta name="description" content="EGIDRA - Expertos en Soluciones Industriales.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -52,12 +26,8 @@ if ($rHSE = $qHSE->fetch_assoc()) {
             <div class="row min-vh-100 align-items-center">
                 <div class="col-lg-8">
                     <span class="badge bg-warning text-dark mb-3">Líder en Servicios Industriales</span>
-                    <h1 class="display-3 fw-bold text-white mb-4"><?php echo $empSlogan; ?></h1>
-                    <?php if ($empDesc): ?>
-                    <p class="lead text-white-50 mb-5"><?php echo $empDesc; ?></p>
-                    <?php else: ?>
-                    <p class="lead text-white-50 mb-5">Servicios especializados de buceo, acceso por cuerda, logística y estudios técnicos para el sector Oil &amp; Gas.</p>
-                    <?php endif; ?>
+                    <h1 class="display-3 fw-bold text-white mb-4" id="heroSlogan">Expertos en Soluciones Industriales</h1>
+                    <p class="lead text-white-50 mb-5" id="heroDesc">Servicios especializados de buceo, acceso por cuerda, logística y estudios técnicos para el sector Oil &amp; Gas.</p>
                     <div class="d-flex gap-3">
                         <a href="servicios/" class="btn btn-warning btn-lg px-4">
                             <i class="fas fa-hard-hat me-2"></i>Nuestros Servicios
@@ -116,19 +86,15 @@ if ($rHSE = $qHSE->fetch_assoc()) {
     <section class="about-preview py-5">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <?php if ($imgNosotros): ?>
-                    <img src="<?php echo htmlspecialchars($imgNosotros); ?>" alt="Equipo <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow" style="width:100%;height:400px;object-fit:cover;">
-                    <?php else: ?>
+                <div class="col-lg-6 mb-4 mb-lg-0" id="imgNosotrosCol">
                     <div class="d-flex align-items-center justify-content-center bg-secondary rounded-3 shadow" style="height:400px;">
                         <i class="fas fa-users fa-5x text-white-50"></i>
                     </div>
-                    <?php endif; ?>
                 </div>
                 <div class="col-lg-6">
                     <span class="text-warning fw-bold text-uppercase">Sobre Nosotros</span>
                     <h2 class="display-5 fw-bold mt-2 mb-4">Compromiso con la Excelencia Industrial</h2>
-                    <p class="text-muted mb-4"><?php echo $empDesc ?: $empNombre . ' es una empresa líder en servicios industriales especializados, comprometida con los más altos estándares de calidad y seguridad en cada proyecto.'; ?></p>
+                    <p class="text-muted mb-4" id="aboutDesc">EGIDRA es una empresa líder en servicios industriales especializados, comprometida con los más altos estándares de calidad y seguridad en cada proyecto.</p>
                     <ul class="list-unstyled">
                         <li class="mb-3"><i class="fas fa-check-circle text-warning me-3"></i>Personal altamente capacitado y certificado</li>
                         <li class="mb-3"><i class="fas fa-check-circle text-warning me-3"></i>Equipamiento de última generación</li>
@@ -200,14 +166,10 @@ if ($rHSE = $qHSE->fetch_assoc()) {
     <section class="hse-preview py-5">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                    <?php if ($imgHSE): ?>
-                    <img src="<?php echo htmlspecialchars($imgHSE); ?>" alt="Seguridad HSE" class="img-fluid rounded-3 shadow" style="width:100%;height:400px;object-fit:cover;">
-                    <?php else: ?>
+                <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0" id="imgHSECol">
                     <div class="d-flex align-items-center justify-content-center bg-secondary rounded-3 shadow" style="height:400px;">
                         <i class="fas fa-shield-halved fa-5x text-white-50"></i>
                     </div>
-                    <?php endif; ?>
                 </div>
                 <div class="col-lg-6 order-lg-1">
                     <span class="text-warning fw-bold text-uppercase">Seguridad HSE</span>
@@ -280,8 +242,8 @@ if ($rHSE = $qHSE->fetch_assoc()) {
                 <div class="row align-items-center g-3">
                     <div class="col-md-1 text-center"><i class="fas fa-certificate fa-2x text-warning"></i></div>
                     <div class="col-md-11">
-                        <p class="mb-0 text-muted" style="font-size:.85rem;">
-                            Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. <?php echo $empNombre; ?> es miembro activo de los principales organismos de la industria subsea y rope access.
+                        <p class="mb-0 text-muted" id="partnersTrust" style="font-size:.85rem;">
+                            Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. EGIDRA es miembro activo de los principales organismos de la industria subsea y rope access.
                         </p>
                     </div>
                 </div>
@@ -300,19 +262,17 @@ if ($rHSE = $qHSE->fetch_assoc()) {
                                 <span class="text-warning fw-bold text-uppercase">Contacto</span>
                                 <h2 class="display-5 fw-bold text-white mt-2 mb-4">¿Necesita nuestros servicios?</h2>
                                 <p class="text-white-50 mb-4">Contáctenos para discutir sus necesidades. Nuestro equipo técnico está disponible 24/7.</p>
-                                <?php if ($empTel): ?>
-                                <div class="mb-3">
+                                <div class="mb-3" id="contactTelDiv" style="display:none;">
                                     <i class="fas fa-phone text-warning me-3"></i>
-                                    <span class="text-white"><?php echo $empTel; ?></span>
+                                    <span class="text-white" id="contactTel"></span>
                                 </div>
-                                <?php endif; ?>
                                 <div class="mb-3">
                                     <i class="fas fa-envelope text-warning me-3"></i>
-                                    <span class="text-white"><?php echo $empEmail; ?></span>
+                                    <span class="text-white" id="contactEmail">info@egidra.com</span>
                                 </div>
                                 <div class="mb-4">
                                     <i class="fas fa-map-marker-alt text-warning me-3"></i>
-                                    <span class="text-white"><?php echo $empDir; ?></span>
+                                    <span class="text-white" id="contactDir">Malabo, Guinea Ecuatorial</span>
                                 </div>
                                 <a href="contacto/" class="btn btn-warning btn-lg">
                                     <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje

@@ -35,6 +35,10 @@ $pageTitle = 'Logs de Actividad'; $pageBreadcrumb = 'Logs';
                     </tbody>
                 </table>
             </div>
+            <div class="d-flex align-items-center justify-content-between gap-3 px-3 py-3" id="logs-pagination" style="border-top:1px solid var(--border);display:none;">
+                <span style="font-size:.78rem;color:var(--muted);" id="logs-pag-info"></span>
+                <div class="d-flex gap-1" id="logs-pag-btns"></div>
+            </div>
         </div>
     </main>
 </div>

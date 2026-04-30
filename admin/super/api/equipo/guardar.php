@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json');
+ini_set('display_errors', '0');
+error_reporting(E_ERROR);
 session_start();
 if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     http_response_code(401);
@@ -84,13 +86,13 @@ if ($id > 0) {
         "UPDATE equipo SET nombre=?, iniciales=?, cargo=?, bio=?, foto=?, linkedin=?, orden=?, activo=?
          WHERE id=?"
     );
-    $stmt->bind_param('sssssssii', $nombre, $iniciales, $cargo, $bio, $foto, $linkedin, $orden, $activo, $id);
+    $stmt->bind_param('ssssssiii', $nombre, $iniciales, $cargo, $bio, $foto, $linkedin, $orden, $activo, $id);
 } else {
     $stmt = $conexion->prepare(
         "INSERT INTO equipo (nombre, iniciales, cargo, bio, foto, linkedin, orden, activo)
          VALUES (?,?,?,?,?,?,?,?)"
     );
-    $stmt->bind_param('ssssssis', $nombre, $iniciales, $cargo, $bio, $foto, $linkedin, $orden, $activo);
+    $stmt->bind_param('ssssssii', $nombre, $iniciales, $cargo, $bio, $foto, $linkedin, $orden, $activo);
 }
 
 if ($stmt->execute()) {

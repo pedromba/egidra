@@ -125,16 +125,20 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <span class="text-warning fw-bold text-uppercase">Ubicación</span>
                 <h2 class="display-6 fw-bold mt-1">Dónde Estamos</h2>
             </div>
-            <div class="map-placeholder">
-                <div class="text-center position-relative" style="z-index:1;">
-                    <i class="fas fa-map-marked-alt fa-4x text-warning mb-3 d-block"></i>
-                    <h5 class="text-white fw-bold mb-1" id="mapLocation">Malabo, Guinea Ecuatorial</h5>
-                    <p class="text-white-50 small mb-3">Sede principal con operaciones a nivel internacional</p>
-                    <a href="https://maps.google.com" target="_blank" rel="noopener"
-                       class="btn btn-warning btn-sm px-4">
-                        <i class="fas fa-external-link-alt me-1"></i>Abrir en Google Maps
-                    </a>
-                </div>
+            <div class="ratio" style="--bs-aspect-ratio: 45%;">
+                <iframe
+                    src="https://maps.google.com/maps?q=3.7479676,8.7713486&z=15&output=embed"
+                    style="border:0; border-radius: 12px;"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            <div class="text-center mt-3">
+                <a href="https://www.google.com/maps/@3.7479676,8.7713486,15z"
+                   target="_blank" rel="noopener" class="btn btn-warning btn-sm px-4">
+                    <i class="fas fa-external-link-alt me-1"></i>Abrir en Google Maps
+                </a>
             </div>
         </div>
     </section>

@@ -1,15 +1,17 @@
-/* EGIDRA — Servicios dinámico */
+/* EGIDRA — Servicios Super */
 (function () {
     'use strict';
 
-    const grid       = document.getElementById('grid-servicios');
-    const statsEl    = document.getElementById('stats-servicios');
-    const btnNuevoSvc= document.getElementById('btn-nuevo-svc');
-    const btnNuevaCat= document.getElementById('btn-nueva-cat');
-    const btnGuardSvc= document.getElementById('btn-guardar-svc');
-    const btnGuardCat= document.getElementById('btn-guardar-cat');
-    const tituloSvc  = document.getElementById('modal-svc-title');
-    const tituloCat  = document.getElementById('modal-cat-title');
+    const grid        = document.getElementById('grid-servicios');
+    const statsEl     = document.getElementById('stats-servicios');
+    const btnNuevoSvc = document.getElementById('btn-nuevo-svc');
+    const btnNuevaCat = document.getElementById('btn-nueva-cat');
+    const btnTabSvc   = document.getElementById('btn-tab-svc');
+    const btnTabCat   = document.getElementById('btn-tab-cat');
+    const btnGuardSvc = document.getElementById('btn-guardar-svc');
+    const btnGuardCat = document.getElementById('btn-guardar-cat');
+    const tituloSvc   = document.getElementById('modal-svc-title');
+    const tituloCat   = document.getElementById('modal-cat-title');
 
     const fSvcId    = document.getElementById('svc-id');
     const fSvcCat   = document.getElementById('svc-cat');
@@ -27,7 +29,9 @@
     const fCatOrden = document.getElementById('cat-orden');
     const fCatActivo= document.getElementById('cat-activo');
 
-    let categorias = [];
+    let categorias      = [];
+    let vistaActual     = 'servicios';
+    let currentVerSvcId = null;
 
     function esc(str) {
         const d = document.createElement('div');
@@ -42,75 +46,135 @@
         });
     }
 
-    function renderGrid(cats) {
-        if (!cats.length) {
-            grid.innerHTML = '<div class="col-12 text-center text-muted py-4">No hay categorías de servicios.</div>';
-            if (statsEl) statsEl.textContent = '0 categorías · 0 servicios';
+    function actualizarStats() {
+        let total = 0;
+        categorias.forEach(function (c) { total += (c.servicios || []).length; });
+        if (statsEl) statsEl.textContent =
+            total + ' servicio' + (total !== 1 ? 's' : '') +
+            ' · ' + categorias.length + ' categorí' + (categorias.length !== 1 ? 'as' : 'a');
+    }
+
+    /* ══════════════ TABS ══════════════ */
+
+    function cambiarVista(v) {
+        vistaActual = v;
+        btnTabSvc.classList.toggle('activo', v === 'servicios');
+        btnTabCat.classList.toggle('activo', v === 'categorias');
+        btnNuevoSvc.style.display = v === 'servicios'  ? '' : 'none';
+        btnNuevaCat.style.display = v === 'categorias' ? '' : 'none';
+        if (v === 'servicios') renderTabla(categorias);
+        else                   renderCategorias(categorias);
+    }
+
+    /* ══════════════ VISTA SERVICIOS (TABLA) ══════════════ */
+
+    function renderTabla(cats) {
+        const rows = [];
+        cats.forEach(function (c) {
+            (c.servicios || []).forEach(function (s) {
+                rows.push({
+                    id: s.id, titulo: s.titulo, descripcion_breve: s.descripcion_breve,
+                    icono: s.icono, orden: s.orden, es_destacado: s.es_destacado,
+                    activo: s.activo, categoria_id: c.id, categoria_nombre: c.nombre
+                });
+            });
+        });
+
+        if (!rows.length) {
+            grid.innerHTML = '<div class="text-center text-muted py-5">No hay servicios registrados.</div>';
             return;
         }
 
-        let totalSvcs = 0;
-        cats.forEach(function (c) { totalSvcs += (c.servicios || []).length; });
-        if (statsEl) statsEl.textContent = cats.length + ' categorías · ' + totalSvcs + ' servicios';
-
-        grid.innerHTML = cats.map(function (c) {
-            const svcs = c.servicios || [];
-            const items = svcs.map(function (s) {
-                return '<div class="svc-item">' +
-                    '<span>' + esc(s.titulo) + (s.es_destacado ? ' <i class="fas fa-star" style="color:var(--accent);font-size:.7rem;"></i>' : '') + '</span>' +
-                    '<div class="d-flex gap-1">' +
+        grid.innerHTML =
+            '<div class="table-wrap"><table class="svc-table">' +
+            '<thead><tr>' +
+            '<th>Servicio</th><th>Categoría</th>' +
+            '<th class="text-center">Orden</th><th class="text-center">Destacado</th>' +
+            '<th class="text-center">Estado</th><th class="text-center">Acciones</th>' +
+            '</tr></thead><tbody>' +
+            rows.map(function (s) {
+                return '<tr>' +
+                    '<td><div class="d-flex align-items-center gap-2">' +
+                        '<span class="svc-row-icon"><i class="fas ' + esc(s.icono || 'fa-cog') + '"></i></span>' +
+                        '<span class="svc-row-title">' + esc(s.titulo) + '</span>' +
+                    '</div></td>' +
+                    '<td><span class="svc-cat-badge">' + esc(s.categoria_nombre) + '</span></td>' +
+                    '<td class="text-center"><span class="svc-orden-num">' + (s.orden || 0) + '</span></td>' +
+                    '<td class="text-center">' + (s.es_destacado
+                        ? '<i class="fas fa-star" style="color:#f59e0b;font-size:.85rem;"></i>'
+                        : '<span style="color:var(--muted);">—</span>') + '</td>' +
+                    '<td class="text-center">' + (s.activo
+                        ? '<span class="badge-estado activo">Activo</span>'
+                        : '<span class="badge-estado inactivo">Inactivo</span>') + '</td>' +
+                    '<td><div class="d-flex gap-1 justify-content-center">' +
+                        '<button class="btn-icon ver-svc" data-id="' + s.id + '" title="Ver detalles"><i class="fas fa-eye"></i></button>' +
                         '<button class="btn-icon edit-svc" data-id="' + s.id + '" title="Editar"><i class="fas fa-pen"></i></button>' +
                         '<button class="btn-icon del-svc" data-id="' + s.id + '" title="Eliminar"><i class="fas fa-trash"></i></button>' +
-                    '</div>' +
-                '</div>';
-            }).join('');
+                    '</div></td>' +
+                '</tr>';
+            }).join('') +
+            '</tbody></table></div>';
+    }
 
-            return '<div class="col-md-6">' +
-                '<div class="svc-card">' +
-                    '<div class="svc-card-head">' +
-                        '<div class="svc-icon"><i class="fas ' + esc(c.icono || 'fa-folder') + '"></i></div>' +
-                        '<h6>' + esc(c.nombre) + '</h6>' +
-                        '<button class="btn-icon edit-cat ms-auto" data-id="' + c.id + '" title="Editar categoría"><i class="fas fa-pen"></i></button>' +
-                    '</div>' +
-                    items +
-                    '<div class="svc-item" style="border-top:1px dashed var(--border);margin-top:4px;">' +
-                        '<button class="btn-icon add-svc-to-cat" data-cat-id="' + c.id + '" style="width:100%;justify-content:center;gap:6px;font-size:.75rem;" title="Añadir servicio a esta categoría">' +
-                            '<i class="fas fa-plus"></i> Añadir servicio' +
-                        '</button>' +
-                    '</div>' +
+    /* ══════════════ VISTA CATEGORÍAS ══════════════ */
+
+    function renderCategorias(cats) {
+        if (!cats.length) {
+            grid.innerHTML = '<div class="text-center text-muted py-5">No hay categorías registradas.</div>';
+            return;
+        }
+        grid.innerHTML = cats.map(function (c) {
+            const n = (c.servicios || []).length;
+            return '<div class="cat-list-row">' +
+                '<div class="cat-list-icon"><i class="fas ' + esc(c.icono || 'fa-folder') + '"></i></div>' +
+                '<div class="cat-list-info">' +
+                    '<h6>' + esc(c.nombre) + '</h6>' +
+                    '<p>' + esc(c.descripcion_breve || '—') + '</p>' +
                 '</div>' +
+                '<span class="cat-list-count">' + n + ' servicio' + (n !== 1 ? 's' : '') + '</span>' +
+                '<button class="btn-icon edit-cat" data-id="' + c.id + '" title="Editar categoría"><i class="fas fa-pen"></i></button>' +
             '</div>';
         }).join('');
     }
 
+    /* ══════════════ CARGA ══════════════ */
+
     function cargar() {
-        grid.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
+        grid.innerHTML = '<div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
         fetch('../api/servicios/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 categorias = data.estado ? data.datos : [];
                 poblarSelectCat();
-                renderGrid(categorias);
+                actualizarStats();
+                if (vistaActual === 'servicios') renderTabla(categorias);
+                else                             renderCategorias(categorias);
             })
-            .catch(function () { grid.innerHTML = '<div class="col-12 text-center text-muted py-4">Error al cargar.</div>'; });
+            .catch(function () {
+                grid.innerHTML = '<div class="text-center text-muted py-4">Error al cargar.</div>';
+            });
     }
+
+    /* ══════════════ CRUD SERVICIOS ══════════════ */
 
     function findSvc(id) {
         for (var i = 0; i < categorias.length; i++) {
             var found = (categorias[i].servicios || []).find(function (s) { return s.id == id; });
-            if (found) return found;
+            if (found) {
+                found.categoria_id     = categorias[i].id;
+                found.categoria_nombre = categorias[i].nombre;
+                return found;
+            }
         }
         return null;
     }
 
-    /* ── Servicio ── */
-
-    function abrirNuevoSvc(catId) {
+    function abrirNuevoSvc() {
         tituloSvc.textContent = 'Nuevo servicio';
         fSvcId.value = ''; fSvcTitulo.value = ''; fSvcDesc.value = '';
         fSvcIcono.value = ''; fSvcOrden.value = '0';
         fSvcDest.checked = false; fSvcActivo.checked = true;
-        fSvcCat.value = catId || '';
+        fSvcCat.value = '';
         window.EgAdmin.openModal('modal-svc');
     }
 
@@ -119,15 +183,39 @@
         if (!s) return;
         tituloSvc.textContent = 'Editar servicio';
         fSvcId.value     = s.id;
-        fSvcCat.value    = s.categoria_id || '';
-        fSvcTitulo.value = s.titulo       || '';
+        fSvcCat.value    = s.categoria_id      || '';
+        fSvcTitulo.value = s.titulo            || '';
         fSvcDesc.value   = s.descripcion_breve || '';
-        fSvcIcono.value  = s.icono        || '';
+        fSvcIcono.value  = s.icono             || '';
         fSvcOrden.value  = s.orden ?? 0;
-        fSvcDest.checked = !!s.es_destacado;
+        fSvcDest.checked   = !!s.es_destacado;
         fSvcActivo.checked = !!s.activo;
         window.EgAdmin.openModal('modal-svc');
     }
+
+    function abrirVerSvc(id) {
+        const s = findSvc(id);
+        if (!s) return;
+        currentVerSvcId = id;
+        document.getElementById('info-titulo').textContent      = s.titulo || '';
+        document.getElementById('info-categoria').textContent   = s.categoria_nombre || '';
+        document.getElementById('info-desc').textContent        = s.descripcion_breve || '— Sin descripción —';
+        document.getElementById('info-icono-clase').textContent = s.icono || '—';
+        document.getElementById('info-orden').textContent       = s.orden ?? 0;
+        document.getElementById('info-icono-preview').innerHTML = '<i class="fas ' + esc(s.icono || 'fa-cog') + '"></i>';
+        document.getElementById('info-destacado').innerHTML = s.es_destacado
+            ? '<span class="badge-estado activo">Sí</span>'
+            : '<span class="badge-estado inactivo">No</span>';
+        document.getElementById('info-activo').innerHTML = s.activo
+            ? '<span class="badge-estado activo">Activo</span>'
+            : '<span class="badge-estado inactivo">Inactivo</span>';
+        window.EgAdmin.openModal('modal-svc-info');
+    }
+
+    document.getElementById('btn-editar-desde-info')?.addEventListener('click', function () {
+        window.EgAdmin.closeModal('modal-svc-info');
+        if (currentVerSvcId) abrirEditarSvc(currentVerSvcId);
+    });
 
     function guardarSvc() {
         if (!fSvcTitulo.value.trim() || !fSvcCat.value) {
@@ -141,9 +229,8 @@
         fd.append('descripcion', fSvcDesc.value.trim());
         fd.append('icono',       fSvcIcono.value.trim());
         fd.append('orden',       fSvcOrden.value || '0');
-        fd.append('es_destacado',fSvcDest.checked ? '1' : '0');
+        fd.append('es_destacado',fSvcDest.checked  ? '1' : '0');
         fd.append('activo',      fSvcActivo.checked ? '1' : '0');
-
         fetch('../api/servicios/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
@@ -176,7 +263,7 @@
         });
     }
 
-    /* ── Categoría ── */
+    /* ══════════════ CRUD CATEGORÍAS ══════════════ */
 
     function abrirNuevaCat() {
         tituloCat.textContent = 'Nueva categoría';
@@ -210,7 +297,6 @@
         fd.append('descripcion_breve',fCatDesc.value.trim());
         fd.append('orden',            fCatOrden.value || '0');
         fd.append('activo',           fCatActivo.checked ? '1' : '0');
-
         fetch('../api/servicios/categorias/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
@@ -225,18 +311,20 @@
     /* ── Event delegation ── */
 
     grid.addEventListener('click', function (e) {
+        const verSvc  = e.target.closest('.ver-svc');
         const editSvc = e.target.closest('.edit-svc');
         const delSvc  = e.target.closest('.del-svc');
         const editCat = e.target.closest('.edit-cat');
-        const addSvc  = e.target.closest('.add-svc-to-cat');
+        if (verSvc)  abrirVerSvc(verSvc.dataset.id);
         if (editSvc) abrirEditarSvc(editSvc.dataset.id);
         if (delSvc)  eliminarSvc(delSvc.dataset.id);
         if (editCat) abrirEditarCat(editCat.dataset.id);
-        if (addSvc)  abrirNuevoSvc(addSvc.dataset.catId);
     });
 
-    btnNuevoSvc?.addEventListener('click', function () { abrirNuevoSvc(''); });
+    btnNuevoSvc?.addEventListener('click', abrirNuevoSvc);
     btnNuevaCat?.addEventListener('click', abrirNuevaCat);
+    btnTabSvc?.addEventListener('click', function () { cambiarVista('servicios'); });
+    btnTabCat?.addEventListener('click', function () { cambiarVista('categorias'); });
     btnGuardSvc?.addEventListener('click', guardarSvc);
     btnGuardCat?.addEventListener('click', guardarCat);
 

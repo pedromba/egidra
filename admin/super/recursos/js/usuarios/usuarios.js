@@ -8,6 +8,8 @@
     const btnGuardar = document.getElementById('btn-guardar-usuario');
     const tituloMod  = document.getElementById('modal-usuario-title');
     const passHint   = document.getElementById('pass-hint');
+    const passRow    = document.getElementById('pass-row');
+    const passNote   = document.getElementById('pass-auto-note');
 
     const fId     = document.getElementById('usr-id');
     const fNombre = document.getElementById('usr-nombre');
@@ -55,6 +57,9 @@
             const estadoBadge = u.estado === 'activo'
                 ? '<span class="badge-pill bp-green">Activo</span>'
                 : '<span class="badge-pill bp-gray">Inactivo</span>';
+            const deactBtn = u.estado === 'activo'
+                ? '<button class="btn-icon deact" data-id="' + u.id + '" title="Desactivar"><i class="fas fa-power-off"></i></button>'
+                : '<button class="btn-icon react" data-id="' + u.id + '" title="Reactivar"><i class="fas fa-power-off" style="color:#059669;"></i></button>';
             return '<tr>' +
                 '<td><div class="user-cell">' +
                     '<div class="avatar-ini ' + COLORES[i % COLORES.length] + '">' + esc(ini) + '</div>' +
@@ -69,7 +74,8 @@
                 '<td style="font-size:.78rem;color:var(--muted);">' + formatFecha(u.fecha_creacion) + '</td>' +
                 '<td><div class="d-flex gap-1">' +
                     '<button class="btn-icon edit" data-id="' + u.id + '" title="Editar"><i class="fas fa-pen"></i></button>' +
-                    '<button class="btn-icon del" data-id="' + u.id + '" title="Eliminar"><i class="fas fa-trash"></i></button>' +
+                    '<button class="btn-icon reset-pass" data-id="' + u.id + '" title="Resetear contraseña"><i class="fas fa-key"></i></button>' +
+                    deactBtn +
                 '</div></td>' +
             '</tr>';
         }).join('');
@@ -85,9 +91,10 @@
 
     function abrirNuevo() {
         tituloMod.textContent = 'Nuevo usuario';
-        if (passHint) passHint.style.display = 'none';
         fId.value = ''; fNombre.value = ''; fEmail.value = '';
         fPass.value = ''; fRol.value = 'Editor'; fActivo.checked = true;
+        if (passRow)  passRow.style.display  = 'none';
+        if (passNote) passNote.style.display  = '';
         window.EgAdmin.openModal('modal-usuario');
     }
 
@@ -95,14 +102,27 @@
         const u = todos.find(function (x) { return x.id == id; });
         if (!u) return;
         tituloMod.textContent = 'Editar usuario';
-        if (passHint) passHint.style.display = '';
-        fId.value      = u.id;
-        fNombre.value  = u.nombre || '';
-        fEmail.value   = u.email  || '';
-        fPass.value    = '';
-        fRol.value     = u.rol    || 'Editor';
-        fActivo.checked= u.estado === 'activo';
+        if (passRow)  passRow.style.display  = '';
+        if (passNote) passNote.style.display  = 'none';
+        if (passHint) passHint.style.display  = '';
+        fId.value       = u.id;
+        fNombre.value   = u.nombre || '';
+        fEmail.value    = u.email  || '';
+        fPass.value     = '';
+        fRol.value      = u.rol    || 'Editor';
+        fActivo.checked = u.estado === 'activo';
         window.EgAdmin.openModal('modal-usuario');
+    }
+
+    function setBtnLoading(btn, loading) {
+        if (loading) {
+            btn.disabled = true;
+            btn._origHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Guardando...';
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = btn._origHtml || btn.innerHTML;
+        }
     }
 
     function guardar() {
@@ -118,22 +138,33 @@
         fd.append('rol',    fRol.value);
         fd.append('estado', fActivo.checked ? 'activo' : 'inactivo');
 
+        setBtnLoading(btnGuardar, true);
         fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
+                setBtnLoading(btnGuardar, false);
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
                 window.EgAdmin.closeModal('modal-usuario');
-                Swal.fire({ title: 'Guardado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                if (data.mail_ok === false) {
+                    Swal.fire({ title: 'Usuario creado', text: data.mensaje, icon: 'warning' });
+                } else {
+                    Swal.fire({ title: 'Guardado', text: data.mensaje, icon: 'success', timer: 2500, showConfirmButton: false });
+                }
                 cargar();
             })
-            .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+            .catch(function () {
+                setBtnLoading(btnGuardar, false);
+                Swal.fire({ title: 'Error de conexión', icon: 'error' });
+            });
     }
 
-    function eliminar(id) {
+    function desactivar(id) {
+        const u = todos.find(function (x) { return x.id == id; });
         Swal.fire({
-            title: '¿Eliminar usuario?', text: 'Esta acción no se puede deshacer.',
+            title: '¿Desactivar usuario?',
+            text: (u ? u.nombre : 'Este usuario') + ' no podrá acceder al panel.',
             icon: 'warning', showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, desactivar', cancelButtonText: 'Cancelar',
             confirmButtonColor: '#e74c3c', cancelButtonColor: '#6c757d', reverseButtons: true
         }).then(function (res) {
             if (!res.isConfirmed) return;
@@ -143,8 +174,68 @@
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
-                    Swal.fire({ title: 'Eliminado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                    Swal.fire({ title: 'Desactivado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
                     cargar();
+                })
+                .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+        });
+    }
+
+    function reactivar(id) {
+        const u = todos.find(function (x) { return x.id == id; });
+        Swal.fire({
+            title: '¿Reactivar usuario?',
+            text: (u ? u.nombre : 'Este usuario') + ' podrá volver a acceder al panel.',
+            icon: 'question', showCancelButton: true,
+            confirmButtonText: 'Sí, reactivar', cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#059669', cancelButtonColor: '#6c757d', reverseButtons: true
+        }).then(function (res) {
+            if (!res.isConfirmed) return;
+            const fd = new FormData();
+            fd.append('id',     id);
+            fd.append('nombre', u ? u.nombre : '');
+            fd.append('email',  u ? u.email  : '');
+            fd.append('rol',    u ? u.rol    : 'Editor');
+            fd.append('estado', 'activo');
+            fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
+                    Swal.fire({ title: 'Reactivado', text: data.mensaje, icon: 'success', timer: 1800, showConfirmButton: false });
+                    cargar();
+                })
+                .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
+        });
+    }
+
+    function resetear(id) {
+        const u = todos.find(function (x) { return x.id == id; });
+        Swal.fire({
+            title: 'Resetear contraseña',
+            text: 'Se generará una nueva contraseña y se enviará por email a ' + (u ? u.email : 'este usuario') + '.',
+            icon: 'info', showCancelButton: true,
+            confirmButtonText: 'Resetear y enviar', cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#2563eb', cancelButtonColor: '#6c757d', reverseButtons: true
+        }).then(function (res) {
+            if (!res.isConfirmed) return;
+
+            Swal.fire({
+                title: 'Enviando...', text: 'Generando contraseña y enviando email.',
+                allowOutsideClick: false, allowEscapeKey: false,
+                didOpen: function () { Swal.showLoading(); }
+            });
+
+            const fd = new FormData();
+            fd.append('id', id);
+            fetch('../api/usuarios/resetear.php', { method: 'POST', body: fd })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
+                    if (data.mail_ok === false) {
+                        Swal.fire({ title: 'Contraseña reseteada', text: data.mensaje, icon: 'warning' });
+                    } else {
+                        Swal.fire({ title: 'Contraseña reseteada', text: data.mensaje, icon: 'success', timer: 2500, showConfirmButton: false });
+                    }
                 })
                 .catch(function () { Swal.fire({ title: 'Error de conexión', icon: 'error' }); });
         });
@@ -163,10 +254,14 @@
     btnGuardar?.addEventListener('click', guardar);
 
     tbody.addEventListener('click', function (e) {
-        const edit = e.target.closest('.edit');
-        const del  = e.target.closest('.del');
-        if (edit) abrirEditar(edit.dataset.id);
-        if (del)  eliminar(del.dataset.id);
+        const edit  = e.target.closest('.edit');
+        const deact = e.target.closest('.deact');
+        const react = e.target.closest('.react');
+        const reset = e.target.closest('.reset-pass');
+        if (edit)  abrirEditar(edit.dataset.id);
+        if (deact) desactivar(deact.dataset.id);
+        if (react) reactivar(react.dataset.id);
+        if (reset) resetear(reset.dataset.id);
     });
 
     searchEl?.addEventListener('input', applyFilter);

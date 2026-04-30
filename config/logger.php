@@ -15,6 +15,7 @@ function registrar_log($conexion, $usuario_id, $accion, $descripcion, $tabla = n
         "INSERT INTO logs_actividad (usuario_id, accion, descripcion_cambio, tabla_afectada, registro_id, direccion_ip)
          VALUES (?, ?, ?, ?, ?, ?)"
     );
-    $stmt->bind_param('isssss', $usuario_id, $accion, $descripcion, $tabla, $registro_id, $ip);
+    if (!$stmt) return;
+    $stmt->bind_param('isssis', $usuario_id, $accion, $descripcion, $tabla, $registro_id, $ip);
     $stmt->execute();
 }

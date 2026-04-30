@@ -50,9 +50,6 @@ $pageTitle = $pageBreadcrumb = 'Mensajes';
                         </div>
                         <div class="msg-detail-body" id="msg-cuerpo"></div>
                         <div style="padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;">
-                            <button class="btn-pri" id="btn-responder" style="font-size:.78rem;padding:7px 14px;">
-                                <i class="fas fa-reply me-1"></i>Responder
-                            </button>
                             <button class="btn-sec" id="btn-eliminar" style="font-size:.78rem;">
                                 <i class="fas fa-trash me-1"></i>Eliminar
                             </button>

@@ -1,4 +1,4 @@
-/* EGIDRA Admin - Login */
+﻿/* EGIDRA Admin - Login */
 
 :root {
     --primary: #ffc107;
@@ -18,7 +18,7 @@ body {
     justify-content: center;
     background:
         linear-gradient(135deg, rgba(13,13,13,.97) 0%, rgba(26,26,26,.95) 100%),
-        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?w=1920&h=1080&fit=crop');
+        url('../../../img/template/bg-offshore.jpg');
     background-size: cover;
     background-position: center;
     position: relative;

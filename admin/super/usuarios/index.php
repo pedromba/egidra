@@ -29,7 +29,7 @@ $pageTitle = 'Usuarios'; $pageBreadcrumb = 'Usuarios';
         <div class="card-admin">
             <div class="tbl-wrap">
                 <table class="tbl">
-                    <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th>Último acceso</th><th>Creado</th><th></th></tr></thead>
+                    <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th>Último acceso</th><th>Creado</th><th style="width:110px;"></th></tr></thead>
                     <tbody id="tbody-usuarios">
                         <tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>
                     </tbody>
@@ -45,13 +45,22 @@ $pageTitle = 'Usuarios'; $pageBreadcrumb = 'Usuarios';
             <input type="hidden" id="usr-id">
             <div class="mb-3"><label class="f-label">Nombre <span class="text-danger">*</span></label><input class="f-input" id="usr-nombre" type="text" placeholder="Nombre completo"></div>
             <div class="mb-3"><label class="f-label">Email <span class="text-danger">*</span></label><input class="f-input" id="usr-email" type="email" placeholder="correo@egidra.com"></div>
-            <div class="mb-3"><label class="f-label">Contraseña <span id="pass-hint" class="text-muted" style="font-size:.75rem;">(dejar vacío para no cambiar)</span></label><input class="f-input" id="usr-pass" type="password" placeholder="••••••••"></div>
+            <div class="mb-3" id="pass-row">
+                <label class="f-label">Contraseña <span id="pass-hint" class="text-muted" style="font-size:.75rem;">(dejar vacío para no cambiar)</span></label>
+                <input class="f-input" id="usr-pass" type="password" placeholder="••••••••">
+            </div>
+            <div class="mb-3" id="pass-auto-note" style="display:none;">
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:.78rem;color:#166534;">
+                    <i class="fas fa-envelope me-1"></i> Se generará una contraseña aleatoria de 8 caracteres y se enviará al correo del usuario.
+                </div>
+            </div>
             <div class="mb-3"><label class="f-label">Rol</label><select class="f-select" id="usr-rol"><option value="Editor">Editor</option><option value="Super">Super</option></select></div>
             <div class="d-flex align-items-center justify-content-between"><label class="f-label mb-0">Estado activo</label><label class="toggle-sw"><input type="checkbox" id="usr-activo" checked><span class="toggle-slider"></span></label></div>
         </div>
         <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-usuario">Cancelar</button><button class="btn-pri" id="btn-guardar-usuario"><i class="fas fa-check me-1"></i>Guardar</button></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/usuarios/usuarios.js"></script>
 </body></html>

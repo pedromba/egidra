@@ -81,8 +81,6 @@
         fFoto.dispatchEvent(new Event('change'));
     });
 
-    fotoLabel?.addEventListener('click', function () { fFoto.click(); });
-
     /* ── Grid ── */
     function renderGrid(lista) {
         if (!lista.length) {

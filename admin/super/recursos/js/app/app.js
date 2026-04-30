@@ -97,3 +97,19 @@
     // expose
     window.EgAdmin = { openModal, closeModal };
 })();
+
+// ── Header badges dinámicos ───────────────────────────────────────────────────
+(function () {
+    function setBadge(id, n) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (n > 0) { el.textContent = n > 99 ? '99+' : n; el.style.display = 'flex'; }
+        else        { el.style.display = 'none'; }
+    }
+    function actualizar() {
+        fetch('../api/mensajes/no-leidos.php').then(r => r.json()).then(d => setBadge('badge-mensajes', d.total || 0)).catch(() => {});
+        fetch('../api/logs/recientes.php').then(r => r.json()).then(d => setBadge('badge-logs', d.total || 0)).catch(() => {});
+    }
+    actualizar();
+    setInterval(actualizar, 60000);
+})();

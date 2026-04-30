@@ -6,17 +6,20 @@ require_once __DIR__ . '/../../config/init.php';
 require_once __DIR__ . '/../../config/logger.php';
 
 $remember = !empty($_POST['recordarme']);
+$secure   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+$lifetime = $remember ? 30 * 24 * 60 * 60 : 0;
 
 if ($remember) {
-    $lifetime = 30 * 24 * 60 * 60;
     ini_set('session.gc_maxlifetime', $lifetime);
-    session_set_cookie_params([
-        'lifetime' => $lifetime,
-        'path'     => '/',
-        'httponly' => true,
-        'samesite' => 'Strict',
-    ]);
 }
+
+session_set_cookie_params([
+    'lifetime' => $lifetime,
+    'path'     => '/',
+    'httponly' => true,
+    'samesite' => 'Strict',
+    'secure'   => $secure,
+]);
 
 session_start();
 

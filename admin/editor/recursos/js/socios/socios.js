@@ -8,13 +8,21 @@
     const btnGuardar = document.getElementById('btn-guardar-soc');
     const tituloMod  = document.getElementById('modal-socio-title');
 
-    const fId     = document.getElementById('soc-id');
-    const fNombre = document.getElementById('soc-nombre');
-    const fDesc   = document.getElementById('soc-desc');
-    const fLogo   = document.getElementById('soc-logo');
-    const fUrl    = document.getElementById('soc-url');
-    const fOrden  = document.getElementById('soc-orden');
-    const fActivo = document.getElementById('soc-activo');
+    const fId          = document.getElementById('soc-id');
+    const fNombre      = document.getElementById('soc-nombre');
+    const fDesc        = document.getElementById('soc-desc');
+    const fLogo        = document.getElementById('soc-logo');
+    const fLogoActual  = document.getElementById('soc-logo-actual');
+    const fUrl         = document.getElementById('soc-url');
+    const fOrden       = document.getElementById('soc-orden');
+    const fActivo      = document.getElementById('soc-activo');
+
+    const logoArea      = document.getElementById('logo-area');
+    const logoPreviewW  = document.getElementById('logo-preview-wrap');
+    const logoPreview   = document.getElementById('logo-preview');
+    const logoLabelTxt  = document.getElementById('logo-label-txt');
+    const logoLabel     = document.getElementById('logo-label');
+    const btnLogoRemove = document.getElementById('logo-remove');
 
     let socios       = [];
     let filtroSearch = '';
@@ -40,6 +48,53 @@
         return (a + b).toUpperCase();
     }
 
+    /* ── Logo preview ── */
+    function mostrarPreview(src) {
+        logoPreview.src             = src;
+        logoPreviewW.style.display  = '';
+        logoLabel.style.display     = 'none';
+    }
+
+    function ocultarPreview() {
+        logoPreview.src             = '';
+        logoPreviewW.style.display  = 'none';
+        logoLabel.style.display     = '';
+        logoLabelTxt.textContent    = 'Haz clic o arrastra un logo';
+        fLogo.value      = '';
+        fLogoActual.value = '';
+    }
+
+    fLogo?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        logoLabelTxt.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function (e) { mostrarPreview(e.target.result); };
+        reader.readAsDataURL(file);
+    });
+
+    btnLogoRemove?.addEventListener('click', function (e) {
+        e.stopPropagation();
+        ocultarPreview();
+    });
+
+    logoArea?.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+    logoArea?.addEventListener('dragleave', function () { this.classList.remove('drag-over'); });
+    logoArea?.addEventListener('drop', function (e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fLogo.files = dt.files;
+        fLogo.dispatchEvent(new Event('change'));
+    });
+
+    /* ── Filtros y render ── */
     function filtrados() {
         if (!filtroSearch) return socios;
         return socios.filter(function (s) {
@@ -92,8 +147,9 @@
 
     function limpiarModal() {
         fId.value = ''; fNombre.value = ''; fDesc.value = '';
-        fLogo.value = ''; fUrl.value = ''; fOrden.value = '';
+        fUrl.value = ''; fOrden.value = '';
         fActivo.checked = true;
+        ocultarPreview();
     }
 
     function abrirNuevo() {
@@ -110,10 +166,14 @@
         fId.value     = s.id;
         fNombre.value = s.nombre      || '';
         fDesc.value   = s.descripcion || '';
-        fLogo.value   = s.logo        || '';
         fUrl.value    = s.url_web     || '';
         fOrden.value  = s.orden       ?? '';
         fActivo.checked = !!s.activo;
+        ocultarPreview();
+        if (s.logo) {
+            fLogoActual.value = s.logo;
+            mostrarPreview(s.logo);
+        }
         window.EgAdmin.openModal('modal-socio');
     }
 
@@ -123,13 +183,16 @@
             return;
         }
         const fd = new FormData();
-        fd.append('id',      fId.value);
-        fd.append('nombre',  fNombre.value.trim());
-        fd.append('desc',    fDesc.value.trim());
-        fd.append('logo',    fLogo.value.trim());
-        fd.append('url_web', fUrl.value.trim());
-        fd.append('orden',   fOrden.value || 0);
-        fd.append('activo',  fActivo.checked ? '1' : '0');
+        fd.append('id',         fId.value);
+        fd.append('nombre',     fNombre.value.trim());
+        fd.append('desc',       fDesc.value.trim());
+        fd.append('logo_actual',fLogoActual.value);
+        fd.append('url_web',    fUrl.value.trim());
+        fd.append('orden',      fOrden.value || 0);
+        fd.append('activo',     fActivo.checked ? '1' : '0');
+        if (fLogo.files[0]) {
+            fd.append('logo', fLogo.files[0]);
+        }
 
         fetch('../api/socios/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })

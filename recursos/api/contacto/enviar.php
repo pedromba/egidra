@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
+ini_set('display_errors', '0');
+error_reporting(E_ERROR);
 
 require_once __DIR__ . '/../../../config/conexion.php';
 require_once __DIR__ . '/../../../config/logger.php';
@@ -49,46 +51,28 @@ $stmt->close();
 registrar_log($conexion, null, 'SISTEMA', "Nuevo mensaje de contacto de: $nombre <$email>", 'contacto', $nuevo_id);
 
 // ── Enviar email via PHPMailer ────────────────────────────────────────────────
-$empRow = $conexion->query(
-    "SELECT nombre, email, telefono, ciudad, pais, logo, logo_blanco FROM empresa WHERE id = 1 LIMIT 1"
-)->fetch_assoc();
+try {
+    $campos  = compact('nombre', 'email', 'asunto', 'mensaje');
+    $empresa = [
+        'nombre'   => MAIL_FROM_NAME,
+        'email'    => MAIL_EMPRESA,
+        'telefono' => '',
+        'ciudad'   => '',
+        'pais'     => '',
+        'logo_url' => '',
+    ];
 
-$destino = $empRow['email'] ?? null;
+    $mail = crearMailer();
+    $mail->addAddress(MAIL_EMPRESA, MAIL_FROM_NAME);
+    $mail->addReplyTo($email, $nombre);
+    $mail->Subject = '[Contacto Web] ' . ($asunto ?: "Mensaje de $nombre");
+    $mail->Body    = buildPlantillaContacto($campos, $empresa);
+    $mail->AltBody = "Nuevo mensaje de: $nombre <$email>\nAsunto: $asunto\n\n$mensaje";
+    $mail->send();
 
-if ($destino && filter_var($destino, FILTER_VALIDATE_EMAIL)) {
-    try {
-        // Construir URL del logo para el email (usar logo principal, si no el blanco)
-        $logoPath = $empRow['logo'] ?: ($empRow['logo_blanco'] ?? '');
-        $logoUrl  = '';
-        if ($logoPath) {
-            // URL absoluta para que el cliente de correo pueda cargar la imagen
-            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-            $host     = $_SERVER['HTTP_HOST'] ?? 'egidra.com';
-            $logoUrl  = "$protocol://$host/" . ltrim($logoPath, '/');
-        }
-
-        $campos  = compact('nombre', 'email', 'asunto', 'mensaje');
-        $empresa = [
-            'nombre'   => $empRow['nombre']   ?? 'EGIDRA',
-            'email'    => $empRow['email']     ?? '',
-            'telefono' => $empRow['telefono']  ? "  ·  {$empRow['telefono']}" : '',
-            'ciudad'   => $empRow['ciudad']    ?? '',
-            'pais'     => $empRow['pais']      ?? '',
-            'logo_url' => $logoUrl,
-        ];
-
-        $mail = crearMailer();
-        $mail->addAddress($destino, $empresa['nombre']);
-        $mail->addReplyTo($email, $nombre);
-        $mail->Subject = '[Contacto Web] ' . ($asunto ?: "Mensaje de $nombre");
-        $mail->Body    = buildPlantillaContacto($campos, $empresa);
-        $mail->AltBody = "Nuevo mensaje de: $nombre <$email>\nAsunto: $asunto\n\n$mensaje";
-        $mail->send();
-
-    } catch (\Exception $e) {
-        // El mensaje ya quedó en BD — el fallo de email no es crítico para el usuario
-        error_log('PHPMailer error (contacto): ' . $e->getMessage());
-    }
+} catch (\Exception $e) {
+    // El mensaje ya quedó en BD — el fallo de email no interrumpe la respuesta al usuario
+    error_log('PHPMailer error (contacto): ' . $e->getMessage());
 }
 
 echo json_encode(['success' => true, 'mensaje' => 'Mensaje enviado correctamente. Le responderemos en menos de 24 horas.']);

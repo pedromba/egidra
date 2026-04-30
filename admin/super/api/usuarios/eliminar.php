@@ -15,16 +15,16 @@ if ($id <= 0) {
     exit;
 }
 if ($id === (int) $_SESSION['user_id']) {
-    echo json_encode(['estado' => false, 'mensaje' => 'No puedes eliminar tu propia cuenta.']);
+    echo json_encode(['estado' => false, 'mensaje' => 'No puedes desactivar tu propia cuenta.']);
     exit;
 }
 
-$stmt = $conexion->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+$stmt = $conexion->prepare("UPDATE usuarios SET estado='inactivo' WHERE id_usuario=?");
 $stmt->bind_param('i', $id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
-    registrar_log($conexion, $_SESSION['user_id'], 'ELIMINAR', 'Eliminado registro id=' . $id, 'usuarios', $id);
-    echo json_encode(['estado' => true, 'mensaje' => 'Usuario eliminado.']);
+    registrar_log($conexion, $_SESSION['user_id'], 'EDITAR', 'Desactivado registro id=' . $id, 'usuarios', $id);
+    echo json_encode(['estado' => true, 'mensaje' => 'Usuario desactivado.']);
 } else {
-    echo json_encode(['estado' => false, 'mensaje' => 'No se pudo eliminar el usuario.']);
+    echo json_encode(['estado' => false, 'mensaje' => 'No se pudo desactivar el usuario.']);
 }

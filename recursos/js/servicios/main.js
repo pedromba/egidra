@@ -1,12 +1,12 @@
 // EGIDRA - Servicios (AJAX)
 
 const CAT_IMAGES = {
-    'buceo-subsea':     'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=620&h=460&fit=crop',
-    'acceso-cuerda':    'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=620&h=460&fit=crop',
-    'logistica':        'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=620&h=460&fit=crop',
-    'estudios-tecnicos':'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=620&h=460&fit=crop',
+    'buceo-subsea':     '../img/template/bg-offshore.jpg',
+    'acceso-cuerda':    '../img/template/srv-cuerda.jpg',
+    'logistica':        '../img/template/srv-logistica.jpg',
+    'estudios-tecnicos':'../img/template/srv-tecnico.jpg',
 };
-const IMG_DEFAULT = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=620&h=460&fit=crop';
+const IMG_DEFAULT = '../img/template/bg-industrial.jpg';
 
 document.addEventListener('DOMContentLoaded', function () {
 

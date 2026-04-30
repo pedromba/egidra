@@ -1,4 +1,4 @@
-/* EGIDRA - Estilos Página Servicios */
+﻿/* EGIDRA - Estilos Página Servicios */
 
 /* Page Header */
 .page-header {
@@ -6,7 +6,7 @@
     min-height: 50vh;
     background:
         linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 50%, rgba(13, 13, 13, 0.5) 100%),
-        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+        url('../../../img/template/bg-industrial.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -17,18 +17,33 @@
 .page-header::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background:
         radial-gradient(ellipse at 30% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
         radial-gradient(ellipse at 70% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 40%);
     pointer-events: none;
 }
 
-.page-header .container { position: relative; z-index: 2; }
+.page-header .container {
+    position: relative;
+    z-index: 2;
+}
 
-.page-header h1      { line-height: 1.2; animation: fadeInUp 1s ease-out; }
-.page-header .badge  { animation: fadeInUp 1s ease-out 0.2s both; }
-.page-header .lead   { animation: fadeInUp 1s ease-out 0.4s both; }
+.page-header h1 {
+    line-height: 1.2;
+    animation: fadeInUp 1s ease-out;
+}
+
+.page-header .badge {
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.page-header .lead {
+    animation: fadeInUp 1s ease-out 0.4s both;
+}
 
 .header-scroll-indicator {
     position: absolute;
@@ -38,7 +53,9 @@
     animation: bounce 2s infinite;
 }
 
-.header-scroll-indicator a { text-decoration: none; }
+.header-scroll-indicator a {
+    text-decoration: none;
+}
 
 /* ── Navegación rápida de servicios ──────────────────────────── */
 .services-nav {
@@ -66,14 +83,18 @@
     border-bottom-color: var(--primary-color);
 }
 
-.services-nav .nav-link i { margin-right: 0.4rem; }
+.services-nav .nav-link i {
+    margin-right: 0.4rem;
+}
 
 /* ── Sección individual de servicio ─────────────────────────── */
 .service-section {
     padding: 5rem 0;
 }
 
-.service-section.bg-alt { background: var(--light-bg); }
+.service-section.bg-alt {
+    background: var(--light-bg);
+}
 
 .service-section img {
     transition: var(--transition);
@@ -95,16 +116,21 @@
 .sub-service-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 4px;
     height: 0;
     background: var(--primary-color);
     transition: var(--transition);
 }
 
-.sub-service-card:hover { transform: translateY(-8px); }
+.sub-service-card:hover {
+    transform: translateY(-8px);
+}
 
-.sub-service-card:hover::before { height: 100%; }
+.sub-service-card:hover::before {
+    height: 100%;
+}
 
 .sub-service-icon {
     width: 60px;
@@ -187,14 +213,34 @@
 
 /* ── Animaciones ─────────────────────────────────────────────── */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-    40%                      { transform: translateX(-50%) translateY(-10px); }
-    60%                      { transform: translateX(-50%) translateY(-5px); }
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */
@@ -203,26 +249,49 @@
         min-height: 40vh;
         background:
             linear-gradient(to right, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0.85) 100%),
-            url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop');
+            url('../../../img/template/bg-industrial.jpg');
         background-size: cover;
         background-position: center;
     }
 
-    .page-header h1 { font-size: 2.5rem !important; }
+    .page-header h1 {
+        font-size: 2.5rem !important;
+    }
 
-    .services-nav { overflow-x: auto; }
-    .services-nav .nav { flex-wrap: nowrap; }
-    .services-nav .nav-link { padding: 0.75rem 1rem; font-size: 0.875rem; }
+    .services-nav {
+        overflow-x: auto;
+    }
 
-    .process-connector { display: none !important; }
+    .services-nav .nav {
+        flex-wrap: nowrap;
+    }
+
+    .services-nav .nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .process-connector {
+        display: none !important;
+    }
 }
 
 @media (max-width: 767px) {
-    .page-header { min-height: 35vh; }
-    .page-header h1 { font-size: 1.75rem !important; }
-    .page-header .display-3 { font-size: 2rem !important; }
+    .page-header {
+        min-height: 35vh;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem !important;
+    }
+
+    .page-header .display-3 {
+        font-size: 2rem !important;
+    }
 
     .service-section,
     .process-section,
-    .cta-section { padding: 3rem 0; }
+    .cta-section {
+        padding: 3rem 0;
+    }
 }

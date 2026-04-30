@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once '../config/rutas.php';
 require_once '../config/conexion.php';
 
@@ -46,7 +46,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=620&h=460&fit=crop"
+                    <img src="../img/template/srv-tecnico.jpg"
                          alt="Política HSE <?php echo $empNombre; ?>" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">

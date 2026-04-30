@@ -14,11 +14,13 @@ $pageBreadcrumb ??= 'Panel de Control';
         </div>
     </div>
     <div class="tb-right">
-        <a href="<?php echo RUTA_ADMIN_SUPER; ?>mensajes/" class="tb-btn" title="Mensajes">
-            <i class="fas fa-envelope"></i><span class="tb-dot"></span>
+        <a href="<?php echo RUTA_ADMIN_SUPER; ?>mensajes/" class="tb-btn" title="Mensajes" id="btn-header-mensajes">
+            <i class="fas fa-envelope"></i>
+            <span class="tb-badge" id="badge-mensajes" style="display:none;"></span>
         </a>
-        <a href="<?php echo RUTA_ADMIN_SUPER; ?>logs/" class="tb-btn" title="Logs">
+        <a href="<?php echo RUTA_ADMIN_SUPER; ?>logs/" class="tb-btn" title="Actividad" id="btn-header-logs">
             <i class="fas fa-bell"></i>
+            <span class="tb-badge" id="badge-logs" style="display:none;"></span>
         </a>
 
         <!-- User dropdown -->

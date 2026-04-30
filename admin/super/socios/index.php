@@ -33,7 +33,22 @@ $pageTitle = 'Socios'; $pageBreadcrumb = 'Socios y Alianzas';
             <input type="hidden" id="soc-id">
             <div class="mb-3"><label class="f-label">Nombre <span class="text-danger">*</span></label><input class="f-input" id="soc-nombre" type="text" placeholder="Ej: Bureau Veritas"></div>
             <div class="mb-3"><label class="f-label">Descripción</label><textarea class="f-textarea" id="soc-desc" placeholder="Descripción de la relación o del organismo..."></textarea></div>
-            <div class="mb-3"><label class="f-label">Logo (ruta o URL)</label><input class="f-input" id="soc-logo" type="text" placeholder="/img/socios/bureau-veritas.svg"></div>
+            <div class="mb-3">
+                <label class="f-label">Logo</label>
+                <div class="foto-upload-area" id="logo-area">
+                    <div class="foto-preview-wrap" id="logo-preview-wrap" style="display:none;">
+                        <img id="logo-preview" src="" alt="Logo" style="width:72px;height:72px;border-radius:8px;object-fit:contain;border:2px solid var(--border);background:#f8f9fa;padding:4px;">
+                        <button type="button" class="foto-remove" id="logo-remove" title="Quitar logo"><i class="fas fa-times"></i></button>
+                    </div>
+                    <label class="foto-label" id="logo-label" for="soc-logo">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span id="logo-label-txt">Haz clic o arrastra un logo</span>
+                        <small>PNG, SVG, JPG, WEBP · máx. 1 MB</small>
+                    </label>
+                    <input type="file" id="soc-logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none;">
+                    <input type="hidden" id="soc-logo-actual">
+                </div>
+            </div>
             <div class="mb-3"><label class="f-label">Sitio web</label><input class="f-input" id="soc-url" type="url" placeholder="https://..."></div>
             <div class="mb-3"><label class="f-label">Orden</label><input class="f-input" id="soc-orden" type="number" min="0" max="99" placeholder="0"></div>
             <div class="d-flex align-items-center justify-content-between"><label class="f-label mb-0">Activo</label><label class="toggle-sw"><input type="checkbox" id="soc-activo" checked><span class="toggle-slider"></span></label></div>
@@ -41,6 +56,7 @@ $pageTitle = 'Socios'; $pageBreadcrumb = 'Socios y Alianzas';
         <div class="modal-foot"><button class="btn-sec" data-modal-close="modal-socio">Cancelar</button><button class="btn-pri" id="btn-guardar-socio"><i class="fas fa-check me-1"></i>Guardar</button></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="../recursos/js/app/app.js"></script>
 <script src="../recursos/js/socios/socios.js"></script>
 </body></html>

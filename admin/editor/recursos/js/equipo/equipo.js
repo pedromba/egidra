@@ -96,9 +96,6 @@
         fFoto.dispatchEvent(new Event('change'));
     });
 
-    /* click on label opens file dialog */
-    fotoLabel?.addEventListener('click', function () { fFoto.click(); });
-
     /* ── Filtros y render ── */
     function filtrados() {
         if (!filtroSearch) return equipo;

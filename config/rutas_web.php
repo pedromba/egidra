@@ -7,12 +7,15 @@ if (!defined('ENTORNO')) {
     );
 }
 
-// ─── Rutas URL del sitio web ──────────────────────────────────────────────────
+// ─── Rutas URL del sitio web (auto-detectadas, independientes del nombre de carpeta) ───
 if (!defined('RUTA_BASE')) {
-    define('RUTA_BASE', ENTORNO === 'local'
-        ? 'http://localhost/egidra.com/'
-        : 'https://www.egidra.com/'
-    );
+    $__protocol  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $__host      = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $__docRoot   = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/\\'));
+    $__projectDir = str_replace('\\', '/', rtrim(dirname(__DIR__), '/\\'));
+    $__webPath   = rtrim(str_ireplace($__docRoot, '', $__projectDir), '/') . '/';
+    define('RUTA_BASE', "{$__protocol}://{$__host}{$__webPath}");
+    unset($__protocol, $__host, $__docRoot, $__projectDir, $__webPath);
 }
 
 if (!defined('RUTA_RECURSOS')) {
