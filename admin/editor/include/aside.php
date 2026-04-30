@@ -17,6 +17,7 @@ $section = match(true) {
     str_contains($uri, '/clientes')        => 'clientes',
     str_contains($uri, '/mensajes')        => 'mensajes',
     str_contains($uri, '/seguridad')       => 'seguridad',
+    str_contains($uri, '/perfil')          => 'perfil',
     default                                => 'dashboard',
 };
 
@@ -80,6 +81,9 @@ function sbLinkEd(string $href, string $icon, string $label, string $key, string
         <?php sbLinkEd($base.'equipo/',          'fa-users-gear',       'Equipo',          'equipo',          $section); ?>
         <?php sbLinkEd($base.'socios/',          'fa-handshake',        'Socios',          'socios',          $section); ?>
         <?php sbLinkEd($base.'certificaciones/', 'fa-certificate',      'Certificaciones', 'certificaciones', $section); ?>
+
+        <div class="sb-group">Mi cuenta</div>
+        <?php sbLinkEd($base.'perfil/', 'fa-user-circle', 'Mi Perfil', 'perfil', $section); ?>
 
         <div class="sb-group">Web</div>
         <?php sbLinkEd(RUTA_BASE, 'fa-arrow-up-right-from-square', 'Ver Sitio', '', $section); ?>

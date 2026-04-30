@@ -10,7 +10,9 @@
       "Bash(/c/laragon/bin/php/php-8.1.10-Win32-vs16-x64/php.exe -r ' *)",
       "WebSearch",
       "WebFetch(domain:www.pexels.com)",
-      "WebFetch(domain:unsplash.com)"
+      "WebFetch(domain:unsplash.com)",
+      "Bash(mysql -u root egidra -e \"ALTER TABLE usuarios ADD COLUMN primera_sesion TINYINT\\(1\\) NOT NULL DEFAULT 0;\")",
+      "Bash(php -r ' *)"
     ]
   }
 }

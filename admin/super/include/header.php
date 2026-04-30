@@ -37,7 +37,7 @@ $pageBreadcrumb ??= 'Panel de Control';
                 </div>
                 <div class="tb-dd-sep"></div>
                 <a href="<?php echo RUTA_ADMIN_SUPER; ?>perfil/" class="tb-dd-item" role="menuitem">
-                    <i class="fas fa-user-pen"></i>Mi perfil
+                    <i class="fas fa-user-circle"></i>Mi perfil
                 </a>
                 <div class="tb-dd-sep"></div>
                 <button type="button" class="tb-dd-item tb-dd-danger btn-logout" data-logout-url="<?php echo RUTA_ADMIN; ?>api/logout.php" role="menuitem" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">
@@ -48,3 +48,4 @@ $pageBreadcrumb ??= 'Panel de Control';
 
     </div>
 </header>
+<?php include_once __DIR__ . '/../../../admin/include/modal_primera_sesion.php'; ?>

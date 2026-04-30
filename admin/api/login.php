@@ -32,7 +32,7 @@ if (empty($email) || empty($password)) {
 }
 
 $stmt = $conexion->prepare(
-    "SELECT id_usuario, email, nombre, contrasena_hash, rol, estado
+    "SELECT id_usuario, email, nombre, contrasena_hash, rol, estado, primera_sesion
      FROM usuarios WHERE email = ? AND estado = 'activo'"
 );
 $stmt->bind_param('s', $email);
@@ -62,11 +62,12 @@ if (!array_key_exists($usuario['rol'], $redirects)) {
 }
 
 session_regenerate_id(true);
-$_SESSION['user_id'] = $usuario['id_usuario'];
-$_SESSION['email']   = $usuario['email'];
-$_SESSION['nombre']  = $usuario['nombre'];
-$_SESSION['estado']  = $usuario['estado'];
-$_SESSION['rol']     = $usuario['rol'];
+$_SESSION['user_id']        = $usuario['id_usuario'];
+$_SESSION['email']          = $usuario['email'];
+$_SESSION['nombre']         = $usuario['nombre'];
+$_SESSION['estado']         = $usuario['estado'];
+$_SESSION['rol']            = $usuario['rol'];
+$_SESSION['primera_sesion'] = (int)$usuario['primera_sesion'];
 
 registrar_log($conexion, $usuario['id_usuario'], 'LOGIN', 'Inicio de sesión: ' . $usuario['email'], 'usuarios', $usuario['id_usuario']);
 

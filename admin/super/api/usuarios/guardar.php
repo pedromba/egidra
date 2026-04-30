@@ -59,7 +59,7 @@ if ($id > 0) {
     $hash      = password_hash($passPlain, PASSWORD_DEFAULT);
 
     $stmt = $conexion->prepare(
-        "INSERT INTO usuarios (nombre, email, contrasena_hash, rol, estado) VALUES (?,?,?,?,?)"
+        "INSERT INTO usuarios (nombre, email, contrasena_hash, rol, estado, primera_sesion) VALUES (?,?,?,?,?,1)"
     );
     $stmt->bind_param('sssss', $nombre, $email, $hash, $rol, $estado);
 

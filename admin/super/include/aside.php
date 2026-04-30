@@ -20,6 +20,7 @@ $section = match(true) {
     str_contains($uri, '/mensajes')        => 'mensajes',
     str_contains($uri, '/seguridad')       => 'seguridad',
     str_contains($uri, '/logs')            => 'logs',
+    str_contains($uri, '/perfil')          => 'perfil',
     default                                => 'dashboard',
 };
 
@@ -88,6 +89,7 @@ function sbLink(string $href, string $icon, string $label, string $key, string $
         <div class="sb-group">Sistema</div>
         <?php sbLink($base.'usuarios/',        'fa-users',         'Usuarios',       'usuarios',  $section); ?>
         <?php sbLink($base.'logs/',            'fa-list-check',    'Logs',           'logs',      $section); ?>
+        <?php sbLink($base.'perfil/',          'fa-user-circle',   'Mi Perfil',      'perfil',    $section); ?>
 
         <div class="sb-group">Web</div>
         <?php sbLink(RUTA_BASE,                'fa-arrow-up-right-from-square', 'Ver Sitio', '', $section); ?>
