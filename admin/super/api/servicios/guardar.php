@@ -33,14 +33,14 @@ if ($id > 0) {
              icono=?, es_destacado=?, orden=?, activo=?
          WHERE id=?"
     );
-    $stmt->bind_param('isssiiii', $cat_id, $titulo, $slug, $desc, $icono, $dest, $orden, $activo, $id);
+    $stmt->bind_param('issssiiii', $cat_id, $titulo, $slug, $desc, $icono, $dest, $orden, $activo, $id);
 } else {
     $stmt = $conexion->prepare(
         "INSERT INTO servicios
          (categoria_id, titulo, slug, descripcion_breve, icono, es_destacado, orden, activo)
          VALUES (?,?,?,?,?,?,?,?)"
     );
-    $stmt->bind_param('issssiiii', $cat_id, $titulo, $slug, $desc, $icono, $dest, $orden, $activo);
+    $stmt->bind_param('issssiii', $cat_id, $titulo, $slug, $desc, $icono, $dest, $orden, $activo);
 }
 
 if ($stmt->execute()) {

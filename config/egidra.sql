@@ -103,7 +103,8 @@ CREATE TABLE usuarios (
     rol             ENUM('Super','Editor') DEFAULT 'Editor',
     estado          ENUM('activo','inactivo') DEFAULT 'activo',
     ultimo_acceso   DATETIME,
-    fecha_creacion  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_creacion  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primera_sesion TINYINT(1) DEFAULT 0 -- este es un atributo que no estaba.
 );
 
 -- ================================================================
