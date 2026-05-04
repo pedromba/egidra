@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-ini_set('display_errors', '0');
-error_reporting(E_ERROR);
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 session_start();
 if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     http_response_code(401);

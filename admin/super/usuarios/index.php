@@ -3,6 +3,9 @@ require_once '../include/auth.php';
 require_once '../../../config/rutas.php';
 $pageTitle = 'Usuarios'; $pageBreadcrumb = 'Usuarios';
 ?>
+
+
+
 <!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Usuarios — EGIDRA Admin</title>
@@ -45,10 +48,6 @@ $pageTitle = 'Usuarios'; $pageBreadcrumb = 'Usuarios';
             <input type="hidden" id="usr-id">
             <div class="mb-3"><label class="f-label">Nombre <span class="text-danger">*</span></label><input class="f-input" id="usr-nombre" type="text" placeholder="Nombre completo"></div>
             <div class="mb-3"><label class="f-label">Email <span class="text-danger">*</span></label><input class="f-input" id="usr-email" type="email" placeholder="correo@egidra.com"></div>
-            <div class="mb-3" id="pass-row">
-                <label class="f-label">Contraseña <span id="pass-hint" class="text-muted" style="font-size:.75rem;">(dejar vacío para no cambiar)</span></label>
-                <input class="f-input" id="usr-pass" type="password" placeholder="••••••••">
-            </div>
             <div class="mb-3" id="pass-auto-note" style="display:none;">
                 <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:.78rem;color:#166534;">
                     <i class="fas fa-envelope me-1"></i> Se generará una contraseña aleatoria de 8 caracteres y se enviará al correo del usuario.

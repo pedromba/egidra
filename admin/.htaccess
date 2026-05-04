@@ -1,0 +1,27 @@
+# ════════════════════════════════════════════════════════════════════
+#  EGIDRA — Panel Admin  ·  /admin/.htaccess
+# ════════════════════════════════════════════════════════════════════
+
+# ── Deshabilitar listado de directorios ──────────────────────────────
+Options -Indexes -MultiViews
+
+# ── Bloquear acceso HTTP directo a carpetas include/ ─────────────────
+# (auth.php, aside.php, header.php se usan solo con require_once)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule (^|/)include/ - [F,L]
+</IfModule>
+
+# ── Bloquear archivos sensibles ───────────────────────────────────────
+<FilesMatch "(\.htaccess|\.htpasswd|\.env|\.git|\.log|\.sql|\.bak|\.sh)$">
+    Require all denied
+</FilesMatch>
+
+# ── Cabeceras de seguridad ────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

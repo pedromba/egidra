@@ -85,7 +85,7 @@
     }
 
     function cargar() {
-        fetch('../api/empresa/obtener.php')
+        fetch('/egidra/admin/super/api/empresa/obtener.php')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (data.estado) rellenar(data.datos);
@@ -109,7 +109,7 @@
         if (logoFile) fd.append('logo_file', logoFile);
         if (logoBlancoFile) fd.append('logo_blanco_file', logoBlancoFile);
 
-        fetch('../api/empresa/guardar.php', { method: 'POST', body: fd })
+        fetch('/egidra/admin/super/api/empresa/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }

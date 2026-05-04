@@ -7,14 +7,11 @@
     const btnNuevo   = document.getElementById('btn-nuevo-usuario');
     const btnGuardar = document.getElementById('btn-guardar-usuario');
     const tituloMod  = document.getElementById('modal-usuario-title');
-    const passHint   = document.getElementById('pass-hint');
-    const passRow    = document.getElementById('pass-row');
     const passNote   = document.getElementById('pass-auto-note');
 
     const fId     = document.getElementById('usr-id');
     const fNombre = document.getElementById('usr-nombre');
     const fEmail  = document.getElementById('usr-email');
-    const fPass   = document.getElementById('usr-pass');
     const fRol    = document.getElementById('usr-rol');
     const fActivo = document.getElementById('usr-activo');
 
@@ -83,7 +80,7 @@
 
     function cargar() {
         tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>';
-        fetch('../api/usuarios/listar.php')
+        fetch('/egidra/admin/super/api/usuarios/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) { todos = data.estado ? data.datos : []; applyFilter(); })
             .catch(function () { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Error al cargar.</td></tr>'; });
@@ -92,9 +89,8 @@
     function abrirNuevo() {
         tituloMod.textContent = 'Nuevo usuario';
         fId.value = ''; fNombre.value = ''; fEmail.value = '';
-        fPass.value = ''; fRol.value = 'Editor'; fActivo.checked = true;
-        if (passRow)  passRow.style.display  = 'none';
-        if (passNote) passNote.style.display  = '';
+        fRol.value = 'Editor'; fActivo.checked = true;
+        if (passNote) passNote.style.display = '';
         window.EgAdmin.openModal('modal-usuario');
     }
 
@@ -102,13 +98,10 @@
         const u = todos.find(function (x) { return x.id == id; });
         if (!u) return;
         tituloMod.textContent = 'Editar usuario';
-        if (passRow)  passRow.style.display  = '';
-        if (passNote) passNote.style.display  = 'none';
-        if (passHint) passHint.style.display  = '';
+        if (passNote) passNote.style.display = 'none';
         fId.value       = u.id;
         fNombre.value   = u.nombre || '';
         fEmail.value    = u.email  || '';
-        fPass.value     = '';
         fRol.value      = u.rol    || 'Editor';
         fActivo.checked = u.estado === 'activo';
         window.EgAdmin.openModal('modal-usuario');
@@ -134,12 +127,11 @@
         fd.append('id',     fId.value);
         fd.append('nombre', fNombre.value.trim());
         fd.append('email',  fEmail.value.trim());
-        fd.append('pass',   fPass.value);
         fd.append('rol',    fRol.value);
         fd.append('estado', fActivo.checked ? 'activo' : 'inactivo');
 
         setBtnLoading(btnGuardar, true);
-        fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
+        fetch('/egidra/admin/super/api/usuarios/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 setBtnLoading(btnGuardar, false);
@@ -170,7 +162,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('../api/usuarios/eliminar.php', { method: 'POST', body: fd })
+            fetch('/egidra/admin/super/api/usuarios/eliminar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -197,7 +189,7 @@
             fd.append('email',  u ? u.email  : '');
             fd.append('rol',    u ? u.rol    : 'Editor');
             fd.append('estado', 'activo');
-            fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
+            fetch('/egidra/admin/super/api/usuarios/guardar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -227,7 +219,7 @@
 
             const fd = new FormData();
             fd.append('id', id);
-            fetch('../api/usuarios/resetear.php', { method: 'POST', body: fd })
+            fetch('/egidra/admin/super/api/usuarios/resetear.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
