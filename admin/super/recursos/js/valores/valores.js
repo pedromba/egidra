@@ -53,7 +53,7 @@
 
     function cargar() {
         grid.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
-        fetch('/egidra/admin/super/api/valores/listar.php')
+        fetch('../api/valores/listar.php')
             .then(r => r.json())
             .then(data => { todos = data.estado ? data.datos : []; renderGrid(todos); })
             .catch(() => { grid.innerHTML = '<div class="col-12 text-center text-muted py-4">Error al cargar.</div>'; });
@@ -119,7 +119,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/valores/eliminar.php', { method: 'POST', body: fd })
+            fetch('../api/valores/eliminar.php', { method: 'POST', body: fd })
                 .then(r => r.json())
                 .then(data => {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }

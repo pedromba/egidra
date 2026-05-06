@@ -110,7 +110,7 @@
 
     function cargar() {
         list.innerHTML = '<div class="p-4 text-center text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
-        fetch('/egidra/admin/super/api/socios/listar.php')
+        fetch('../api/socios/listar.php')
             .then(r => r.json())
             .then(data => { todos = data.estado ? data.datos : []; renderList(todos); })
             .catch(() => { list.innerHTML = '<div class="p-4 text-center text-muted">Error al cargar.</div>'; });
@@ -163,7 +163,7 @@
             fd.append('logo', fLogo.files[0]);
         }
 
-        fetch('/egidra/admin/super/api/socios/guardar.php', { method: 'POST', body: fd })
+        fetch('../api/socios/guardar.php', { method: 'POST', body: fd })
             .then(r => r.json())
             .then(data => {
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -184,7 +184,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/socios/eliminar.php', { method: 'POST', body: fd })
+            fetch('../api/socios/eliminar.php', { method: 'POST', body: fd })
                 .then(r => r.json())
                 .then(data => {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }

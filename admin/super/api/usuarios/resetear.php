@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-ini_set('display_errors', '1');
+ini_set('display_errors', '0');
 error_reporting(E_ALL);
 session_start();
 if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
@@ -36,7 +36,7 @@ if (!$stmt->execute()) {
     exit;
 }
 
-registrar_log($conexion, $_SESSION['user_id'], 'EDITAR', 'Contraseña reseteada para id=' . $id, 'usuarios', $id);
+registrar_log($conexion, $_SESSION['user_id'], 'EDITAR', "Contraseña reseteada para id=$id", 'usuarios', $id);
 
 /* Enviar nueva contraseña por email */
 $mailEnviado = false;
@@ -55,7 +55,7 @@ try {
 }
 
 $msg = $mailEnviado
-    ? 'Contraseña reseteada y enviada a ' . $row['email'] . '.'
-    : 'Contraseña reseteada, pero no se pudo enviar el email. ' . $mailError;
+    ? "Contraseña reseteada y enviada a {$row['email']}."
+    : "Contraseña reseteada, pero no se pudo enviar el email. $mailError";
 
 echo json_encode(['estado' => true, 'mail_ok' => $mailEnviado, 'mensaje' => $msg]);

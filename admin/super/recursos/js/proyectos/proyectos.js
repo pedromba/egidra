@@ -36,7 +36,7 @@
     }
 
     function poblarSelects() {
-        fetch('/egidra/admin/super/api/servicios/categorias/listar.php')
+        fetch('../api/servicios/categorias/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) return;
@@ -51,7 +51,7 @@
                 });
             });
 
-        fetch('/egidra/admin/super/api/clientes/listar.php')
+        fetch('../api/clientes/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) return;
@@ -96,7 +96,7 @@
 
     function cargar() {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>';
-        fetch('/egidra/admin/super/api/proyectos/listar.php')
+        fetch('../api/proyectos/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) { todos = data.estado ? data.datos : []; applyFilter(); })
             .catch(function () { tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Error al cargar.</td></tr>'; });
@@ -178,7 +178,7 @@
         fd.append('activo',           fActivo.checked ? '1' : '0');
         if (fImgFile && fImgFile.files[0]) fd.append('imagen_file', fImgFile.files[0]);
 
-        fetch('/egidra/admin/super/api/proyectos/guardar.php', { method: 'POST', body: fd })
+        fetch('../api/proyectos/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -199,7 +199,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/proyectos/eliminar.php', { method: 'POST', body: fd })
+            fetch('../api/proyectos/eliminar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }

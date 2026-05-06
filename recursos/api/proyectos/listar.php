@@ -10,7 +10,7 @@ $cats = $conexion->query(
 
 // Proyectos con JOIN a categoría y cliente
 $result = $conexion->query(
-    "SELECT p.titulo, p.descripcion_tecnica, p.ubicacion, p.ano_finalizacion, p.imagen,
+    "SELECT p.id_proyecto, p.titulo, p.descripcion_tecnica, p.ubicacion, p.ano_finalizacion, p.imagen,
             cs.nombre AS categoria, cs.slug AS categoria_slug, cs.icono AS categoria_icono,
             cl.nombre AS cliente
      FROM proyectos p

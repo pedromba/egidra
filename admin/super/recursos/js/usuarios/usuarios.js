@@ -80,7 +80,7 @@
 
     function cargar() {
         tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>';
-        fetch('/egidra/admin/super/api/usuarios/listar.php')
+        fetch('../api/usuarios/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) { todos = data.estado ? data.datos : []; applyFilter(); })
             .catch(function () { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Error al cargar.</td></tr>'; });
@@ -131,7 +131,7 @@
         fd.append('estado', fActivo.checked ? 'activo' : 'inactivo');
 
         setBtnLoading(btnGuardar, true);
-        fetch('/egidra/admin/super/api/usuarios/guardar.php', { method: 'POST', body: fd })
+        fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 setBtnLoading(btnGuardar, false);
@@ -162,7 +162,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/usuarios/eliminar.php', { method: 'POST', body: fd })
+            fetch('../api/usuarios/eliminar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -189,7 +189,7 @@
             fd.append('email',  u ? u.email  : '');
             fd.append('rol',    u ? u.rol    : 'Editor');
             fd.append('estado', 'activo');
-            fetch('/egidra/admin/super/api/usuarios/guardar.php', { method: 'POST', body: fd })
+            fetch('../api/usuarios/guardar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -219,7 +219,7 @@
 
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/usuarios/resetear.php', { method: 'POST', body: fd })
+            fetch('../api/usuarios/resetear.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }

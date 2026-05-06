@@ -127,16 +127,22 @@ document.addEventListener('DOMContentLoaded', function () {
             const cli   = p.cliente   ? `<span><i class="fas fa-building me-1 text-warning"></i>${esc(p.cliente)}</span>` : '';
             const yr    = year        ? `<span><i class="fas fa-calendar me-1 text-warning"></i>${esc(String(year))}</span>` : '';
 
+            const detailUrl = BASE_URL + 'proyectos/verProyecto.php?id=' + p.id_proyecto;
+
             return `
             <div class="col-md-6 col-lg-4 project-item" data-category="${esc(slug)}">
                 <div class="card project-card shadow-sm h-100">
                     ${imgHtml}
                     <div class="card-body">
                         <span class="badge bg-warning text-dark mb-2">${badge}</span>
-                        <h5 class="fw-bold mb-2">${esc(p.titulo)}</h5>
-                        <p class="text-muted small mb-0">${esc(p.descripcion_tecnica || '')}</p>
+                        <h5 class="fw-bold mb-0">${esc(p.titulo)}</h5>
                     </div>
-                    <div class="card-footer">${loc}${cli}${yr}</div>
+                    <div class="card-footer d-flex align-items-center gap-2 flex-wrap">
+                        ${loc}${cli}${yr}
+                        <a href="${detailUrl}" class="ms-auto text-warning" title="Ver proyecto">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
                 </div>
             </div>`;
         }).join('');

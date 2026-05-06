@@ -1,8 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../libs/vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 // ─── Transporte SMTP ──────────────────────────────────────────────────────────
 // Para cambiar al servidor corporativo en producción, editar solo estas líneas:
@@ -26,8 +25,13 @@ if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'ssl');  // 'ssl'=465 | 'tls'
 if (!defined('MAIL_FROM'))      define('MAIL_FROM',      SMTP_USER);
 if (!defined('MAIL_FROM_NAME')) define('MAIL_FROM_NAME', 'EGIDRA');
 if (!defined('MAIL_EMPRESA'))   define('MAIL_EMPRESA',   'pmba098@gmail.com');
-if (!defined('SITE_URL'))       define('SITE_URL',       'http://localhost/egidra.com');
-if (!defined('ADMIN_URL'))      define('ADMIN_URL',       SITE_URL . '/admin');
+if (!defined('SITE_URL')) {
+    if (!defined('RUTA_BASE')) require_once __DIR__ . '/config.php';
+    define('SITE_URL', defined('URL_INICIO') ? rtrim(URL_INICIO, '/') : 'https://egidra.com');
+}
+if (!defined('ADMIN_URL')) {
+    define('ADMIN_URL', defined('RUTA_ADMIN') ? rtrim(RUTA_ADMIN, '/') : SITE_URL . '/admin');
+}
 
 /**
  * Devuelve una instancia de PHPMailer lista para usar.
@@ -35,8 +39,6 @@ if (!defined('ADMIN_URL'))      define('ADMIN_URL',       SITE_URL . '/admin');
  */
 function crearMailer(): PHPMailer
 {
-  require_once dirname(__DIR__) . '/libs/vendor/autoload.php';
-
   $mail = new PHPMailer(true);
   $mail->isSMTP();
   $mail->Host       = SMTP_HOST;

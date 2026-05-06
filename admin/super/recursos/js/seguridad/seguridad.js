@@ -53,7 +53,7 @@
 
     function cargarReglas() {
         listReglas.innerHTML = '<div class="rule-row"><div class="text-center text-muted py-4 w-100"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div></div>';
-        fetch('/egidra/admin/super/api/seguridad/reglas/listar.php')
+        fetch('../api/seguridad/reglas/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) { reglas = data.estado ? data.datos : []; renderReglas(reglas); })
             .catch(function () { listReglas.innerHTML = '<div class="rule-row"><div class="text-center text-muted py-4 w-100">Error al cargar.</div></div>'; });
@@ -80,7 +80,7 @@
         fd.append('icono',       fRegIcono.value.trim());
         fd.append('descripcion', fRegDesc.value.trim());
 
-        fetch('/egidra/admin/super/api/seguridad/reglas/guardar.php', { method: 'POST', body: fd })
+        fetch('../api/seguridad/reglas/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -120,7 +120,7 @@
 
     function cargarStats() {
         gridStats.innerHTML = '<div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</div>';
-        fetch('/egidra/admin/super/api/seguridad/estadisticas/listar.php')
+        fetch('../api/seguridad/estadisticas/listar.php')
             .then(function (r) { return r.json(); })
             .then(function (data) { stats = data.estado ? data.datos : []; renderStats(stats); })
             .catch(function () { gridStats.innerHTML = '<div class="col-12 text-center text-muted py-4">Error al cargar.</div>'; });
@@ -157,7 +157,7 @@
         fd.append('icono',    fStatIcono.value.trim());
         fd.append('orden',    fStatOrden.value || '0');
 
-        fetch('/egidra/admin/super/api/seguridad/estadisticas/guardar.php', { method: 'POST', body: fd })
+        fetch('../api/seguridad/estadisticas/guardar.php', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
@@ -178,7 +178,7 @@
             if (!res.isConfirmed) return;
             const fd = new FormData();
             fd.append('id', id);
-            fetch('/egidra/admin/super/api/seguridad/estadisticas/eliminar.php', { method: 'POST', body: fd })
+            fetch('../api/seguridad/estadisticas/eliminar.php', { method: 'POST', body: fd })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (!data.estado) { Swal.fire({ title: 'Error', text: data.mensaje, icon: 'error' }); return; }
