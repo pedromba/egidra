@@ -1,6 +1,6 @@
 <?php
-require_once '../include/auth.php';
-require_once '../../../config/rutas.php';
+require_once __DIR__ . "/../include/auth.php";
+require_once __DIR__ . "/../../../config/rutas.php";
 $pageTitle = 'Usuarios';
 $pageBreadcrumb = 'Usuarios';
 ?>
