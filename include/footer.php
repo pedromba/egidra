@@ -138,3 +138,18 @@ $_logoFooter = !empty($_emp['logo_blanco'])
 
     </div>
 </footer>
+
+<!-- ─── Botón flotante: volver arriba ─── -->
+<button type="button" id="btnVolverArriba" class="btn-volver-arriba" aria-label="Volver arriba" title="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+</button>
+<script>
+(() => {
+    const btn = document.getElementById('btnVolverArriba');
+    if (!btn) return;
+    const alternar = () => btn.classList.toggle('visible', window.scrollY > 300);
+    window.addEventListener('scroll', alternar, { passive: true });
+    alternar();
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+</script>
