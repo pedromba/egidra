@@ -9,6 +9,13 @@ Options -Indexes -MultiViews
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule (^|/)include/ - [F,L]
+
+    # ── Dominio canónico: www.egidra.com → egidra.com ──
+    RewriteCond %{HTTP_HOST} ^www\.egidra\.com$ [NC]
+    RewriteRule ^(.*)$ https://egidra.com/$1 [R=301,L]
+
+    # ── Sitemap dinámico ──
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
 </IfModule>
 
 # ── Bloquear archivos sensibles ───────────────────────────────────────

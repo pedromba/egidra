@@ -1,10 +1,11 @@
 // EGIDRA - Servicios (AJAX)
 
 const CAT_IMAGES = {
-    'buceo-subsea':     '../img/template/bg-offshore.jpg',
-    'acceso-cuerda':    '../img/template/srv-cuerda.jpg',
-    'logistica':        '../img/template/srv-logistica.jpg',
-    'estudios-tecnicos':'../img/template/srv-tecnico.jpg',
+    'buceo-subsea':                 '../img/empresa/buceo-egidra.jpg',
+    'acceso-por-cuerda':            '../img/template/hse-safety.jpg',
+    'levantamientos-hidrograficos': '../img/empresa/fondo-marino.jpg',
+    'logistica':                    '../img/template/nos-cand3.jpg',
+    'soporte-soldadura':            '../img/template/nos-cand1.jpg',
 };
 const IMG_DEFAULT = '../img/template/bg-industrial.jpg';
 
@@ -248,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const duration = 2000;
             const delay    = Math.max(duration / target, 10);
             let current = 0;
-            const suffix = counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+';
+            const suffix = counter.dataset.suffix ?? (counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+');
             const iv = setInterval(() => {
                 current++;
                 if (current >= target) { counter.textContent = target + suffix; clearInterval(iv); }

@@ -10,14 +10,17 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyectos - <?php echo $empNombre; ?></title>
-    <meta name="description" content="Track record de <?php echo $empNombre; ?>: proyectos ejecutados en buceo industrial, rope access, logística y estudios técnicos para el sector Oil &amp; Gas.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/proyectos/proyectos.css">
+    <?php $seoTitulo = 'Proyectos - ' . $empNombre;
+      $seoDescripcion = 'Trayectoria de ' . $empNombre . ' en Guinea Ecuatorial: buceo, inspecciones submarinas, levantamientos hidrográficos y logística para AMPCO, Marathon Oil, Chevron, TotalEnergies y Trident Energy.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -28,9 +31,9 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
         <div class="container">
             <div class="row min-vh-50 align-items-center">
                 <div class="col-lg-8">
-                    <span class="badge bg-warning text-dark mb-3">Track Record</span>
+                    <span class="badge bg-warning text-dark mb-3">Trayectoria</span>
                     <h1 class="display-3 fw-bold text-white mb-4">Nuestros <span class="text-warning">Proyectos</span></h1>
-                    <p class="lead text-white-50" id="headerSubtitle">Proyectos ejecutados con éxito para las principales compañías del sector Oil &amp; Gas.</p>
+                    <p class="lead text-white-50" id="headerSubtitle">Proyectos ejecutados con éxito para las principales compañías del sector del petróleo y el gas.</p>
                 </div>
             </div>
         </div>
@@ -92,7 +95,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
             <div class="text-center mb-5">
                 <span class="text-warning fw-bold text-uppercase">Con Quiénes Trabajamos</span>
                 <h2 class="display-5 fw-bold mt-2">Nuestros Clientes</h2>
-                <p class="text-muted mx-auto" style="max-width:560px;">Compañías líderes del sector Oil &amp; Gas confían en <?php echo $empNombre; ?> para sus operaciones más críticas.</p>
+                <p class="text-muted mx-auto" style="max-width:560px;">Compañías líderes del sector del petróleo y el gas confían en <?php echo $empNombre; ?> para sus operaciones más críticas.</p>
             </div>
             <div class="row g-3 justify-content-center align-items-center" id="clientesGrid">
                 <div class="col-12 placeholder-glow text-center py-3">

@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (metaDesc) metaDesc.setAttribute('content', data.nombre + ' - ' + (data.slogan || 'Expertos en Soluciones Industriales') + '.');
             const heroSlogan = document.getElementById('heroSlogan');
             if (heroSlogan && data.slogan) heroSlogan.textContent = data.slogan;
-            const heroDesc = document.getElementById('heroDesc');
-            if (heroDesc && data.descripcion) heroDesc.textContent = data.descripcion;
+            // El texto bajo el título del hero es fijo y breve: la descripción
+            // completa de la empresa es demasiado larga para el banner
             const aboutDesc = document.getElementById('aboutDesc');
             if (aboutDesc && data.descripcion) aboutDesc.textContent = data.descripcion;
             if (data.img_nosotros_url) {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (col) col.innerHTML = `<img src="${esc(data.img_nosotros_url)}" alt="Equipo ${esc(data.nombre)}" class="img-fluid rounded-3 shadow" style="width:100%;height:400px;object-fit:cover;">`;
             }
             const partnersTrust = document.getElementById('partnersTrust');
-            if (partnersTrust && data.nombre) partnersTrust.innerHTML = `Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. ${esc(data.nombre)} es miembro activo de los principales organismos de la industria subsea y rope access.`;
+            if (partnersTrust && data.nombre) partnersTrust.innerHTML = `Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. ${esc(data.nombre)} es miembro activo de los principales organismos de la industria submarina y del acceso por cuerda.`;
             if (data.telefono) {
                 const telDiv = document.getElementById('contactTelDiv');
                 const telSpan = document.getElementById('contactTel');
@@ -90,8 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const steps    = Math.max(target, 1);
             const delay    = duration / steps;
             let current = 0;
-            const suffix = counter.closest('.stat-item').querySelector('p')
-                .textContent.includes('%') ? '%' : '+';
+            const suffix = counter.dataset.suffix ?? (counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+');
             const interval = setInterval(() => {
                 current++;
                 if (current >= target) {
@@ -190,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             container.innerHTML = data.map(s => {
                 const logo = s.logo_url
-                    ? `<img src="${esc(s.logo_url)}" alt="${esc(s.nombre)}" style="max-height:60px;max-width:140px;object-fit:contain;" class="mb-2">`
-                    : `<div class="partner-logo">${esc(s.iniciales)}</div>`;
+                    ? `<div class="partner-logo"><img src="${esc(s.logo_url)}" alt="${esc(s.nombre)}"></div>`
+                    : `<div class="partner-logo">${esc(iniciales(s.nombre))}</div>`;
                 const link = s.url_web
                     ? `<a href="${esc(s.url_web)}" target="_blank" rel="noopener noreferrer" class="partner-link"><i class="fas fa-arrow-up-right-from-square me-1"></i>Ver sitio</a>`
                     : '';
@@ -231,6 +230,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── Helper escape HTML ────────────────────────────────────────────
+    function iniciales(nombre) {
+        return String(nombre || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    }
+
     function esc(str) {
         if (!str) return '';
         return String(str)

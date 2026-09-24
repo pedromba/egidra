@@ -11,7 +11,7 @@ if (!defined('SMTP_HOST'))   define('SMTP_HOST',   'smtp.gmail.com');
 if (!defined('SMTP_PORT'))   define('SMTP_PORT',   465);
 if (!defined('SMTP_AUTH'))   define('SMTP_AUTH',   true);
 if (!defined('SMTP_USER'))   define('SMTP_USER',   'pmba098@gmail.com');
-if (!defined('SMTP_PASS'))   define('SMTP_PASS',   'sqbh wzyi bwkk cqrs');
+if (!defined('SMTP_PASS'))   define('SMTP_PASS',   'sqbhwzyibwkkcqrs');
 if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'ssl');  // 'ssl'=465 | 'tls'=587
 
 // ─── Identidad, buzones y URLs ───────────────────────────────────────────────

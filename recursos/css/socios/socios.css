@@ -75,25 +75,35 @@
 
 .socio-card-head {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: 1rem;
 }
 
 .socio-logo-badge {
-    width: 58px; height: 58px;
-    border-radius: 12px;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
     background: rgba(255,193,7,.1);
-    border: 2px solid rgba(255,193,7,.2);
+    border: 4px solid #fff;
+    box-shadow: 0 0 0 3px rgba(255,193,7,.45), 0 10px 25px rgba(0,0,0,.12);
     display: flex; align-items: center; justify-content: center;
-    font-size: .75rem; font-weight: 800;
+    font-size: 1.8rem; font-weight: 800;
     color: #8a6000; letter-spacing: .5px;
     flex-shrink: 0;
     transition: var(--transition);
 }
-.socio-card:hover .socio-logo-badge {
-    background: rgba(255,193,7,.18);
-    border-color: rgba(255,193,7,.45);
+.socio-logo-badge img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform .4s ease;
 }
+.socio-card:hover .socio-logo-badge {
+    box-shadow: 0 0 0 3px var(--primary-color), 0 14px 30px rgba(0,0,0,.16);
+}
+.socio-card:hover .socio-logo-badge img { transform: scale(1.06); }
 
 .socio-categoria {
     font-size: .68rem;
@@ -134,6 +144,7 @@
     line-height: 1.65;
     flex: 1;
     margin: 0;
+    text-align: center;
 }
 
 .socio-tags {
@@ -154,6 +165,7 @@
 }
 
 .socio-foot {
+    text-align: center;
     border-top: 1px solid rgba(0,0,0,.06);
     padding-top: .85rem;
 }

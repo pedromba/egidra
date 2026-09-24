@@ -74,12 +74,12 @@
         });
 
         // Mostrar logos existentes
-        if (data.logo) {
-            logoPreviewColor.innerHTML = '<img src="' + data.logo + '" alt="Logo" style="max-width:100%; max-height:150px;">';
+        if (data.logo_url) {
+            logoPreviewColor.innerHTML = '<img src="' + data.logo_url + '" alt="Logo" style="max-width:100%; max-height:150px;">';
             logoFileName.textContent = data.logo.split('/').pop();
         }
-        if (data.logo_blanco) {
-            logoPreviewWhite.innerHTML = '<img src="' + data.logo_blanco + '" alt="Logo blanco" style="max-width:100%; max-height:150px;">';
+        if (data.logo_blanco_url) {
+            logoPreviewWhite.innerHTML = '<img src="' + data.logo_blanco_url + '" alt="Logo blanco" style="max-width:100%; max-height:150px;">';
             logoBlancoFileName.textContent = data.logo_blanco.split('/').pop();
         }
     }

@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         grid.innerHTML = socios.map(s => {
             const badge = s.logo_url
-                ? `<img src="${esc(s.logo_url)}" alt="${esc(s.nombre)}" style="max-height:44px;max-width:90px;object-fit:contain;">`
-                : `<span style="font-size:.75rem;font-weight:800;color:#8a6000;letter-spacing:.5px;">${esc(s.iniciales)}</span>`;
+                ? `<img src="${esc(s.logo_url)}" alt="${esc(s.nombre)}">`
+                : `<span>${esc(iniciales(s.nombre))}</span>`;
 
             const link = s.url_web
                 ? `<a href="${esc(s.url_web)}" target="_blank" rel="noopener noreferrer" class="socio-link">
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!target) { counter.textContent = '0'; return; }
             const delay  = Math.max(2000 / target, 10);
             let current  = 0;
-            const suffix = counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+';
+            const suffix = counter.dataset.suffix ?? (counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+');
             const iv = setInterval(() => {
                 current++;
                 if (current >= target) { counter.textContent = target + suffix; clearInterval(iv); }
@@ -167,6 +167,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── Helper escape HTML ────────────────────────────────────────────
+    function iniciales(nombre) {
+        return String(nombre || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    }
+
     function esc(str) {
         if (!str) return '';
         return String(str)

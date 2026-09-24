@@ -9,9 +9,29 @@ $_empNombre  = htmlspecialchars($_emp['nombre']  ?? 'EGIDRA');
 $_logoBlanco = $_emp['logo_blanco'] ?? '';
 $_logoPrinc  = $_emp['logo']        ?? '';
 // Preferir versión blanca (fondo oscuro del navbar); si no, usar la principal
-$_logoSrc = !empty($_logoBlanco) ? RUTA_BASE . $_logoBlanco
-          : (!empty($_logoPrinc) ? RUTA_BASE . $_logoPrinc : '');
+$_logoSrc = !empty($_logoBlanco) ? RUTA_BASE . ltrim($_logoBlanco, '/')
+          : (!empty($_logoPrinc) ? RUTA_BASE . ltrim($_logoPrinc, '/') : '');
+
+// ─── Sección activa del menú ───
+// Primer segmento de la ruta relativa a la raíz del sitio ('' = inicio)
+$_basePath = parse_url(RUTA_BASE, PHP_URL_PATH) ?: '/';
+$_uriPath  = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$_relPath  = str_starts_with($_uriPath, $_basePath) ? substr($_uriPath, strlen($_basePath)) : ltrim($_uriPath, '/');
+$_seccion  = explode('/', $_relPath)[0];
+if ($_seccion === 'index.php') $_seccion = '';
+
+$_menu = [
+    ''               => 'Inicio',
+    'sobre-nosotros' => 'Sobre Nosotros',
+    'servicios'      => 'Servicios',
+    'seguridad'      => 'Seguridad HSE',
+    'proyectos'      => 'Proyectos',
+    'socios'         => 'Socios',
+    'contacto'       => 'Contacto',
+];
 ?>
+<!-- Ajustes responsive comunes (después del CSS de cada página para prevalecer) -->
+<link rel="stylesheet" href="<?php echo RUTA_CSS; ?>comun/responsive.css?v=<?php echo @filemtime(DIR_RECURSOS . 'css/comun/responsive.css'); ?>">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="<?php echo RUTA_BASE; ?>">
@@ -30,13 +50,13 @@ $_logoSrc = !empty($_logoBlanco) ? RUTA_BASE . $_logoBlanco
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>sobre-nosotros/">Sobre Nosotros</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>servicios/">Servicios</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>seguridad/">Seguridad HSE</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>proyectos/">Proyectos</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>socios/">Socios</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo RUTA_BASE; ?>contacto/">Contacto</a></li>
+                <?php foreach ($_menu as $_slug => $_label): $_activo = ($_slug === $_seccion); ?>
+                <li class="nav-item">
+                    <a class="nav-link<?php echo $_activo ? ' active' : ''; ?>"
+                       href="<?php echo RUTA_BASE . ($_slug !== '' ? $_slug . '/' : ''); ?>"
+                       <?php echo $_activo ? 'aria-current="page"' : ''; ?>><?php echo $_label; ?></a>
+                </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>

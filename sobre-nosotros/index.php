@@ -18,14 +18,17 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre Nosotros - <?php echo $empNombre; ?></title>
-    <meta name="description" content="Conoce más sobre <?php echo $empNombre; ?>, empresa líder en servicios industriales especializados para el sector Oil &amp; Gas.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/sobre-nosotros/sobre-nosotros.css">
+    <?php $seoTitulo = 'Sobre Nosotros - ' . $empNombre;
+      $seoDescripcion = 'Conoce ' . $empNombre . ', empresa de Guinea Ecuatorial especializada en buceo industrial, acceso por cuerda y apoyo logístico para el sector del petróleo y el gas.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -38,7 +41,7 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
                 <div class="col-lg-8">
                     <span class="badge bg-warning text-dark mb-3">Quiénes Somos</span>
                     <h1 class="display-3 fw-bold text-white mb-4">Sobre <span class="text-warning"><?php echo $empNombre; ?></span></h1>
-                    <p class="lead text-white-50"><?php echo $empDesc ?: 'Más de ' . $empAnios . ' años de trayectoria en servicios industriales especializados.'; ?></p>
+                    <p class="lead text-white-50">Empresa de Guinea Ecuatorial especializada en buceo industrial, acceso por cuerda y apoyo logístico para el sector del petróleo y el gas.</p>
                 </div>
             </div>
         </div>
@@ -57,7 +60,7 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
                 <div class="col-lg-6">
                     <span class="text-warning fw-bold text-uppercase">Nuestra Historia</span>
                     <h2 class="display-5 fw-bold mt-2 mb-4">Trayectoria e Innovación</h2>
-                    <p class="text-muted mb-4"><?php echo $empDesc ?: $empNombre . ' nació con la visión de proporcionar servicios industriales de excelencia para las operaciones más exigentes del sector Oil & Gas.'; ?></p>
+                    <p class="text-muted mb-4"><?php echo $empDesc ?: $empNombre . ' nació con la visión de proporcionar servicios industriales de excelencia para las operaciones más exigentes del sector del petróleo y el gas.'; ?></p>
                     <div class="row g-3 mt-4">
                         <div class="col-6">
                             <div class="d-flex align-items-center">
@@ -105,7 +108,7 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
                         <div class="card-body text-center p-4">
                             <div class="mvv-icon mb-3"><i class="fas fa-eye fa-3x text-warning"></i></div>
                             <h4 class="card-title fw-bold mb-3">Visión</h4>
-                            <p class="card-text text-muted"><?php echo $empVision ?: 'Ser la empresa de referencia en servicios industriales para el sector Oil & Gas, destacando por nuestra excelencia operativa.'; ?></p>
+                            <p class="card-text text-muted"><?php echo $empVision ?: 'Ser la empresa de referencia en servicios industriales para el sector del petróleo y el gas, destacando por nuestra excelencia operativa.'; ?></p>
                         </div>
                     </div>
                 </div>
@@ -207,9 +210,9 @@ $empAnios    = $empFundado ? (int)(date('Y') - $empFundado) : 20;
                 </div>
                 <div class="col-6 col-md-3 mb-4 mb-md-0">
                     <div class="stat-item">
-                        <i class="fas fa-users mb-2"></i>
-                        <h2 class="stat-number" data-target="0" data-key="clientes">0</h2>
-                        <p class="text-muted mb-0">Profesionales</p>
+                        <i class="fas fa-layer-group mb-2"></i>
+                        <h2 class="stat-number" data-target="<?php echo (int)$conexion->query("SELECT COUNT(*) AS c FROM categorias_servicios WHERE activo = 1")->fetch_assoc()['c']; ?>" data-suffix="">0</h2>
+                        <p class="text-muted mb-0">Líneas de Servicio</p>
                     </div>
                 </div>
             </div>

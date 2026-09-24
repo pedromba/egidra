@@ -9,7 +9,7 @@ $result = $conexion->query(
 
 $socios = [];
 while ($row = $result->fetch_assoc()) {
-    if (!empty($row['logo'])) $row['logo_url'] = RUTA_BASE . $row['logo'];
+    if (!empty($row['logo'])) $row['logo_url'] = RUTA_BASE . ltrim($row['logo'], '/');
     // Iniciales para badge (máx. 2 letras)
     $palabras      = array_values(array_filter(explode(' ', $row['nombre'])));
     $row['iniciales'] = mb_strtoupper(

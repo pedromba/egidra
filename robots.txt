@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /config/
+Disallow: /include/
+Disallow: /libs/
+
+Sitemap: https://egidra.com/sitemap.xml

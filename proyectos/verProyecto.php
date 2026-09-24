@@ -44,8 +44,6 @@ $imagenUrl = !empty($p['imagen']) ? RUTA_BASE . htmlspecialchars($p['imagen']) :
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $titulo; ?> — <?php echo $empNombre; ?></title>
-    <meta name="description" content="<?php echo $desc; ?>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -53,6 +51,11 @@ $imagenUrl = !empty($p['imagen']) ? RUTA_BASE . htmlspecialchars($p['imagen']) :
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/proyectos/proyectos.css">
     <link rel="stylesheet" href="../recursos/css/proyectos/verProyecto.css">
+    <?php $seoTitulo = $titulo . ' — ' . $empNombre;
+      $seoDescripcion = $desc; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -84,7 +87,7 @@ $imagenUrl = !empty($p['imagen']) ? RUTA_BASE . htmlspecialchars($p['imagen']) :
     <!-- Contenido principal -->
     <section class="vp-main">
         <div class="container">
-            <div class="row g-5">
+            <div class="row g-4 g-lg-5">
 
                 <!-- Descripción -->
                 <div class="col-lg-8">

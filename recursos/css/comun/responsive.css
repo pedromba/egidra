@@ -1,0 +1,140 @@
+/* ════════════════════════════════════════════════════════════════════
+   EGIDRA — Ajustes responsive comunes a toda la web pública
+   Se carga desde include/header.php, después del CSS de cada página,
+   para que estas reglas prevalezcan sin tener que duplicarlas.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ─── Tipografía fluida ─── */
+/* Los display-* de Bootstrap son demasiado grandes en móvil y parten
+   palabras largas ("Documentació-n"); se escalan con el ancho de pantalla */
+h1, h2, h3, .display-3, .display-4, .display-5 {
+    overflow-wrap: break-word;
+    hyphens: manual;
+}
+.display-3 { font-size: clamp(2rem, 1.2rem + 3.2vw, 3.5rem); }
+.display-4 { font-size: clamp(1.85rem, 1.2rem + 2.6vw, 3rem); }
+.display-5 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.5rem); }
+
+/* ─── Hero de inicio ─── */
+.hero-section {
+    /* foto real de EGIDRA (plataforma offshore, del dossier corporativo) */
+    background:
+        linear-gradient(to right, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.65) 50%, rgba(13, 13, 13, 0.35) 100%),
+        url('../../../img/empresa/plataforma-offshore.jpg') center / cover no-repeat;
+    /* deja sitio al navbar fijo y a la flecha de scroll */
+    padding: 6.5rem 0 5.5rem;
+}
+.hero-section .row.min-vh-100 {
+    min-height: calc(100vh - 12rem) !important;
+}
+.hero-section h1 {
+    font-size: clamp(2rem, 1.1rem + 3.4vw, 3.4rem) !important;
+    max-width: 20ch;
+}
+.hero-section .lead {
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    line-height: 1.65;
+    max-width: 36rem;
+    margin-bottom: 2.25rem !important;
+}
+.hero-section .d-flex {
+    flex-wrap: wrap;
+}
+
+/* ─── Cabeceras de página interiores ─── */
+.page-header {
+    padding: 3rem 0 4.5rem;          /* abajo: hueco para la flecha de scroll */
+}
+.page-header .row.min-vh-50 {
+    min-height: auto;
+}
+.page-header .lead {
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    line-height: 1.65;
+    max-width: 38rem;
+    margin-bottom: 0;
+}
+.header-scroll-indicator,
+.hero-scroll-indicator {
+    bottom: 1.25rem;
+}
+
+/* ─── Footer ─── */
+/* La descripción de empresa es larga: se limita a 4 líneas */
+.footer .col-lg-4 > p.text-white-50 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ─── Certificaciones con nombres largos ─── */
+#certificacionesContainer .fw-bold,
+#certsContainer h6,
+#certsContainer .fw-bold {
+    overflow-wrap: anywhere;
+}
+/* Insignias de certificados en Servicios: permitir salto de línea */
+#certsContainer .badge {
+    white-space: normal;
+    max-width: 100%;
+    line-height: 1.4;
+    text-align: left;
+}
+
+/* ════════════ Tablet ════════════ */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+}
+
+/* ════════════ Móvil ════════════ */
+@media (max-width: 767.98px) {
+    /* Imagen de fondo del hero en móvil (la ruta original era incorrecta) */
+    .hero-section {
+        background:
+            linear-gradient(to bottom, rgba(13, 13, 13, 0.88) 0%, rgba(13, 13, 13, 0.8) 100%),
+            url('../../../img/empresa/plataforma-offshore.jpg') 65% center / cover no-repeat;
+        padding: 6rem 0 4.5rem;
+    }
+    .hero-section .row.min-vh-100 {
+        min-height: auto !important;
+    }
+    .hero-section .badge {
+        white-space: normal;
+        text-align: left;
+    }
+
+    .page-header {
+        padding: 2.5rem 0 4rem;
+    }
+
+    /* Tarjetas de certificados a una columna: los nombres oficiales son largos */
+    #certificacionesContainer > [class*="col-"],
+    #certsContainer > [class*="col-"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    /* Espaciado general de secciones algo más compacto */
+    section.py-5 {
+        padding-top: 3.5rem !important;
+        padding-bottom: 3.5rem !important;
+    }
+}
+
+/* ════════════ Móvil pequeño ════════════ */
+@media (max-width: 575.98px) {
+    /* Botones de llamada a la acción: uno por fila, a todo el ancho */
+    .hero-section .d-flex > .btn,
+    .cta-buttons > .btn {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+    .btn-lg {
+        font-size: 1.05rem;
+        padding: 0.7rem 1.25rem;
+    }
+}

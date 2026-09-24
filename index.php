@@ -6,13 +6,16 @@ require_once 'config/rutas.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EGIDRA - Servicios Industriales Especializados</title>
-    <meta name="description" content="EGIDRA - Expertos en Soluciones Industriales.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="recursos/css/inicio/index.css">
+    <?php $seoTitulo = 'EGIDRA - Buceo Industrial y Acceso por Cuerda en Guinea Ecuatorial';
+      $seoDescripcion = 'EGIDRA: buceo industrial, acceso por cuerda, levantamientos hidrográficos y apoyo logístico para el sector del petróleo y el gas en Guinea Ecuatorial.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/include/seo.php'; ?>
 </head>
 <body>
 
@@ -27,7 +30,7 @@ require_once 'config/rutas.php';
                 <div class="col-lg-8">
                     <span class="badge bg-warning text-dark mb-3">Líder en Servicios Industriales</span>
                     <h1 class="display-3 fw-bold text-white mb-4" id="heroSlogan">Expertos en Soluciones Industriales</h1>
-                    <p class="lead text-white-50 mb-5" id="heroDesc">Servicios especializados de buceo, acceso por cuerda, logística y estudios técnicos para el sector Oil &amp; Gas.</p>
+                    <p class="lead text-white-50 mb-5" id="heroDesc">Buceo industrial, acceso por cuerda, levantamientos hidrográficos y apoyo logístico para el sector del petróleo y el gas en Guinea Ecuatorial.</p>
                     <div class="d-flex gap-3">
                         <a href="servicios/" class="btn btn-warning btn-lg px-4">
                             <i class="fas fa-hard-hat me-2"></i>Nuestros Servicios
@@ -74,8 +77,8 @@ require_once 'config/rutas.php';
                 <div class="col-6 col-md-3 mb-4 mb-md-0">
                     <div class="stat-item">
                         <i class="fas fa-certificate mb-2"></i>
-                        <h2 class="stat-number" data-target="0" data-key="seguridad">0</h2>
-                        <p class="text-muted mb-0">% Seguridad</p>
+                        <h2 class="stat-number" data-target="0" data-key="seguridad" data-suffix="%">0</h2>
+                        <p class="text-muted mb-0">Seguridad</p>
                     </div>
                 </div>
             </div>
@@ -115,26 +118,26 @@ require_once 'config/rutas.php';
             <div class="text-center mb-5">
                 <span class="text-warning fw-bold text-uppercase">Nuestros Servicios</span>
                 <h2 class="display-5 fw-bold mt-2">Soluciones Integrales para la Industria</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">Ofrecemos un portafolio completo de servicios especializados adaptados a las necesidades del sector Oil &amp; Gas.</p>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Ofrecemos un portafolio completo de servicios especializados adaptados a las necesidades del sector del petróleo y el gas.</p>
             </div>
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
                     <div class="card service-card h-100 border-0 shadow-sm">
                         <div class="card-body text-center p-4">
-                            <div class="service-icon mb-3"><i class="fas fa-diving-mask fa-3x text-warning"></i></div>
-                            <h5 class="card-title fw-bold">Buceo &amp; Subsea</h5>
-                            <p class="card-text text-muted">Servicios de buceo industrial, inspecciones subsea, reparaciones y mantenimiento de estructuras offshore.</p>
-                            <a href="servicios/" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
+                            <div class="service-icon mb-3"><i class="fas fa-water fa-3x text-warning"></i></div>
+                            <h5 class="card-title fw-bold">Buceo y Trabajos Submarinos</h5>
+                            <p class="card-text text-muted">Servicios de buceo industrial, inspecciones submarinas, reparaciones y mantenimiento de estructuras en alta mar.</p>
+                            <a href="servicios/#buceo-subsea" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="card service-card h-100 border-0 shadow-sm">
                         <div class="card-body text-center p-4">
-                            <div class="service-icon mb-3"><i class="fas fa-rope fa-3x text-warning"></i></div>
+                            <div class="service-icon mb-3"><i class="fas fa-person-falling fa-3x text-warning"></i></div>
                             <h5 class="card-title fw-bold">Acceso por Cuerda</h5>
-                            <p class="card-text text-muted">Técnicas de rope access para inspecciones, mantenimiento y trabajos en altura extrema.</p>
-                            <a href="servicios/" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
+                            <p class="card-text text-muted">Técnicas de acceso por cuerda para inspecciones, mantenimiento y trabajos en altura extrema.</p>
+                            <a href="servicios/#acceso-por-cuerda" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -142,19 +145,19 @@ require_once 'config/rutas.php';
                     <div class="card service-card h-100 border-0 shadow-sm">
                         <div class="card-body text-center p-4">
                             <div class="service-icon mb-3"><i class="fas fa-truck-loading fa-3x text-warning"></i></div>
-                            <h5 class="card-title fw-bold">Logística</h5>
-                            <p class="card-text text-muted">Gestión integral de logística para operaciones offshore y onshore, transporte y suministro.</p>
-                            <a href="servicios/" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
+                            <h5 class="card-title fw-bold">Soporte Logístico</h5>
+                            <p class="card-text text-muted">Gestión de bases, agencia de personal, alquiler de vehículos y asistencia documental.</p>
+                            <a href="servicios/#logistica" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="card service-card h-100 border-0 shadow-sm">
                         <div class="card-body text-center p-4">
-                            <div class="service-icon mb-3"><i class="fas fa-clipboard-check fa-3x text-warning"></i></div>
-                            <h5 class="card-title fw-bold">Estudios Técnicos</h5>
-                            <p class="card-text text-muted">Estudios de ingeniería, análisis de integridad y evaluaciones técnicas especializadas.</p>
-                            <a href="servicios/" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
+                            <div class="service-icon mb-3"><i class="fas fa-map fa-3x text-warning"></i></div>
+                            <h5 class="card-title fw-bold">Levantamientos Hidrográficos</h5>
+                            <p class="card-text text-muted">Batimetría, cartografía del fondo marino y perfilado del subsuelo y los sedimentos.</p>
+                            <a href="servicios/#levantamientos-hidrograficos" class="text-warning text-decoration-none">Ver más <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -194,8 +197,8 @@ require_once 'config/rutas.php';
         <div class="container">
             <div class="text-center mb-5">
                 <span class="text-warning fw-bold text-uppercase">Proyectos Destacados</span>
-                <h2 class="display-5 fw-bold mt-2">Nuestro Track Record</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">Hemos ejecutado exitosamente proyectos para las principales empresas del sector Oil &amp; Gas.</p>
+                <h2 class="display-5 fw-bold mt-2">Nuestra Trayectoria</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Hemos ejecutado exitosamente proyectos para las principales empresas del sector del petróleo y el gas.</p>
             </div>
             <div class="row g-4" id="proyectosContainer">
                 <!-- Skeleton mientras carga -->
@@ -243,7 +246,7 @@ require_once 'config/rutas.php';
                     <div class="col-md-1 text-center"><i class="fas fa-certificate fa-2x text-warning"></i></div>
                     <div class="col-md-11">
                         <p class="mb-0 text-muted" id="partnersTrust" style="font-size:.85rem;">
-                            Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. EGIDRA es miembro activo de los principales organismos de la industria subsea y rope access.
+                            Todas nuestras operaciones están respaldadas por certificaciones internacionales vigentes. EGIDRA es miembro activo de los principales organismos de la industria submarina y del acceso por cuerda.
                         </p>
                     </div>
                 </div>

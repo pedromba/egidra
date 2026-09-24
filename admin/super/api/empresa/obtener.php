@@ -7,6 +7,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['rol'] !== 'Super') {
     exit;
 }
 require_once '../../../../config/conexion.php';
+require_once '../../../../config/rutas.php';
 
 $row = $conexion->query(
     "SELECT nombre, slogan, descripcion, mision, vision, anio_fundacion,
@@ -16,6 +17,9 @@ $row = $conexion->query(
 )->fetch_assoc();
 
 if ($row) {
+    // URL absoluta para la vista previa (la ruta en BD es relativa a la raíz del proyecto)
+    $row['logo_url']        = $row['logo']        ? RUTA_BASE . ltrim($row['logo'], '/')        : null;
+    $row['logo_blanco_url'] = $row['logo_blanco'] ? RUTA_BASE . ltrim($row['logo_blanco'], '/') : null;
     echo json_encode(['estado' => true, 'datos' => $row]);
 } else {
     echo json_encode(['estado' => false, 'mensaje' => 'No se encontró el registro de empresa.']);

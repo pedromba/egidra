@@ -10,14 +10,17 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios - <?php echo $empNombre; ?></title>
-    <meta name="description" content="Servicios industriales especializados de <?php echo $empNombre; ?>: Buceo &amp; Subsea, Acceso por Cuerda, Logística y Estudios Técnicos.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/servicios/servicios.css">
+    <?php $seoTitulo = 'Servicios - ' . $empNombre;
+      $seoDescripcion = 'Servicios de ' . $empNombre . ': buceo y trabajos submarinos, acceso por cuerda, levantamientos hidrográficos, soporte logístico y soporte de soldadura.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -30,7 +33,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <div class="col-lg-8">
                     <span class="badge bg-warning text-dark mb-3">Lo Que Hacemos</span>
                     <h1 class="display-3 fw-bold text-white mb-4">Nuestros <span class="text-warning">Servicios</span></h1>
-                    <p class="lead text-white-50">Soluciones industriales especializadas para las operaciones más exigentes del sector Oil &amp; Gas.</p>
+                    <p class="lead text-white-50">Soluciones industriales especializadas para las operaciones más exigentes del sector del petróleo y el gas.</p>
                 </div>
             </div>
         </div>

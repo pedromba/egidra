@@ -10,14 +10,17 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - <?php echo $empNombre; ?></title>
-    <meta name="description" content="Contacte con <?php echo $empNombre; ?> para servicios industriales especializados en Oil &amp; Gas. Disponibles 24/7 para atender su consulta.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/contacto/contacto.css">
+    <?php $seoTitulo = 'Contacto - ' . $empNombre;
+      $seoDescripcion = 'Contacte con ' . $empNombre . ' en Malabo para servicios de buceo industrial, acceso por cuerda y apoyo logístico. Disponibles 24/7.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -44,7 +47,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
     <!-- Formulario + Info -->
     <section id="contacto" class="contact-section">
         <div class="container">
-            <div class="row g-5 align-items-start">
+            <div class="row g-4 g-lg-5 align-items-start">
 
                 <!-- Formulario -->
                 <div class="col-lg-7">
@@ -171,8 +174,8 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <div class="col-6 col-md-3 mb-4 mb-md-0">
                     <div class="stat-item">
                         <i class="fas fa-headset mb-2"></i>
-                        <h2 class="stat-number" data-target="24">0</h2>
-                        <p class="text-muted mb-0">Soporte 24h</p>
+                        <h2 class="stat-number" data-target="24" data-suffix="/7">0</h2>
+                        <p class="text-muted mb-0">Soporte</p>
                     </div>
                 </div>
             </div>

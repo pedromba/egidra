@@ -16,8 +16,8 @@ if ($rImg = $qImg->fetch_assoc()) {
 }
 
 if ($row) {
-    if (!empty($row['logo']))        $row['logo_url']        = RUTA_BASE . $row['logo'];
-    if (!empty($row['logo_blanco'])) $row['logo_blanco_url'] = RUTA_BASE . $row['logo_blanco'];
+    if (!empty($row['logo']))        $row['logo_url']        = RUTA_BASE . ltrim($row['logo'], '/');
+    if (!empty($row['logo_blanco'])) $row['logo_blanco_url'] = RUTA_BASE . ltrim($row['logo_blanco'], '/');
     $row['img_nosotros_url'] = $img_nosotros;
     echo json_encode(['success' => true, 'data' => $row]);
 } else {

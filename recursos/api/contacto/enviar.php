@@ -53,13 +53,18 @@ registrar_log($conexion, null, 'SISTEMA', "Nuevo mensaje de contacto de: $nombre
 // ── Enviar email via PHPMailer ────────────────────────────────────────────────
 try {
     $campos  = compact('nombre', 'email', 'asunto', 'mensaje');
+
+    // Logo para la cabecera oscura del email: preferir versión blanca
+    require_once __DIR__ . '/../../../config/rutas.php';
+    $_emp    = $conexion->query("SELECT logo, logo_blanco FROM empresa WHERE id = 1 LIMIT 1")->fetch_assoc();
+    $_logo   = ($_emp['logo_blanco'] ?? '') ?: ($_emp['logo'] ?? '');
     $empresa = [
         'nombre'   => MAIL_FROM_NAME,
         'email'    => MAIL_EMPRESA,
         'telefono' => '',
         'ciudad'   => '',
         'pais'     => '',
-        'logo_url' => '',
+        'logo_url' => $_logo ? RUTA_BASE . ltrim($_logo, '/') : '',
     ];
 
     $mail = crearMailer();

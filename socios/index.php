@@ -10,14 +10,17 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socios y Alianzas - <?php echo $empNombre; ?></title>
-    <meta name="description" content="<?php echo $empNombre; ?> trabaja con los organismos internacionales más reconocidos del sector industrial y offshore, garantizando los más altos estándares de calidad y seguridad.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/socios/socios.css">
+    <?php $seoTitulo = 'Socios y Alianzas - ' . $empNombre;
+      $seoDescripcion = $empNombre . ' trabaja con socios y organismos del sector industrial y marítimo para garantizar los más altos estándares de calidad y seguridad.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -30,7 +33,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <div class="col-lg-8">
                     <span class="badge bg-warning text-dark mb-3">Alianzas Estratégicas</span>
                     <h1 class="display-3 fw-bold text-white mb-4">Nuestros <span class="text-warning">Socios</span></h1>
-                    <p class="lead text-white-50">Respaldados por los organismos internacionales más exigentes del sector industrial y offshore.</p>
+                    <p class="lead text-white-50">Respaldados por los organismos internacionales más exigentes del sector industrial y marítimo.</p>
                 </div>
             </div>
         </div>
@@ -56,7 +59,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                     <ul class="list-unstyled mb-4">
                         <li class="mb-3 d-flex align-items-start">
                             <i class="fas fa-check-circle text-warning me-3 mt-1 flex-shrink-0"></i>
-                            <span>Miembros activos de los principales organismos de la industria subsea y rope access</span>
+                            <span>Miembros activos de los principales organismos de la industria submarina y del acceso por cuerda</span>
                         </li>
                         <li class="mb-3 d-flex align-items-start">
                             <i class="fas fa-check-circle text-warning me-3 mt-1 flex-shrink-0"></i>
@@ -138,7 +141,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                             <i class="fas fa-globe fa-2x text-warning"></i>
                         </div>
                         <h5 class="fw-bold mb-2">Estándares Globales</h5>
-                        <p class="text-muted small mb-0">Procedimientos alineados con las mejores prácticas internacionales reconocidas por las principales operadoras del sector Oil &amp; Gas.</p>
+                        <p class="text-muted small mb-0">Procedimientos alineados con las mejores prácticas internacionales reconocidas por las principales operadoras del sector del petróleo y el gas.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">

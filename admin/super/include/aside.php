@@ -28,7 +28,7 @@ $section = match(true) {
 $empresa = $_SESSION['empresa_data'] ?? null;
 if (!$empresa) {
     $row = $conexion->query(
-        "SELECT nombre, logo FROM empresa WHERE id = 1 LIMIT 1"
+        "SELECT nombre, logo, logo_blanco FROM empresa WHERE id = 1 LIMIT 1"
     )->fetch_assoc();
     $empresa = $row ?? ['nombre' => 'EGIDRA', 'logo' => null];
     $_SESSION['empresa_data'] = $empresa;
@@ -55,8 +55,9 @@ function sbLink(string $href, string $icon, string $label, string $key, string $
 
     <a class="sb-brand" href="<?php echo $base; ?>">
         <div class="sb-brand-icon">
-            <?php if ($empresa['logo']): ?>
-                <img src="<?php echo htmlspecialchars(RUTA_BASE . ltrim($empresa['logo'], '/')); ?>" alt="<?php echo htmlspecialchars($empresa['nombre']); ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            <?php $_sbLogo = ($empresa['logo_blanco'] ?? '') ?: ($empresa['logo'] ?? ''); // sidebar oscuro: preferir logo blanco ?>
+            <?php if ($_sbLogo): ?>
+                <img src="<?php echo htmlspecialchars(RUTA_BASE . ltrim($_sbLogo, '/')); ?>" alt="<?php echo htmlspecialchars($empresa['nombre']); ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             <?php else: ?>
                 <i class="fas fa-layer-group"></i>
             <?php endif; ?>

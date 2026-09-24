@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const duration = 2000;
             const delay    = Math.max(duration / target, 10);
             let current = 0;
-            const suffix = counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+';
+            const suffix = counter.dataset.suffix ?? (counter.closest('.stat-item').querySelector('p').textContent.includes('%') ? '%' : '+');
             const iv = setInterval(() => {
                 current++;
                 if (current >= target) { counter.textContent = target + suffix; clearInterval(iv); }

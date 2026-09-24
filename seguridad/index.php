@@ -10,14 +10,17 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguridad HSE - <?php echo $empNombre; ?></title>
-    <meta name="description" content="Política de Seguridad HSE de <?php echo $empNombre; ?>: Las 9 Reglas de Oro, certificaciones internacionales y compromiso con cero accidentes.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../recursos/css/inicio/index.css">
     <link rel="stylesheet" href="../recursos/css/seguridad/seguridad.css">
+    <?php $seoTitulo = 'Seguridad HSE - ' . $empNombre;
+      $seoDescripcion = 'Cultura de seguridad HSE de ' . $empNombre . ': las 9 Reglas de Oro, la guía de control y nuestras políticas de salud, seguridad y medio ambiente.'; ?>
+    <title><?php echo htmlspecialchars(html_entity_decode($seoTitulo, ENT_QUOTES, 'UTF-8')); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars(html_entity_decode($seoDescripcion, ENT_QUOTES, 'UTF-8')); ?>">
+    <?php include __DIR__ . '/../include/seo.php'; ?>
 </head>
 <body>
 
@@ -52,7 +55,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <div class="col-lg-6">
                     <span class="text-warning fw-bold text-uppercase">Nuestra Política</span>
                     <h2 class="display-5 fw-bold mt-2 mb-4">Compromiso Total con la Seguridad</h2>
-                    <p class="text-muted mb-4">En <?php echo $empNombre; ?>, la seguridad de nuestro equipo y de quienes nos rodean está por encima de cualquier objetivo operativo o comercial. Nuestro sistema de gestión HSE integra las mejores prácticas internacionales del sector Oil &amp; Gas.</p>
+                    <p class="text-muted mb-4">En <?php echo $empNombre; ?>, la seguridad de nuestro equipo y de quienes nos rodean está por encima de cualquier objetivo operativo o comercial. Nuestro sistema de gestión HSE integra las mejores prácticas internacionales del sector del petróleo y el gas.</p>
                     <p class="text-muted mb-4">Cada trabajador tiene la autoridad y la responsabilidad de detener cualquier operación que considere insegura, sin consecuencias negativas para él.</p>
                     <div class="d-flex flex-wrap gap-2 mt-3">
                         <span class="policy-pill"><i class="fas fa-shield-halved text-warning"></i>Stop Work Authority</span>
@@ -150,8 +153,8 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                 <div class="col-6 col-md-3 mb-4 mb-md-0">
                     <div class="stat-item">
                         <i class="fas fa-shield-halved mb-2"></i>
-                        <h2 class="stat-number" data-target="0" data-key="accidentes">0</h2>
-                        <p class="text-muted mb-0">Accidentes</p>
+                        <h2 class="stat-number" data-target="9" data-suffix="">0</h2>
+                        <p class="text-muted mb-0">Reglas de Oro</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 mb-4 mb-md-0">
@@ -195,7 +198,7 @@ $empNombre = htmlspecialchars($empresa['nombre'] ?? 'EGIDRA');
                             <div class="col-lg-5 bg-warning d-flex align-items-center justify-content-center">
                                 <div class="text-center p-4">
                                     <i class="fas fa-shield-halved fa-5x text-dark mb-3"></i>
-                                    <h3 class="fw-bold text-dark">Safety First</h3>
+                                    <h3 class="fw-bold text-dark">La Seguridad Primero</h3>
                                     <p class="text-dark mb-0">La seguridad es el valor que nunca negociamos.</p>
                                 </div>
                             </div>

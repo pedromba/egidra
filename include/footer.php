@@ -21,10 +21,12 @@ $_empLI      = $_emp['linkedin']  ?? '';
 $_empFB      = $_emp['facebook']  ?? '';
 $_empIG      = $_emp['instagram'] ?? '';
 
-// Logo para footer (preferir logo principal, si no logo blanco)
-$_logoFooter = !empty($_emp['logo'])
-    ? RUTA_BASE . ltrim($_emp['logo'], '/')
-    : (!empty($_emp['logo_blanco']) ? RUTA_BASE . ltrim($_emp['logo_blanco'], '/') : '');
+// Logo para footer (fondo oscuro): preferir logo blanco; si solo hay principal,
+// se blanquea con filtro CSS para que sea legible
+$_logoFooterInvertir = empty($_emp['logo_blanco']) && !empty($_emp['logo']);
+$_logoFooter = !empty($_emp['logo_blanco'])
+    ? RUTA_BASE . ltrim($_emp['logo_blanco'], '/')
+    : (!empty($_emp['logo']) ? RUTA_BASE . ltrim($_emp['logo'], '/') : '');
 ?>
 <footer class="footer bg-dark text-white pt-5 pb-4">
     <div class="container">
@@ -37,7 +39,7 @@ $_logoFooter = !empty($_emp['logo'])
                         <img src="<?php echo htmlspecialchars($_logoFooter); ?>"
                              alt="<?php echo $_empNombre; ?>"
                              height="45"
-                             style="object-fit:contain;max-width:160px;filter:brightness(0) invert(1);">
+                             style="object-fit:contain;max-width:160px;<?php echo $_logoFooterInvertir ? 'filter:brightness(0) invert(1);' : ''; ?>">
                     <?php else: ?>
                         <h4 class="fw-bold mb-0"><i class="fas fa-anchor me-2"></i><?php echo $_empNombre; ?></h4>
                     <?php endif; ?>
@@ -46,7 +48,7 @@ $_logoFooter = !empty($_emp['logo'])
                     <p class="text-warning small mb-2"><?php echo $_empSlogan; ?></p>
                 <?php endif; ?>
                 <p class="text-white-50 small">
-                    <?php echo htmlspecialchars($_emp['descripcion'] ?? 'Empresa especializada en servicios industriales para el sector Oil & Gas.'); ?>
+                    <?php echo htmlspecialchars($_emp['descripcion'] ?? 'Empresa especializada en servicios industriales para el sector del petróleo y el gas.'); ?>
                 </p>
                 <div class="d-flex gap-3 mt-3">
                     <?php if ($_empLI): ?>

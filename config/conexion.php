@@ -1,8 +1,8 @@
 <?php
 
 define("HOST","localhost");
-define("USER","root");
-define("PASSWORD","");
+define("USER","egidra_user");
+define("PASSWORD","Egidra1234");
 define("DB","egidra");
 
 $conexion = new mysqli(HOST, USER, PASSWORD, DB);
